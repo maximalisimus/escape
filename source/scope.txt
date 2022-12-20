@@ -1,0 +1,20 @@
+
+
+heart - 5
+clock - 30
+alarm - 100
+coffee - 20
+stop - 1 - sleep bomb and heart on 10 seconds
+thermos - 1 - delete 2...3 bombs
+cola - 10
+burger - 50
+live - 1
+
+esc-1: [1-5] levels
+esc-3: [6-11] levels
+esc-4: [12-17] levels
+esc-5: [24-29] levels
+esc-6: [30] levels
+esc-10: [18-23] levels
+
+
