@@ -1,5 +1,6 @@
 # User Ignored files
 source/bashrc
+source/Python-portable-3.8.9-x86.bat
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
