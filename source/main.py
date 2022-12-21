@@ -3,46 +3,48 @@
 
 import pathlib
 
-images = {'bonus': '1': {
+images = {'bonus': {
+					1: {
 						'name': 'alarm',
 						'path': str(pathlib.Path('./images/alarm.png').resolve()),
 						'score': 100,
 						},
-					'2': {
+					2: {
 						'name': 'burger',
 						'path': str(pathlib.Path('./images/burger.png').resolve()),
 						'score': 50,
 						},
-					'3': {
+					3: {
 						'name': 'clock',
 						'path': str(pathlib.Path('./images/clock.png').resolve()),
 						'score': 30,
 						},
-					'4': {
+					4: {
 						'name': 'coffee',
 						'path': str(pathlib.Path('./images/coffee.png').resolve()),
 						'score': 20,
 						},
-					'5': {
+					5: {
 						'name': 'cola',
 						'path': str(pathlib.Path('./images/cola.png').resolve()),
 						'score': 10,
 						},
-					'6': {
+					6: {
 						'name': 'medicine_chest',
 						'path': str(pathlib.Path('./images/medicine-chest.png').resolve()),
 						'score': 1,
 						},
-					'7': {
+					7: {
 						'name': 'stop',
 						'path': str(pathlib.Path('./images/stop.png').resolve()),
 						'score': 1,
 						},
-					'8': {
+					8: {
 						'name': 'thermos',
 						'path': str(pathlib.Path('./images/thermos.png').resolve()),
 						'score': 1,
 						},
+				},
 		'wall': {
 				1: str(pathlib.Path('./images/tile-1.png').resolve()),
 				2: str(pathlib.Path('./images/tile-2.png').resolve()),
