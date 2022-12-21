@@ -118,9 +118,16 @@ def main():
 	
 	bg = pygame.image.load(images['bg'][8]).convert_alpha()
 	sc.blit(bg, (0, 0))
-	pygame.display.update()
 	
-	f = pygame.font.Font(str(pathlib.Path('./config/').joinpath('YandexSDLight.ttf').resolve()), 24)
+	fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('digital-7-mono.ttf').resolve()), 28, bold=True, italic=False)
+	SCORE_COLOR = (192, 192, 192)
+	SCORE_BG = (0, 0, 0)
+	text_level = fonts.render('30', 1, SCORE_COLOR, SCORE_BG)
+	pos = text_level.get_rect(center=(522, 120))
+	
+	sc.blit(text_level, pos)
+	
+	pygame.display.update()
 	
 	RUN = True
 	while RUN:
