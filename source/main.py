@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import pygame
 import pathlib
+
+pygame.init()
 
 images = {'bonus': {
 					1: {
@@ -105,7 +108,28 @@ sounds = {
 		}
 
 def main():
-	pass
+	W, H = 596, 385
+	sc = pygame.display.set_mode((W, H))
+	pygame.display.set_caption("Esc")
+	pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath('logo.png').resolve())))
+
+	clock = pygame.time.Clock()
+	FPS = 60
+	
+	bg = pygame.image.load(images['bg'][8]).convert_alpha()
+	sc.blit(bg, (0, 0))
+	pygame.display.update()
+	
+	f = pygame.font.Font(str(pathlib.Path('./config/').joinpath('YandexSDLight.ttf').resolve()), 24)
+	
+	RUN = True
+	while RUN:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				RUN = False
+				exit()
+		
+		clock.tick(FPS)
 
 if __name__ == '__main__':
 	main()
