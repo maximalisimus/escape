@@ -82,7 +82,7 @@ images = {'bonus': {
 				}
 		}
 
-levels = str(pathlib.Path('./levels/').resolve())
+levels = map(lambda x: str(pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve()), range(1,31))
 
 musics = str(pathlib.Path('./sounds/music.mp3').resolve())
 
