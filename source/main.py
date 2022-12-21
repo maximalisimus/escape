@@ -107,6 +107,12 @@ sounds = {
 			'thermos': str(pathlib.Path('./sounds/thermos.WAV').resolve())
 		}
 
+def print_level(l: int) -> str:
+	if l<10:
+		return f"0{l}"
+	else:
+		return f"{l}"
+
 def main():
 	W, H = 596, 385
 	sc = pygame.display.set_mode((W, H))
@@ -119,15 +125,27 @@ def main():
 	bg = pygame.image.load(images['bg'][8]).convert_alpha()
 	sc.blit(bg, (0, 0))
 	
-	fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('digital-7-mono.ttf').resolve()), 28, bold=True, italic=False)
+	level_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 35, bold=True, italic=False)
+	score_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 38, bold=True, italic=False)
+	
 	SCORE_COLOR = (192, 192, 192)
 	SCORE_BG = (0, 0, 0)
-	text_level = fonts.render('30', 1, SCORE_COLOR, SCORE_BG)
-	pos = text_level.get_rect(center=(522, 120))
 	
-	sc.blit(text_level, pos)
+	text_level = level_fonts.render('00', 1, SCORE_COLOR)
+	pos_level = text_level.get_rect(center=(525, 130))
+	
+	text_score = score_fonts.render('000000', 1, SCORE_COLOR)
+	pos_score = text_level.get_rect(center=(492, 59))
+	
+	sc.blit(text_level, pos_level)
+	sc.blit(text_score, pos_score)
 	
 	pygame.display.update()
+	
+	CHANGE_LEVEL = pygame.USEREVENT + 1
+	pygame.time.set_timer(CHANGE_LEVEL, 500)
+		
+	x = 0
 	
 	RUN = True
 	while RUN:
@@ -135,6 +153,17 @@ def main():
 			if event.type == pygame.QUIT:
 				RUN = False
 				exit()
+			elif event.type == CHANGE_LEVEL:
+				if x == 31:
+					x = 0
+				text_level = level_fonts.render(print_level(x), 1, SCORE_COLOR)
+				sc.blit(bg, (0, 0))
+				sc.blit(text_level, pos_level)
+				x += 1
+				
+				sc.blit(text_score, pos_score)
+				
+		pygame.display.update()
 		
 		clock.tick(FPS)
 
