@@ -47,6 +47,11 @@ images = {'bonus': {
 						'path': str(pathlib.Path('./images/thermos.png').resolve()),
 						'score': 1,
 						},
+					9: {
+						'name': 'heart',
+						'path': str(pathlib.Path('./images/heart.png').resolve()),
+						'score': 1,
+						},
 				},
 		'wall': {
 				1: str(pathlib.Path('./images/tile-1.png').resolve()),
