@@ -6,7 +6,8 @@ import pathlib
 
 pygame.init()
 
-images = {'bonus': {
+images = {
+		'bonus': {
 					1: {
 						'name': 'alarm',
 						'path': str(pathlib.Path('./images/alarm.png').resolve()),
@@ -91,7 +92,19 @@ images = {'bonus': {
 					13:  str(pathlib.Path('./images/door.png').resolve()),
 					14:  str(pathlib.Path('./images/blade-rear.png').resolve()),
 					15:  str(pathlib.Path('./images/blade-up.png').resolve()),
-				}
+				},
+		'LCD': {
+					0: str(pathlib.Path('./images/LCD/lcd-0.png').resolve()),
+					1: str(pathlib.Path('./images/LCD/lcd-1.png').resolve()),
+					2: str(pathlib.Path('./images/LCD/lcd-2.png').resolve()),
+					3: str(pathlib.Path('./images/LCD/lcd-3.png').resolve()),
+					4: str(pathlib.Path('./images/LCD/lcd-4.png').resolve()),
+					5: str(pathlib.Path('./images/LCD/lcd-5.png').resolve()),
+					6: str(pathlib.Path('./images/LCD/lcd-6.png').resolve()),
+					7: str(pathlib.Path('./images/LCD/lcd-7.png').resolve()),
+					8: str(pathlib.Path('./images/LCD/lcd-8.png').resolve()),
+					9: str(pathlib.Path('./images/LCD/lcd-9.png').resolve()),
+				},
 		}
 
 levels = map(lambda x: str(pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve()), range(1,31))
@@ -147,6 +160,20 @@ def main():
 	
 	bg = pygame.image.load(images['bg'][8]).convert_alpha()
 	sc.blit(bg, (0, 0))
+	
+	#surf_level_left = pygame.image.load(images['LCD'][0]).convert_alpha()
+	#sc.blit(surf_level_left, (511, 111))
+	#surf_level_right = pygame.image.load(images['LCD'][1]).convert_alpha()
+	#sc.blit(surf_level_right, (524, 111))
+	
+	#surf_score_1 = pygame.image.load(images['LCD'][0]).convert_alpha()
+	#sc.blit(surf_score_1, (476, 41.5))
+	#sc.blit(surf_score_1, (489, 41.5))
+	#sc.blit(surf_score_1, (502, 41.5))
+	#sc.blit(surf_score_1, (515, 41.5))
+	#sc.blit(surf_score_1, (528, 41.5))
+	#sc.blit(surf_score_1, (541, 41.5))
+	#sc.blit(surf_score_1, (554, 41.5))
 	
 	#level_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 35, bold=True, italic=False)
 	#score_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 38, bold=True, italic=False)
