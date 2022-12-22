@@ -152,6 +152,9 @@ def print_score(score: int) -> str:
 		return f"{score}"
 
 def DrawScore(surface, score: int, level: int, live: int):
+	bg = pygame.image.load(images['bg'][8]).convert_alpha()
+	surface.blit(bg, (0, 0))
+	
 	OnScore = tuple(print_score(score))
 	OnLevel = tuple(print_level(level))
 	surf_level_left = pygame.image.load(images['LCD'][OnLevel[0]]).convert_alpha()
@@ -198,10 +201,7 @@ def main():
 
 	clock = pygame.time.Clock()
 	FPS = 60
-	
-	bg = pygame.image.load(images['bg'][8]).convert_alpha()
-	sc.blit(bg, (0, 0))
-	
+		
 	DrawScore(sc, 0, 1, 4)
 	
 	#level_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 35, bold=True, italic=False)
@@ -244,7 +244,7 @@ def main():
 			#	sc.blit(text_score, pos_score)
 			#	
 			#	x += 1
-				
+		
 		#pygame.display.update()
 		
 		clock.tick(FPS)
