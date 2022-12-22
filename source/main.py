@@ -6,104 +6,112 @@ import pathlib
 
 pygame.init()
 
+W, H = 596, 385
+sc = pygame.display.set_mode((W, H))
+pygame.display.set_caption("Esc")
+pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath('logo.png').resolve())))
+
+clock = pygame.time.Clock()
+FPS = 60
+
 images = {
 		'bonus': {
 					1: {
 						'name': 'alarm',
-						'path': str(pathlib.Path('./images/alarm.png').resolve()),
+						'surf': pygame.image.load(str(pathlib.Path('./images/alarm.png').resolve())).convert_alpha(),
 						'score': 100,
 						},
 					2: {
 						'name': 'burger',
-						'path': str(pathlib.Path('./images/burger.png').resolve()),
+						'surf': pygame.image.load(str(pathlib.Path('./images/burger.png').resolve())).convert_alpha(),
 						'score': 50,
 						},
 					3: {
 						'name': 'clock',
-						'path': str(pathlib.Path('./images/clock.png').resolve()),
+						'surf': pygame.image.load(str(pathlib.Path('./images/clock.png').resolve())).convert_alpha(),
 						'score': 30,
 						},
 					4: {
 						'name': 'coffee',
-						'path': str(pathlib.Path('./images/coffee.png').resolve()),
+						'surf': pygame.image.load(str(pathlib.Path('./images/coffee.png').resolve())).convert_alpha(),
 						'score': 20,
 						},
 					5: {
 						'name': 'cola',
-						'path': str(pathlib.Path('./images/cola.png').resolve()),
+						'surf': pygame.image.load(str(pathlib.Path('./images/cola.png').resolve())).convert_alpha(),
 						'score': 10,
 						},
 					6: {
 						'name': 'medicine_chest',
-						'path': str(pathlib.Path('./images/medicine-chest.png').resolve()),
+						'surf': pygame.image.load(str(pathlib.Path('./images/medicine-chest.png').resolve())).convert_alpha(),
 						'score': 1,
 						},
 					7: {
 						'name': 'stop',
-						'path': str(pathlib.Path('./images/stop.png').resolve()),
+						'surf': pygame.image.load(str(pathlib.Path('./images/stop.png').resolve())).convert_alpha(),
 						'score': 1,
 						},
 					8: {
 						'name': 'thermos',
-						'path': str(pathlib.Path('./images/thermos.png').resolve()),
+						'surf': pygame.image.load(str(pathlib.Path('./images/thermos.png').resolve())).convert_alpha(),
 						'score': 1,
 						},
 					9: {
 						'name': 'heart',
-						'path': str(pathlib.Path('./images/heart.png').resolve()),
+						'surf': pygame.image.load(str(pathlib.Path('./images/heart.png').resolve())).convert_alpha(),
 						'score': 1,
 						},
 				},
 		'wall': {
-				1: str(pathlib.Path('./images/tile-1.png').resolve()),
-				2: str(pathlib.Path('./images/tile-2.png').resolve()),
-				3: str(pathlib.Path('./images/tile-3.png').resolve()),
-				4: str(pathlib.Path('./images/tile-4.png').resolve()),
-				5: str(pathlib.Path('./images/tile-5.png').resolve()),
-				6: str(pathlib.Path('./images/tile-6.png').resolve()),
+				1: pygame.image.load(str(pathlib.Path('./images/tile-1.png').resolve())).convert_alpha(),
+				2: pygame.image.load(str(pathlib.Path('./images/tile-2.png').resolve())).convert_alpha(),
+				3: pygame.image.load(str(pathlib.Path('./images/tile-3.png').resolve())).convert_alpha(),
+				4: pygame.image.load(str(pathlib.Path('./images/tile-4.png').resolve())).convert_alpha(),
+				5: pygame.image.load(str(pathlib.Path('./images/tile-5.png').resolve())).convert_alpha(),
+				6: pygame.image.load(str(pathlib.Path('./images/tile-6.png').resolve())).convert_alpha(),
 				},
 		'bg': {
-				1:  str(pathlib.Path('./images/esc_1.png').resolve()),
-				2:  str(pathlib.Path('./images/esc_2.png').resolve()),
-				3:  str(pathlib.Path('./images/esc_3.png').resolve()),
-				4:  str(pathlib.Path('./images/esc_4.png').resolve()),
-				5:  str(pathlib.Path('./images/esc_5.png').resolve()),
-				6:  str(pathlib.Path('./images/esc_6.png').resolve()),
-				7:  str(pathlib.Path('./images/esc_t.png').resolve()),
-				8:  str(pathlib.Path('./images/esc-bg.png').resolve()),
+				1: pygame.image.load(str(pathlib.Path('./images/esc_1.png').resolve())).convert_alpha(),
+				2: pygame.image.load(str(pathlib.Path('./images/esc_2.png').resolve())).convert_alpha(),
+				3: pygame.image.load(str(pathlib.Path('./images/esc_3.png').resolve())).convert_alpha(),
+				4: pygame.image.load(str(pathlib.Path('./images/esc_4.png').resolve())).convert_alpha(),
+				5: pygame.image.load(str(pathlib.Path('./images/esc_5.png').resolve())).convert_alpha(),
+				6: pygame.image.load(str(pathlib.Path('./images/esc_6.png').resolve())).convert_alpha(),
+				7: pygame.image.load(str(pathlib.Path('./images/esc_t.png').resolve())).convert_alpha(),
+				8: pygame.image.load(str(pathlib.Path('./images/esc-bg.png').resolve())).convert_alpha(),
 			},
 		'weapon': {
-					1: str(pathlib.Path('./images/bomb.png').resolve()),
-					2: str(pathlib.Path('./images/bullet.png').resolve()),
+					1: pygame.image.load(str(pathlib.Path('./images/bomb.png').resolve())).convert_alpha(),
+					2: pygame.image.load(str(pathlib.Path('./images/bullet.png').resolve())).convert_alpha(),
 				},
 		'else': {
-					1:  str(pathlib.Path('./images/hatch-bombs.png').resolve()),
-					2:  str(pathlib.Path('./images/hatch-bombs-2.png').resolve()),
-					3:  str(pathlib.Path('./images/Helicopter_1.png').resolve()),
-					4:  str(pathlib.Path('./images/Helicopter_2.png').resolve()),
-					5:  str(pathlib.Path('./images/Helicopter_3.png').resolve()),
-					6:  str(pathlib.Path('./images/Helicopter_4.png').resolve()),
-					7:  str(pathlib.Path('./images/ladder.png').resolve()),
-					8:  str(pathlib.Path('./images/ladder-2.png').resolve()),
-					9:  str(pathlib.Path('./images/left-pistol.png').resolve()),
-					10:  str(pathlib.Path('./images/right-pistol.png').resolve()),
-					11:  str(pathlib.Path('./images/live-bg.png').resolve()),
-					12:  str(pathlib.Path('./images/died-bg.png').resolve()),
-					13:  str(pathlib.Path('./images/door.png').resolve()),
-					14:  str(pathlib.Path('./images/blade-rear.png').resolve()),
-					15:  str(pathlib.Path('./images/blade-up.png').resolve()),
+					1: pygame.image.load(str(pathlib.Path('./images/hatch-bombs.png').resolve())).convert_alpha(),
+					2: pygame.image.load(str(pathlib.Path('./images/hatch-bombs-2.png').resolve())).convert_alpha(),
+					3: pygame.image.load(str(pathlib.Path('./images/Helicopter_1.png').resolve())).convert_alpha(),
+					4: pygame.image.load(str(pathlib.Path('./images/Helicopter_2.png').resolve())).convert_alpha(),
+					5: pygame.image.load(str(pathlib.Path('./images/Helicopter_3.png').resolve())).convert_alpha(),
+					6: pygame.image.load(str(pathlib.Path('./images/Helicopter_4.png').resolve())).convert_alpha(),
+					7: pygame.image.load(str(pathlib.Path('./images/ladder.png').resolve())).convert_alpha(),
+					8: pygame.image.load(str(pathlib.Path('./images/ladder-2.png').resolve())).convert_alpha(),
+					9: pygame.image.load(str(pathlib.Path('./images/left-pistol.png').resolve())).convert_alpha(),
+					10: pygame.image.load(str(pathlib.Path('./images/right-pistol.png').resolve())).convert_alpha(),
+					11: pygame.image.load(str(pathlib.Path('./images/live-bg.png').resolve())).convert_alpha(),
+					12: pygame.image.load(str(pathlib.Path('./images/died-bg.png').resolve())).convert_alpha(),
+					13: pygame.image.load(str(pathlib.Path('./images/door.png').resolve())).convert_alpha(),
+					14: pygame.image.load(str(pathlib.Path('./images/blade-rear.png').resolve())).convert_alpha(),
+					15: pygame.image.load(str(pathlib.Path('./images/blade-up.png').resolve())).convert_alpha(),
 				},
 		'LCD': {
-					'0': str(pathlib.Path('./images/LCD/lcd-0.png').resolve()),
-					'1': str(pathlib.Path('./images/LCD/lcd-1.png').resolve()),
-					'2': str(pathlib.Path('./images/LCD/lcd-2.png').resolve()),
-					'3': str(pathlib.Path('./images/LCD/lcd-3.png').resolve()),
-					'4': str(pathlib.Path('./images/LCD/lcd-4.png').resolve()),
-					'5': str(pathlib.Path('./images/LCD/lcd-5.png').resolve()),
-					'6': str(pathlib.Path('./images/LCD/lcd-6.png').resolve()),
-					'7': str(pathlib.Path('./images/LCD/lcd-7.png').resolve()),
-					'8': str(pathlib.Path('./images/LCD/lcd-8.png').resolve()),
-					'9': str(pathlib.Path('./images/LCD/lcd-9.png').resolve()),
+					'0': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-0.png').resolve())).convert_alpha(),
+					'1': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-1.png').resolve())).convert_alpha(),
+					'2': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-2.png').resolve())).convert_alpha(),
+					'3': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-3.png').resolve())).convert_alpha(),
+					'4': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-4.png').resolve())).convert_alpha(),
+					'5': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-5.png').resolve())).convert_alpha(),
+					'6': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-6.png').resolve())).convert_alpha(),
+					'7': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-7.png').resolve())).convert_alpha(),
+					'8': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-8.png').resolve())).convert_alpha(),
+					'9': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-9.png').resolve())).convert_alpha(),
 				},
 		}
 
@@ -152,56 +160,51 @@ def print_score(score: int) -> str:
 		return f"{score}"
 
 def DrawScore(surface, score: int, level: int, live: int):
-	bg = pygame.image.load(images['bg'][8]).convert_alpha()
-	surface.blit(bg, (0, 0))
-	
+	surface.blit(images['bg'][8], (0, 0))
+		
 	OnScore = tuple(print_score(score))
 	OnLevel = tuple(print_level(level))
-	surf_level_left = pygame.image.load(images['LCD'][OnLevel[0]]).convert_alpha()
-	surface.blit(surf_level_left, (511, 111))
-	surf_level_right = pygame.image.load(images['LCD'][OnLevel[1]]).convert_alpha()
-	surface.blit(surf_level_right, (524, 111))
+	surface.blit(images['LCD'][OnLevel[0]], (511, 111))
+	surface.blit(images['LCD'][OnLevel[1]], (524, 111))
 	
-	surf_score_0 = pygame.image.load(images['LCD'][OnScore[0]]).convert_alpha()
-	surface.blit(surf_score_0, (476, 41.5))
-	surf_score_1 = pygame.image.load(images['LCD'][OnScore[1]]).convert_alpha()
-	surface.blit(surf_score_1, (489, 41.5))
-	surf_score_2 = pygame.image.load(images['LCD'][OnScore[2]]).convert_alpha()
-	surface.blit(surf_score_2, (502, 41.5))
-	surf_score_3 = pygame.image.load(images['LCD'][OnScore[3]]).convert_alpha()
-	surface.blit(surf_score_3, (515, 41.5))
-	surf_score_4 = pygame.image.load(images['LCD'][OnScore[4]]).convert_alpha()
-	surface.blit(surf_score_4, (528, 41.5))
-	surf_score_5 = pygame.image.load(images['LCD'][OnScore[5]]).convert_alpha()
-	surface.blit(surf_score_5, (541, 41.5))
-	surf_score_6 = pygame.image.load(images['LCD'][OnScore[6]]).convert_alpha()
-	surface.blit(surf_score_6, (554, 41.5))
+	surface.blit(images['LCD'][OnScore[0]], (476, 41.5))
+	surface.blit(images['LCD'][OnScore[1]], (489, 41.5))
+	surface.blit(images['LCD'][OnScore[2]], (502, 41.5))
+	surface.blit(images['LCD'][OnScore[3]], (515, 41.5))
+	surface.blit(images['LCD'][OnScore[4]], (528, 41.5))
+	surface.blit(images['LCD'][OnScore[5]], (541, 41.5))
+	surface.blit(images['LCD'][OnScore[6]], (554, 41.5))
 	
-	surf_live = pygame.image.load(images['else'][11]).convert_alpha()
+	def live_one(surf):
+		surf.blit(images['else'][11], (460, 160))
+	def live_two(surf):
+		live_one(surf)
+		surf.blit(images['else'][11], (492, 160))
+	def live_three(surf):
+		live_one(surf)
+		live_two(surf)
+		surf.blit(images['else'][11], (524, 160))
+	def live_four(surf):
+		live_one(surf)
+		live_two(surf)
+		live_three(surf)
+		surf.blit(images['else'][11], (556, 160))
+	
 	if live == 4:
-		surface.blit(surf_live, (460, 160))
-		surface.blit(surf_live, (492, 160))
-		surface.blit(surf_live, (524, 160))
-		surface.blit(surf_live, (556, 160))
+		live_four(surface)
 	elif live == 3:
-		surface.blit(surf_live, (460, 160))
-		surface.blit(surf_live, (492, 160))
-		surface.blit(surf_live, (524, 160))
+		live_three(surface)
 	elif live == 2:
-		surface.blit(surf_live, (460, 160))
-		surface.blit(surf_live, (492, 160))
+		live_two(surface)
 	elif live == 1:
-		surface.blit(surf_live, (460, 160))
+		live_one(surface)
 
 def main():
-	W, H = 596, 385
-	sc = pygame.display.set_mode((W, H))
-	pygame.display.set_caption("Esc")
-	pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath('logo.png').resolve())))
-
-	clock = pygame.time.Clock()
-	FPS = 60
-		
+	
+	global sc
+	global clock
+	global FPS
+	
 	DrawScore(sc, 0, 1, 4)
 	
 	#level_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 35, bold=True, italic=False)
