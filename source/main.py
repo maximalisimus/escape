@@ -94,16 +94,16 @@ images = {
 					15:  str(pathlib.Path('./images/blade-up.png').resolve()),
 				},
 		'LCD': {
-					0: str(pathlib.Path('./images/LCD/lcd-0.png').resolve()),
-					1: str(pathlib.Path('./images/LCD/lcd-1.png').resolve()),
-					2: str(pathlib.Path('./images/LCD/lcd-2.png').resolve()),
-					3: str(pathlib.Path('./images/LCD/lcd-3.png').resolve()),
-					4: str(pathlib.Path('./images/LCD/lcd-4.png').resolve()),
-					5: str(pathlib.Path('./images/LCD/lcd-5.png').resolve()),
-					6: str(pathlib.Path('./images/LCD/lcd-6.png').resolve()),
-					7: str(pathlib.Path('./images/LCD/lcd-7.png').resolve()),
-					8: str(pathlib.Path('./images/LCD/lcd-8.png').resolve()),
-					9: str(pathlib.Path('./images/LCD/lcd-9.png').resolve()),
+					'0': str(pathlib.Path('./images/LCD/lcd-0.png').resolve()),
+					'1': str(pathlib.Path('./images/LCD/lcd-1.png').resolve()),
+					'2': str(pathlib.Path('./images/LCD/lcd-2.png').resolve()),
+					'3': str(pathlib.Path('./images/LCD/lcd-3.png').resolve()),
+					'4': str(pathlib.Path('./images/LCD/lcd-4.png').resolve()),
+					'5': str(pathlib.Path('./images/LCD/lcd-5.png').resolve()),
+					'6': str(pathlib.Path('./images/LCD/lcd-6.png').resolve()),
+					'7': str(pathlib.Path('./images/LCD/lcd-7.png').resolve()),
+					'8': str(pathlib.Path('./images/LCD/lcd-8.png').resolve()),
+					'9': str(pathlib.Path('./images/LCD/lcd-9.png').resolve()),
 				},
 		}
 
@@ -137,17 +137,58 @@ def print_level(level: int) -> str:
 
 def print_score(score: int) -> str:
 	if score < 10:
-		return f"00000{score}"
+		return f"000000{score}"
 	elif score < 100:
-		return f"0000{score}"
+		return f"00000{score}"
 	elif score < 1000:
-		return f"000{score}"
+		return f"0000{score}"
 	elif score < 10000:
-		return f"00{score}"
+		return f"000{score}"
 	elif score < 100000:
+		return f"00{score}"
+	elif score < 1000000:
 		return f"0{score}"
 	else:
 		return f"{score}"
+
+def DrawScore(surface, score: int, level: int, live: int):
+	OnScore = tuple(print_score(score))
+	OnLevel = tuple(print_level(level))
+	surf_level_left = pygame.image.load(images['LCD'][OnLevel[0]]).convert_alpha()
+	surface.blit(surf_level_left, (511, 111))
+	surf_level_right = pygame.image.load(images['LCD'][OnLevel[1]]).convert_alpha()
+	surface.blit(surf_level_right, (524, 111))
+	
+	surf_score_0 = pygame.image.load(images['LCD'][OnScore[0]]).convert_alpha()
+	surface.blit(surf_score_0, (476, 41.5))
+	surf_score_1 = pygame.image.load(images['LCD'][OnScore[1]]).convert_alpha()
+	surface.blit(surf_score_1, (489, 41.5))
+	surf_score_2 = pygame.image.load(images['LCD'][OnScore[2]]).convert_alpha()
+	surface.blit(surf_score_2, (502, 41.5))
+	surf_score_3 = pygame.image.load(images['LCD'][OnScore[3]]).convert_alpha()
+	surface.blit(surf_score_3, (515, 41.5))
+	surf_score_4 = pygame.image.load(images['LCD'][OnScore[4]]).convert_alpha()
+	surface.blit(surf_score_4, (528, 41.5))
+	surf_score_5 = pygame.image.load(images['LCD'][OnScore[5]]).convert_alpha()
+	surface.blit(surf_score_5, (541, 41.5))
+	surf_score_6 = pygame.image.load(images['LCD'][OnScore[6]]).convert_alpha()
+	surface.blit(surf_score_6, (554, 41.5))
+	
+	surf_live = pygame.image.load(images['else'][11]).convert_alpha()
+	if live == 4:
+		surface.blit(surf_live, (460, 160))
+		surface.blit(surf_live, (492, 160))
+		surface.blit(surf_live, (524, 160))
+		surface.blit(surf_live, (556, 160))
+	elif live == 3:
+		surface.blit(surf_live, (460, 160))
+		surface.blit(surf_live, (492, 160))
+		surface.blit(surf_live, (524, 160))
+	elif live == 2:
+		surface.blit(surf_live, (460, 160))
+		surface.blit(surf_live, (492, 160))
+	elif live == 1:
+		surface.blit(surf_live, (460, 160))
 
 def main():
 	W, H = 596, 385
@@ -161,19 +202,7 @@ def main():
 	bg = pygame.image.load(images['bg'][8]).convert_alpha()
 	sc.blit(bg, (0, 0))
 	
-	#surf_level_left = pygame.image.load(images['LCD'][0]).convert_alpha()
-	#sc.blit(surf_level_left, (511, 111))
-	#surf_level_right = pygame.image.load(images['LCD'][1]).convert_alpha()
-	#sc.blit(surf_level_right, (524, 111))
-	
-	#surf_score_1 = pygame.image.load(images['LCD'][0]).convert_alpha()
-	#sc.blit(surf_score_1, (476, 41.5))
-	#sc.blit(surf_score_1, (489, 41.5))
-	#sc.blit(surf_score_1, (502, 41.5))
-	#sc.blit(surf_score_1, (515, 41.5))
-	#sc.blit(surf_score_1, (528, 41.5))
-	#sc.blit(surf_score_1, (541, 41.5))
-	#sc.blit(surf_score_1, (554, 41.5))
+	DrawScore(sc, 0, 1, 4)
 	
 	#level_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 35, bold=True, italic=False)
 	#score_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 38, bold=True, italic=False)
