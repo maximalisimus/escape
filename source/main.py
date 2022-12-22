@@ -107,11 +107,25 @@ sounds = {
 			'thermos': str(pathlib.Path('./sounds/thermos.WAV').resolve())
 		}
 
-def print_level(l: int) -> str:
-	if l<10:
-		return f"0{l}"
+def print_level(level: int) -> str:
+	if level<10:
+		return f"0{level}"
 	else:
-		return f"{l}"
+		return f"{level}"
+
+def print_score(score: int) -> str:
+	if score < 10:
+		return f"00000{score}"
+	elif score < 100:
+		return f"0000{score}"
+	elif score < 1000:
+		return f"000{score}"
+	elif score < 10000:
+		return f"00{score}"
+	elif score < 100000:
+		return f"0{score}"
+	else:
+		return f"{score}"
 
 def main():
 	W, H = 596, 385
@@ -134,7 +148,7 @@ def main():
 	text_level = level_fonts.render('00', 1, SCORE_COLOR)
 	pos_level = text_level.get_rect(center=(525, 130))
 	
-	text_score = score_fonts.render('000000', 1, SCORE_COLOR)
+	text_score = score_fonts.render(print_score(0), 1, SCORE_COLOR)
 	pos_score = text_level.get_rect(center=(492, 59))
 	
 	sc.blit(text_level, pos_level)
@@ -159,9 +173,12 @@ def main():
 				text_level = level_fonts.render(print_level(x), 1, SCORE_COLOR)
 				sc.blit(bg, (0, 0))
 				sc.blit(text_level, pos_level)
-				x += 1
+							
+				text_score = score_fonts.render(print_score(x), 1, SCORE_COLOR)
 				
 				sc.blit(text_score, pos_score)
+				
+				x += 1
 				
 		pygame.display.update()
 		
