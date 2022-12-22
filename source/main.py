@@ -66,6 +66,10 @@ images = {'bonus': {
 				7:  str(pathlib.Path('./images/esc_t.png').resolve()),
 				8:  str(pathlib.Path('./images/esc-bg.png').resolve()),
 			},
+		'weapon': {
+					1: str(pathlib.Path('./images/bomb.png').resolve()),
+					2: str(pathlib.Path('./images/bullet.png').resolve()),
+				},
 		'else': {
 					1:  str(pathlib.Path('./images/hatch-bombs.png').resolve()),
 					2:  str(pathlib.Path('./images/hatch-bombs-2.png').resolve()),
