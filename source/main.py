@@ -5,6 +5,7 @@ import pygame
 import pathlib
 from typing import Tuple
 
+pygame.mixer.pre_init(44100, -16, 2, 512) # важно прописать до pygame.init()
 pygame.init()
 
 W, H = 596, 385
@@ -175,24 +176,26 @@ images = {
 
 levels = map(lambda x: str(pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve()), range(1,31))
 
-musics = str(pathlib.Path('./sounds/music.mp3').resolve())
+music_file = str(pathlib.Path('./sounds/music.mp3').resolve())
+
+pygame.mixer.music.load(music_file)
 
 sounds = {
-			'alarm': str(pathlib.Path('./sounds/alarm.WAV').resolve()),
-			'applause': str(pathlib.Path('./sounds/applause.WAV').resolve()),
-			'bomb': str(pathlib.Path('./sounds/bomb.WAV').resolve()),
-			'burger': str(pathlib.Path('./sounds/burger.WAV').resolve()),
-			'clock': str(pathlib.Path('./sounds/clock.WAV').resolve()),
-			'coffee': str(pathlib.Path('./sounds/coffee.WAV').resolve()),
-			'cola': str(pathlib.Path('./sounds/cola.WAV').resolve()),
-			'heart': str(pathlib.Path('./sounds/heart.WAV').resolve()),
-			'jump': str(pathlib.Path('./sounds/jump.WAV').resolve()),
-			'live': str(pathlib.Path('./sounds/live.WAV').resolve()),
-			'final': str(pathlib.Path('./sounds/final.WAV').resolve()),
-			'shot': str(pathlib.Path('./sounds/shot.WAV').resolve()),
-			'start': str(pathlib.Path('./sounds/start.WAV').resolve()),
-			'stop': str(pathlib.Path('./sounds/stop.WAV').resolve()),
-			'thermos': str(pathlib.Path('./sounds/thermos.WAV').resolve())
+			'alarm': pygame.mixer.Sound(str(pathlib.Path('./sounds/alarm.WAV').resolve())),
+			'applause': pygame.mixer.Sound(str(pathlib.Path('./sounds/applause.WAV').resolve())),
+			'bomb': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
+			'burger': pygame.mixer.Sound(str(pathlib.Path('./sounds/burger.WAV').resolve())),
+			'clock': pygame.mixer.Sound(str(pathlib.Path('./sounds/clock.WAV').resolve())),
+			'coffee': pygame.mixer.Sound(str(pathlib.Path('./sounds/coffee.WAV').resolve())),
+			'cola': pygame.mixer.Sound(str(pathlib.Path('./sounds/cola.WAV').resolve())),
+			'heart': pygame.mixer.Sound(str(pathlib.Path('./sounds/heart.WAV').resolve())),
+			'jump': pygame.mixer.Sound(str(pathlib.Path('./sounds/jump.WAV').resolve())),
+			'live': pygame.mixer.Sound(str(pathlib.Path('./sounds/live.WAV').resolve())),
+			'final': pygame.mixer.Sound(str(pathlib.Path('./sounds/final.WAV').resolve())),
+			'shot': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
+			'start': pygame.mixer.Sound(str(pathlib.Path('./sounds/start.WAV').resolve())),
+			'stop': pygame.mixer.Sound(str(pathlib.Path('./sounds/stop.WAV').resolve())),
+			'thermos': pygame.mixer.Sound(str(pathlib.Path('./sounds/thermos.WAV').resolve())),
 		}
 
 def print_level(level: int) -> str:
@@ -302,6 +305,19 @@ def main():
 	global sc
 	global clock
 	global FPS
+	
+	# pygame.mixer.music.play(-1)
+	# pygame.mixer.music.pause()
+	# pygame.mixer.music.unpause()
+	# pygame.mixer.music.stop()
+	# pygame.mixer.music.rewind() # Заново
+	
+	# start_sound = pygame.mixer.Sound(sounds['start'])
+	# start_sound.play()
+	# start_sound.stop()
+	# start_sound.pause()
+	# start_sound.unpause()
+	# sounds['start'].play()
 	
 	sc.blit(images['bg'][8], (0, 0))
 	sc.blit(images['bg'][9], (coord_score_bg[0], coord_score_bg[1]))
