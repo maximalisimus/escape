@@ -26,7 +26,7 @@ size_surf_score = (92,22)
 size_surf_level = (26, 22)
 size_surf_lives = (128,32)
 
-# 16 x 18 (24x24)
+# 16 row x 18 column (24 pixel x 24 pixel)
 size_table = (434, 385)
 surf_table = pygame.Surface((size_table[0], size_table[1]))
 
@@ -336,10 +336,15 @@ def main():
 		
 		keys = pygame.key.get_pressed()
 		mouse_pressed = pygame.mouse.get_pressed()
-		#if mouse_pressed[0]:
+		# if mouse_pressed[0]:
 		#	mouse_pos = pygame.mouse.get_pos()
 		#	print(mouse_pos)
 		
+		# 1. (516, 522) - (536, 244) - up
+		# 2. (492, 246) - (514, 268) - left
+		# 3. (516, 246) - (538, 269) - jump
+		# 4. (539, 245) - (562, 269) - right
+		# 5. (516, 269) - (538, 293) - down
 		clock.tick(FPS)
 
 if __name__ == '__main__':
