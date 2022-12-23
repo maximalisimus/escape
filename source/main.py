@@ -308,6 +308,8 @@ def main():
 	
 	DrawTotal(sc, 0, 1, 4)	
 	
+	# pygame.Surface(())
+	
 	pygame.display.update()
 	
 	RUN = True
@@ -316,6 +318,8 @@ def main():
 			if event.type == pygame.QUIT:
 				RUN = False
 				exit()
+		
+		keys = pygame.key.get_pressed()
 		
 		clock.tick(FPS)
 
