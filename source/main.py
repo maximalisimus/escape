@@ -264,16 +264,6 @@ def DrawTotal(surface, score: int, level: int, live: int):
 	global pos_live_x
 	global pos_live_y
 	
-	if is_Start:
-		is_Start = False
-		DrawScore(surf_score, 0)
-		Score = Old_Score = 0
-		DrawLevel(surf_level, 1)
-		Level = Old_Level = 1
-		Live = Old_Live = 4
-		for i in range(1,5):
-			DrawLive(surf_lives, images['else'][11], (pos_live_x[i], pos_live_y))
-	
 	if score != Old_Score:
 		DrawScore(surf_score, score)
 		Old_Score = score
@@ -291,12 +281,47 @@ def DrawTotal(surface, score: int, level: int, live: int):
 	if live != Old_Live:
 		if live > Old_Live:
 			DrawLive(surf_lives, images['else'][11], (pos_live_x[live], 0))
-		else:
-			DrawLive(surf_lives, images['else'][12], (pos_live_x[Old_Live], 0))
+		elif live == Old_Live:
+			pass
+		elif (live < Old_Live):
+			if (Old_Live - live) == 1:
+				DrawLive(surf_lives, images['else'][12], (pos_live_x[Old_Live], 0))
+			else:
+				for i in range(Old_Live, live, -1):
+					DrawLive(surf_lives, images['else'][12], (pos_live_x[i], 0))
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 		Old_Live = live
 	else:
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
+
+def Restart(surface):
+	global is_Start
+	global surf_score
+	global surf_level
+	global surf_lives
+	global coord_score
+	global coord_level
+	global coord_live
+	global images
+	global pos_live_x
+	
+	global Score
+	global Level
+	global Live
+	global Old_Score
+	global Old_Level
+	global Old_Live
+	
+	Score = Old_Score = 0
+	Level = Old_Level = 1
+	Live = Old_Live = 4
+	DrawScore(surf_score, 0)
+	surface.blit(surf_score, (coord_score[0], coord_score[1]))
+	DrawLevel(surf_level, 1)
+	surface.blit(surf_level, (coord_level[0], coord_level[1]))
+	for i in range(1,5):
+		DrawLive(surf_lives, images['else'][11], (pos_live_x[i], pos_live_y))
+	surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 
 def main():
 	global Score
@@ -331,7 +356,9 @@ def main():
 	sc.blit(images['bg'][8], (0, 0))
 	sc.blit(images['bg'][9], (coord_score_bg[0], coord_score_bg[1]))
 	
-	DrawTotal(sc, 0, 1, 4)
+	Restart(sc)
+	
+	# DrawTotal(sc, 0, 1, 4)
 	
 	pygame.display.update()
 		
