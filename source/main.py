@@ -26,6 +26,9 @@ size_surf_score = (92,22)
 size_surf_level = (26, 22)
 size_surf_lives = (128,32)
 
+size_table = (434, 385)
+surf_table = pygame.Surface((size_table[0], size_table[1]))
+
 coord_score = (475,40)
 coord_level = (510, 110.5)
 coord_live = (460, 160)
@@ -304,6 +307,8 @@ def main():
 	global clock
 	global FPS
 	
+	global surf_table
+	
 	# pygame.mixer.music.play(-1)
 	# pygame.mixer.music.pause()
 	# pygame.mixer.music.unpause()
@@ -320,9 +325,10 @@ def main():
 	sc.blit(images['bg'][8], (0, 0))
 	sc.blit(images['bg'][9], (coord_score_bg[0], coord_score_bg[1]))
 	
-	DrawTotal(sc, 0, 1, 4)	
+	DrawTotal(sc, 0, 1, 4)
+	pygame.draw.rect(surf_table, (0,0,0), (0, 0, size_table[0], size_table[1]))
 	
-	# pygame.Surface((434, 384))
+	sc.blit(surf_table, (0, 0))
 	
 	pygame.display.update()
 	
