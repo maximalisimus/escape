@@ -225,11 +225,16 @@ def main():
 	
 	sc.blit(images['bg'][8], (0, 0))
 	
-	screen = pygame.Surface.copy(sc)
 	
-	DrawScore(screen, 0, 1, 4)
 	
-	sc.blit(screen, (0, 0))
+	### Copy Surface Variant
+	DrawScore(sc, 0, 1, 4)
+	# screen = pygame.Surface.copy(sc)
+	# DrawScore(screen, 0, 1, 4)
+	# sc.blit(screen, (0, 0))
+	### Copy Surface Variant
+	
+		
 	
 	#level_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 35, bold=True, italic=False)
 	#score_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 38, bold=True, italic=False)
