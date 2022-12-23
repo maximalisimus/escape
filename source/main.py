@@ -28,18 +28,31 @@ size_surf_lives = (128,32)
 coord_score = (475,40)
 coord_level = (510, 110.5)
 coord_live = (460, 160)
+coord_score_bg = (450, 0)
 
 surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]))
 surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]))
 surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]))
 
-pos_live = {
+pos_live_x = {
 				0: 0,
 				1: 0,
 				2: 32,
 				3: 64,
 				4: 96,
 			}
+pos_live_y = 0
+
+pos_score_x = {
+				0: 1,
+				1: 14,
+				2: 27,
+				3: 40,
+				4: 53,
+				5: 66,
+				6: 79,
+			}
+pos_score_y = 1
 
 images = {
 		'bonus': {
@@ -206,22 +219,26 @@ def print_score(score: int) -> str:
 
 def DrawScore(surf, on_score: int):
 	global size_surf_score
+	global pos_score_x
+	global pos_score_y
 	pygame.draw.rect(surf, (0,0,0), (0, 0, size_surf_score[0], size_surf_score[1]))
 	OnScore = tuple(print_score(on_score))
-	surf.blit(images['LCD'][OnScore[0]], (1, 1))
-	surf.blit(images['LCD'][OnScore[1]], (14, 1))
-	surf.blit(images['LCD'][OnScore[2]], (27, 1))
-	surf.blit(images['LCD'][OnScore[3]], (40, 1))
-	surf.blit(images['LCD'][OnScore[4]], (53, 1))
-	surf.blit(images['LCD'][OnScore[5]], (66, 1))
-	surf.blit(images['LCD'][OnScore[6]], (79, 1))
+	surf.blit(images['LCD'][OnScore[0]], (pos_score_x[0], pos_score_y))
+	surf.blit(images['LCD'][OnScore[1]], (pos_score_x[1], pos_score_y))
+	surf.blit(images['LCD'][OnScore[2]], (pos_score_x[2], pos_score_y))
+	surf.blit(images['LCD'][OnScore[3]], (pos_score_x[3], pos_score_y))
+	surf.blit(images['LCD'][OnScore[4]], (pos_score_x[4], pos_score_y))
+	surf.blit(images['LCD'][OnScore[5]], (pos_score_x[5], pos_score_y))
+	surf.blit(images['LCD'][OnScore[6]], (pos_score_x[6], pos_score_y))
 
 def DrawLevel(surf, on_level: int):
 	global size_surf_level
+	global pos_score_x
+	global pos_score_y
 	pygame.draw.rect(surf, (0,0,0), (0, 0, size_surf_level[0], size_surf_level[1]))
 	OnLevel = tuple(print_level(on_level))
-	surf.blit(images['LCD'][OnLevel[0]], (1, 1))
-	surf.blit(images['LCD'][OnLevel[1]], (14, 1))
+	surf.blit(images['LCD'][OnLevel[0]], (pos_score_x[0], pos_score_y))
+	surf.blit(images['LCD'][OnLevel[1]], (pos_score_x[1], pos_score_y))
 
 def DrawLive(screen_surf, surf, coord: Tuple[int, int]):
 	screen_surf.blit(surf, (coord[0], coord[1]))
@@ -236,7 +253,8 @@ def DrawTotal(surface, score: int, level: int, live: int):
 	global surf_level
 	global surf_lives
 	
-	global pos_live
+	global pos_live_x
+	global pos_live_y
 	
 	if is_Start:
 		is_Start = False
@@ -244,10 +262,10 @@ def DrawTotal(surface, score: int, level: int, live: int):
 		Old_Score = 0
 		DrawLevel(surf_level, 1)
 		Old_Level = 1
-		DrawLive(surf_lives, images['else'][11], (pos_live[1], 0))
-		DrawLive(surf_lives, images['else'][11], (pos_live[2], 0))
-		DrawLive(surf_lives, images['else'][11], (pos_live[3], 0))
-		DrawLive(surf_lives, images['else'][11], (pos_live[4], 0))
+		DrawLive(surf_lives, images['else'][11], (pos_live_x[1], pos_live_y))
+		DrawLive(surf_lives, images['else'][11], (pos_live_x[2], pos_live_y))
+		DrawLive(surf_lives, images['else'][11], (pos_live_x[3], pos_live_y))
+		DrawLive(surf_lives, images['else'][11], (pos_live_x[4], pos_live_y))
 	
 	if score != Old_Score:
 		DrawScore(surf_score, score)
@@ -265,9 +283,9 @@ def DrawTotal(surface, score: int, level: int, live: int):
 		
 	if live != Old_Live:
 		if live > Old_Live:
-			DrawLive(surf_lives, images['else'][11], (pos_live[live], 0))
+			DrawLive(surf_lives, images['else'][11], (pos_live_x[live], 0))
 		else:
-			DrawLive(surf_lives, images['else'][12], (pos_live[Old_Live], 0))
+			DrawLive(surf_lives, images['else'][12], (pos_live_x[Old_Live], 0))
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 		Old_Live = live
 	else:
@@ -282,8 +300,8 @@ def main():
 	global FPS
 	
 	sc.blit(images['bg'][8], (0, 0))
-	sc.blit(images['bg'][9], (450, 0))
-		
+	sc.blit(images['bg'][9], (coord_score_bg[0], coord_score_bg[1]))
+	
 	### Copy Surface Variant
 	DrawTotal(sc, 0, 1, 4)	
 	# screen = pygame.Surface.copy(sc)
