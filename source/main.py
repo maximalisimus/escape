@@ -240,14 +240,14 @@ def DrawTotal(surface, score: int, level: int, live: int):
 	
 	if is_Start:
 		is_Start = False
-		DrawScore(surf_score, score)
-		Old_Score = score
-		DrawLevel(surf_level, level)
-		Old_Level = level
-		DrawLive(surf_lives, images['else'][11], (pos_live[1],0))
-		DrawLive(surf_lives, images['else'][11], (pos_live[2],0))
-		DrawLive(surf_lives, images['else'][11], (pos_live[3],0))
-		DrawLive(surf_lives, images['else'][11], (pos_live[4],0))
+		DrawScore(surf_score, 0)
+		Old_Score = 0
+		DrawLevel(surf_level, 1)
+		Old_Level = 1
+		DrawLive(surf_lives, images['else'][11], (pos_live[1], 0))
+		DrawLive(surf_lives, images['else'][11], (pos_live[2], 0))
+		DrawLive(surf_lives, images['else'][11], (pos_live[3], 0))
+		DrawLive(surf_lives, images['else'][11], (pos_live[4], 0))
 	
 	if score != Old_Score:
 		DrawScore(surf_score, score)
@@ -265,9 +265,9 @@ def DrawTotal(surface, score: int, level: int, live: int):
 		
 	if live != Old_Live:
 		if live > Old_Live:
-			DrawLive(surf_lives, images['else'][11], (pos_live[live],0))
+			DrawLive(surf_lives, images['else'][11], (pos_live[live], 0))
 		else:
-			DrawLive(surf_lives, images['else'][12], (pos_live[Old_Live],0))
+			DrawLive(surf_lives, images['else'][12], (pos_live[Old_Live], 0))
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 		Old_Live = live
 	else:
