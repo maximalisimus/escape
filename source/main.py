@@ -20,46 +20,55 @@ images = {
 						'name': 'alarm',
 						'surf': pygame.image.load(str(pathlib.Path('./images/alarm.png').resolve())).convert_alpha(),
 						'score': 100,
+						'type': 'bonus',
 						},
 					2: {
 						'name': 'burger',
 						'surf': pygame.image.load(str(pathlib.Path('./images/burger.png').resolve())).convert_alpha(),
 						'score': 50,
+						'type': 'bonus',
 						},
 					3: {
 						'name': 'clock',
 						'surf': pygame.image.load(str(pathlib.Path('./images/clock.png').resolve())).convert_alpha(),
 						'score': 30,
+						'type': 'bonus',
 						},
 					4: {
 						'name': 'coffee',
 						'surf': pygame.image.load(str(pathlib.Path('./images/coffee.png').resolve())).convert_alpha(),
 						'score': 20,
+						'type': 'bonus',
 						},
 					5: {
 						'name': 'cola',
 						'surf': pygame.image.load(str(pathlib.Path('./images/cola.png').resolve())).convert_alpha(),
 						'score': 10,
+						'type': 'bonus',
 						},
 					6: {
 						'name': 'medicine_chest',
 						'surf': pygame.image.load(str(pathlib.Path('./images/medicine-chest.png').resolve())).convert_alpha(),
 						'score': 1,
+						'type': 'bonus',
 						},
 					7: {
 						'name': 'stop',
 						'surf': pygame.image.load(str(pathlib.Path('./images/stop.png').resolve())).convert_alpha(),
 						'score': 1,
+						'type': 'bonus',
 						},
 					8: {
 						'name': 'thermos',
 						'surf': pygame.image.load(str(pathlib.Path('./images/thermos.png').resolve())).convert_alpha(),
 						'score': 1,
+						'type': 'bonus',
 						},
 					9: {
 						'name': 'heart',
 						'surf': pygame.image.load(str(pathlib.Path('./images/heart.png').resolve())).convert_alpha(),
 						'score': 1,
+						'type': 'bonus',
 						},
 				},
 		'wall': {
@@ -82,8 +91,16 @@ images = {
 				9: pygame.image.load(str(pathlib.Path('./images/score-bg.png').resolve())).convert_alpha(),
 			},
 		'weapon': {
-					1: pygame.image.load(str(pathlib.Path('./images/bomb.png').resolve())).convert_alpha(),
-					2: pygame.image.load(str(pathlib.Path('./images/bullet.png').resolve())).convert_alpha(),
+					1: { 
+							'name': 'bomb',
+							'surf': pygame.image.load(str(pathlib.Path('./images/bomb.png').resolve())).convert_alpha(),
+							'type': 'weapon',
+						},
+					2: { 
+						'name': 'shot',
+						'surf': pygame.image.load(str(pathlib.Path('./images/bullet.png').resolve())).convert_alpha(),
+						'type': 'weapon',
+						},
 				},
 		'else': {
 					1: pygame.image.load(str(pathlib.Path('./images/hatch-bombs.png').resolve())).convert_alpha(),
