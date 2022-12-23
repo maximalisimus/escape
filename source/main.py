@@ -286,8 +286,9 @@ def main():
 		
 	### Copy Surface Variant
 	DrawTotal(sc, 0, 1, 4)	
+	# screen = pygame.Surface.copy(sc)
 	# DrawTotal(screen, 0, 1, 4)
-	#sc.blit(screen, (0, 0))
+	# sc.blit(screen, (0, 0))
 	### Copy Surface Variant
 	
 	#level_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 35, bold=True, italic=False)
