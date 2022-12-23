@@ -244,6 +244,9 @@ def DrawLive(screen_surf, surf, coord: Tuple[int, int]):
 	screen_surf.blit(surf, (coord[0], coord[1]))
 
 def DrawTotal(surface, score: int, level: int, live: int):
+	global Score
+	global Level
+	global Live
 	global Old_Score
 	global Old_Level
 	global Old_Live
@@ -259,9 +262,10 @@ def DrawTotal(surface, score: int, level: int, live: int):
 	if is_Start:
 		is_Start = False
 		DrawScore(surf_score, 0)
-		Old_Score = 0
+		Score = Old_Score = 0
 		DrawLevel(surf_level, 1)
-		Old_Level = 1
+		Level = Old_Level = 1
+		Live = Old_Live = 4
 		DrawLive(surf_lives, images['else'][11], (pos_live_x[1], pos_live_y))
 		DrawLive(surf_lives, images['else'][11], (pos_live_x[2], pos_live_y))
 		DrawLive(surf_lives, images['else'][11], (pos_live_x[3], pos_live_y))
