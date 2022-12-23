@@ -176,9 +176,7 @@ images = {
 
 levels = map(lambda x: str(pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve()), range(1,31))
 
-music_file = str(pathlib.Path('./sounds/music.mp3').resolve())
-
-pygame.mixer.music.load(music_file)
+pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
 
 sounds = {
 			'alarm': pygame.mixer.Sound(str(pathlib.Path('./sounds/alarm.WAV').resolve())),
