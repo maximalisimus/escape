@@ -22,6 +22,8 @@ Live = Old_Live = 4
 
 is_Start = True
 
+isGame = False
+
 isUp = isLeft = isRight = isDown = isJump = False
 
 size_surf_score = (92,22)
@@ -202,6 +204,33 @@ sounds = {
 			'thermos': pygame.mixer.Sound(str(pathlib.Path('./sounds/thermos.WAV').resolve())),
 		}
 
+pos_clicked = {
+				0: {
+						0: (0, 0),
+						1: (434, 385),
+					},
+				1: {
+						0: (516, 222),
+						1: (538, 246),
+					},
+				2: {
+						0: (492, 246),
+						1: (516, 268),
+					},
+				3: {
+						0: (516, 246),
+						1: (538, 268),
+					},
+				4: {
+						0: (538, 246),
+						1: (562, 268),
+					},
+				5: {
+						0: (516, 268),
+						1: (538, 294),
+					},
+			}
+
 def print_level(level: int) -> str:
 	if level<10:
 		return f"0{level}"
@@ -322,6 +351,40 @@ def Restart(surface):
 	for i in range(1,5):
 		DrawLive(surf_lives, images['else'][11], (pos_live_x[i], pos_live_y))
 	surface.blit(surf_lives, (coord_live[0], coord_live[1]))
+	surf_start_bg = pygame.transform.scale(images['bg'][7], (size_table[0], size_table[1]))
+	surface.blit(surf_start_bg, (0, 0))
+
+def MouseClicked(pos: Tuple[int, int]):
+	global isUp
+	global isLeft
+	global isRight
+	global isDown
+	global isJump
+	global isGame
+	global pos_clicked
+	
+	if ((pos[0] >= pos_clicked[0][0][0]) and (pos[0] <= pos_clicked[0][1][0])):
+		if ((pos[1] >= pos_clicked[0][0][1]) and (pos[1] <= pos_clicked[0][1][1])):
+			isGame = True
+	elif ((pos[0] >= pos_clicked[1][0][0]) and (pos[0] <= pos_clicked[1][1][0])):
+		if ((pos[1] >= pos_clicked[1][0][1]) and (pos[1] <= pos_clicked[1][1][1])):
+			isUp = True
+		elif ((pos[1] >= pos_clicked[3][0][1]) and (pos[1] <= pos_clicked[3][1][1])):
+			isJump = True
+		elif ((pos[1] >= pos_clicked[5][0][1]) and (pos[1] <= pos_clicked[5][1][1])):
+			isDown = True
+	elif ((pos[0] >= pos_clicked[2][0][0]) and (pos[0] <= pos_clicked[2][1][0])):
+		if ((pos[1] >= pos_clicked[2][0][1]) and (pos[1] <= pos_clicked[2][1][1])):
+			isLeft = True
+	elif ((pos[0] >= pos_clicked[4][0][0]) and (pos[0] <= pos_clicked[4][1][0])):
+		if ((pos[1] >= pos_clicked[4][0][1]) and (pos[1] <= pos_clicked[4][1][1])):
+			isRight = True
+	# 0. (0, 0) - (434, 385) - work_table
+	# 1. (516, 222) - (538, 246) - up
+	# 2. (492, 246) - (516, 268) - left
+	# 3. (516, 246) - (538, 268) - jump
+	# 4. (538, 246) - (562, 268) - right
+	# 5. (516, 268) - (538, 294) - down
 
 def main():
 	global Score
@@ -331,14 +394,15 @@ def main():
 	global clock
 	global FPS
 	
-	global is_Start	
+	global is_Start
 	global surf_table
 	
 	global isUp
 	global isLeft
 	global isRight
 	global isDown
-	global isJump
+	global isJump	
+	global isGame
 	
 	# pygame.mixer.music.play(-1)
 	# pygame.mixer.music.pause()
@@ -361,7 +425,7 @@ def main():
 	# DrawTotal(sc, 0, 1, 4)
 	
 	pygame.display.update()
-		
+	
 	RUN = True
 	while RUN:
 		for event in pygame.event.get():
@@ -371,15 +435,23 @@ def main():
 		
 		keys = pygame.key.get_pressed()
 		mouse_pressed = pygame.mouse.get_pressed()
-		# if mouse_pressed[0]:
-		#	mouse_pos = pygame.mouse.get_pos()
-		#	print(mouse_pos)
+		if mouse_pressed[0]:
+			mouse_pos = pygame.mouse.get_pos()
+			MouseClicked((mouse_pos[0],mouse_pos[1]))
 		
-		# 1. (516, 222) - (538, 246) - up
-		# 2. (492, 246) - (516, 268) - left
-		# 3. (516, 246) - (538, 268) - jump
-		# 4. (538, 246) - (562, 268) - right
-		# 5. (516, 268) - (538, 294) - down
+		if isUp:
+			isUp = False
+		if isLeft:
+			isLeft = False
+		if isRight:
+			isRight = False
+		if isDown:
+			isDown = False
+		if isJump:
+			isJump = False
+		if isGame:
+			isGame = False
+		
 		clock.tick(FPS)
 
 if __name__ == '__main__':
