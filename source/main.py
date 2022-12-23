@@ -308,7 +308,7 @@ def main():
 	
 	DrawTotal(sc, 0, 1, 4)	
 	
-	# pygame.Surface(())
+	# pygame.Surface((434, 384))
 	
 	pygame.display.update()
 	
@@ -320,6 +320,10 @@ def main():
 				exit()
 		
 		keys = pygame.key.get_pressed()
+		mouse_pressed = pygame.mouse.get_pressed()
+		#if mouse_pressed[0]:
+		#	mouse_pos = pygame.mouse.get_pos()
+		#	print(mouse_pos)
 		
 		clock.tick(FPS)
 
