@@ -79,6 +79,7 @@ images = {
 				6: pygame.image.load(str(pathlib.Path('./images/esc_6.png').resolve())).convert_alpha(),
 				7: pygame.image.load(str(pathlib.Path('./images/esc_t.png').resolve())).convert_alpha(),
 				8: pygame.image.load(str(pathlib.Path('./images/esc-bg.png').resolve())).convert_alpha(),
+				9: pygame.image.load(str(pathlib.Path('./images/score-bg.png').resolve())).convert_alpha(),
 			},
 		'weapon': {
 					1: pygame.image.load(str(pathlib.Path('./images/bomb.png').resolve())).convert_alpha(),
@@ -160,7 +161,7 @@ def print_score(score: int) -> str:
 		return f"{score}"
 
 def DrawScore(surface, score: int, level: int, live: int):
-	surface.blit(images['bg'][8], (0, 0))
+	surface.blit(images['bg'][9], (450, 0))
 		
 	OnScore = tuple(print_score(score))
 	OnLevel = tuple(print_level(level))
@@ -205,7 +206,13 @@ def main():
 	global clock
 	global FPS
 	
-	DrawScore(sc, 0, 1, 4)
+	sc.blit(images['bg'][8], (0, 0))
+	
+	screen = pygame.Surface.copy(sc)
+	
+	DrawScore(screen, 0, 1, 4)
+	
+	sc.blit(screen, (0, 0))
 	
 	#level_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 35, bold=True, italic=False)
 	#score_fonts = pygame.font.Font(str(pathlib.Path('./config/').joinpath('esc-lcd.ttf').resolve()), 38, bold=True, italic=False)
