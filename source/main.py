@@ -22,6 +22,8 @@ Live = Old_Live = 4
 
 is_Start = True
 
+isUp = isLeft = isRight = isDown = isJump = False
+
 size_surf_score = (92,22)
 size_surf_level = (26, 22)
 size_surf_lives = (128,32)
@@ -307,6 +309,12 @@ def main():
 	global is_Start	
 	global surf_table
 	
+	global isUp
+	global isLeft
+	global isRight
+	global isDown
+	global isJump
+	
 	# pygame.mixer.music.play(-1)
 	# pygame.mixer.music.pause()
 	# pygame.mixer.music.unpause()
@@ -326,7 +334,7 @@ def main():
 	DrawTotal(sc, 0, 1, 4)
 	
 	pygame.display.update()
-	
+		
 	RUN = True
 	while RUN:
 		for event in pygame.event.get():
@@ -340,11 +348,11 @@ def main():
 		#	mouse_pos = pygame.mouse.get_pos()
 		#	print(mouse_pos)
 		
-		# 1. (516, 522) - (536, 244) - up
+		# 1. (516, 223) - (536, 244) - up
 		# 2. (492, 246) - (514, 268) - left
-		# 3. (516, 246) - (538, 269) - jump
-		# 4. (539, 245) - (562, 269) - right
-		# 5. (516, 269) - (538, 293) - down
+		# 3. (516, 246) - (538, 268) - jump
+		# 4. (538, 246) - (562, 268) - right
+		# 5. (516, 268) - (538, 294) - down
 		clock.tick(FPS)
 
 if __name__ == '__main__':
