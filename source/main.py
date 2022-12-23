@@ -178,8 +178,10 @@ def print_score(score: int) -> str:
 		return f"{score}"
 
 def DrawScore(surface, score: int, level: int, live: int):
-	surface.blit(images['bg'][9], (450, 0))
-		
+	
+	pygame.draw.rect(surface, (0,0,0), (475,40, 92, 22))
+	pygame.draw.rect(surface, (0,0,0), (510, 111, 26, 22))
+	
 	OnScore = tuple(print_score(score))
 	OnLevel = tuple(print_level(level))
 	surface.blit(images['LCD'][OnLevel[0]], (511, 111))
@@ -224,11 +226,11 @@ def main():
 	global FPS
 	
 	sc.blit(images['bg'][8], (0, 0))
-	
+	sc.blit(images['bg'][9], (450, 0))
 	
 	
 	### Copy Surface Variant
-	DrawScore(sc, 0, 1, 4)
+	DrawScore(sc, 0, 1, 4)	
 	# screen = pygame.Surface.copy(sc)
 	# DrawScore(screen, 0, 1, 4)
 	# sc.blit(screen, (0, 0))
