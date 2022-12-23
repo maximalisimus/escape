@@ -26,6 +26,7 @@ size_surf_score = (92,22)
 size_surf_level = (26, 22)
 size_surf_lives = (128,32)
 
+# 16 x 18 (24x24)
 size_table = (434, 385)
 surf_table = pygame.Surface((size_table[0], size_table[1]))
 
@@ -177,7 +178,7 @@ images = {
 				},
 		}
 
-levels = map(lambda x: str(pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve()), range(1,31))
+levels = tuple(map(lambda x: str(pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve()), range(1,31)))
 
 pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
 
@@ -222,6 +223,7 @@ def print_score(score: int) -> str:
 		return f"{score}"
 
 def DrawScore(surf, on_score: int):
+	global images
 	global size_surf_score
 	global pos_score_x
 	global pos_score_y
@@ -236,6 +238,7 @@ def DrawScore(surf, on_score: int):
 	surf.blit(images['LCD'][OnScore[6]], (pos_score_x[6], pos_score_y))
 
 def DrawLevel(surf, on_level: int):
+	global images
 	global size_surf_level
 	global pos_score_x
 	global pos_score_y
@@ -248,6 +251,7 @@ def DrawLive(screen_surf, surf, coord: Tuple[int, int]):
 	screen_surf.blit(surf, (coord[0], coord[1]))
 
 def DrawTotal(surface, score: int, level: int, live: int):
+	global images
 	global Score
 	global Level
 	global Live
@@ -299,6 +303,29 @@ def DrawTotal(surface, score: int, level: int, live: int):
 	else:
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 
+def DrawClouds(surf):
+	global images
+	global size_table
+	global is_Start
+	global Level
+	pygame.draw.rect(surf, (0,0,0), (0, 0, size_table[0], size_table[1]))
+	if is_Start:
+		surf.blit(pygame.transform.scale(images['bg'][7], (size_table[0], size_table[1])), (0, 0))
+		is_Start = False
+	else:
+		if Level >= 1 and Level < 6:
+			surf.blit(pygame.transform.scale(images['bg'][1], (size_table[0], size_table[1])), (0, 0))
+		elif Level >= 6 and Level < 12:
+			surf.blit(pygame.transform.scale(images['bg'][2], (size_table[0], size_table[1])), (0, 0))
+		elif Level >= 12 and Level < 18:
+			surf.blit(pygame.transform.scale(images['bg'][3], (size_table[0], size_table[1])), (0, 0))
+		elif Level >= 18 and Level < 24:
+			surf.blit(pygame.transform.scale(images['bg'][4], (size_table[0], size_table[1])), (0, 0))
+		elif Level >= 24 and Level < 30:
+			surf.blit(pygame.transform.scale(images['bg'][5], (size_table[0], size_table[1])), (0, 0))
+		elif Level == 30:
+			surf.blit(pygame.transform.scale(images['bg'][6], (size_table[0], size_table[1])), (0, 0))
+
 def main():
 	global Score
 	global Level
@@ -307,6 +334,7 @@ def main():
 	global clock
 	global FPS
 	
+	global is_Start	
 	global surf_table
 	
 	# pygame.mixer.music.play(-1)
@@ -326,9 +354,6 @@ def main():
 	sc.blit(images['bg'][9], (coord_score_bg[0], coord_score_bg[1]))
 	
 	DrawTotal(sc, 0, 1, 4)
-	pygame.draw.rect(surf_table, (0,0,0), (0, 0, size_table[0], size_table[1]))
-	
-	sc.blit(surf_table, (0, 0))
 	
 	pygame.display.update()
 	
