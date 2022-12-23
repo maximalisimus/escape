@@ -97,9 +97,9 @@ images = {
 							'type': 'weapon',
 						},
 					2: { 
-						'name': 'shot',
-						'surf': pygame.image.load(str(pathlib.Path('./images/bullet.png').resolve())).convert_alpha(),
-						'type': 'weapon',
+							'name': 'shot',
+							'surf': pygame.image.load(str(pathlib.Path('./images/bullet.png').resolve())).convert_alpha(),
+							'type': 'weapon',
 						},
 				},
 		'else': {
