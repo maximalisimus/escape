@@ -348,39 +348,42 @@ def Restart(surface):
 		DrawLive(surf_lives, images['else'][11], (pos_live_x[i], pos_live_y))
 	surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 
-def MouseClicked(pos: Tuple[int, int], surface):
+def SwitchInitImage(pos: Tuple[int, int], surface):
+	global isGame
+	global isStart
+	global pos_clicked
+	global W
+	global H
+	if (pos[0] >= 0) and (pos[0] <= W):
+		if ((pos[1] >= 0) and (pos[1] <= H)):
+			isGame = True
+			isStart = False
+			Restart(surface)
+			pygame.display.update()
+
+def MouseClicked(pos: Tuple[int, int], isValue):
 	global isUp
 	global isLeft
 	global isRight
 	global isDown
 	global isJump
 	global isGame
-	global isStart
 	global pos_clicked
-	global W
-	global H
-	
-	if isStart:
-		if (pos[0] >= 0) and (pos[0] <= W):
-			if ((pos[1] >= 0) and (pos[1] <= H)):
-				isGame = True
-				isStart = False
-				Restart(surface)
-				pygame.display.update()
-	elif isGame:
+
+	if isGame:
 		if ((pos[0] >= pos_clicked[1][0][0]) and (pos[0] <= pos_clicked[1][1][0])):
 			if ((pos[1] >= pos_clicked[1][0][1]) and (pos[1] <= pos_clicked[1][1][1])):
-				isUp = True
+				isUp = isValue
 			elif ((pos[1] >= pos_clicked[3][0][1]) and (pos[1] <= pos_clicked[3][1][1])):
-				isJump = True
+				isJump = isValue
 			elif ((pos[1] >= pos_clicked[5][0][1]) and (pos[1] <= pos_clicked[5][1][1])):
-				isDown = True
+				isDown = isValue
 		elif ((pos[0] >= pos_clicked[2][0][0]) and (pos[0] <= pos_clicked[2][1][0])):
 			if ((pos[1] >= pos_clicked[2][0][1]) and (pos[1] <= pos_clicked[2][1][1])):
-				isLeft = True
+				isLeft = isValue
 		elif ((pos[0] >= pos_clicked[4][0][0]) and (pos[0] <= pos_clicked[4][1][0])):
 			if ((pos[1] >= pos_clicked[4][0][1]) and (pos[1] <= pos_clicked[4][1][1])):
-				isRight = True
+				isRight = isValue
 	# 0. (0, 0) - (434, 385) - work_table
 	# 1. (516, 222) - (538, 246) - up
 	# 2. (492, 246) - (516, 268) - left
@@ -403,8 +406,7 @@ def main():
 	global isLeft
 	global isRight
 	global isDown
-	global isJump	
-	global isGame
+	global isJump
 	
 	# pygame.mixer.music.play(-1)
 	# pygame.mixer.music.pause()
@@ -424,8 +426,9 @@ def main():
 	
 	surf_start_bg = pygame.transform.scale(images['bg'][7], (W, H))
 	sc.blit(surf_start_bg, (0, 0))
-	isStart = True
 	pygame.display.update()
+	
+	isStart = True
 	
 	RUN = True
 	while RUN:
@@ -433,6 +436,47 @@ def main():
 			if event.type == pygame.QUIT:
 				RUN = False
 				exit()
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_SPACE:
+					isJump = True
+				elif event.key == pygame.K_UP:
+					isUp = True
+				elif event.key == pygame.K_DOWN:
+					isDown = True
+				elif event.key == pygame.K_LEFT:
+					isLeft = True
+				elif event.key == pygame.K_RIGHT:
+					isRight = True
+			elif event.type == pygame.KEYUP:
+				if event.key in [pygame.K_SPACE, pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
+					isUp = isDown = isLeft = isRight = isJump = False
+				# elif event.key in []:
+					# pass
+			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				if isStart:
+					SwitchInitImage((event.pos[0],event.pos[1]), sc)
+				elif isGame:
+					MouseClicked((event.pos[0],event.pos[1]), True)
+			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+				MouseClicked((event.pos[0],event.pos[1]), False)
+				isStart = False
+				#isGame = True
+		
+		if isUp:
+			#print('Up')
+			pass
+		elif isDown:
+			#print('Down')
+			pass
+		elif isLeft:
+			#print('Left')
+			pass
+		elif isRight:
+			#print('Right')
+			pass
+		elif isJump:
+			#print('Jump')
+			pass
 		
 		keys = pygame.key.get_pressed()
 		# if keys[pygame.K_SPACE]:
@@ -459,27 +503,11 @@ def main():
 		#	print('F10')
 		# elif keys[pygame.K_F11]:
 		#	print('F11')
-		mouse_pressed = pygame.mouse.get_pressed()
-		if mouse_pressed[0]:
-			mouse_pos = pygame.mouse.get_pos()
-			MouseClicked((mouse_pos[0],mouse_pos[1]), sc)
-		
-		if isUp:
-			isUp = False
-			# print('Up')
-		if isLeft:
-			isLeft = False
-			# print('Left')
-		if isRight:
-			isRight = False
-			# print('Right')
-		if isDown:
-			isDown = False
-			# print('Down')
-		if isJump:
-			isJump = False
-			# print('Jump')
-		
+		# mouse_pressed = pygame.mouse.get_pressed()
+		# if mouse_pressed[0]:
+		#	mouse_pos = pygame.mouse.get_pos()
+		#	MouseClicked((mouse_pos[0],mouse_pos[1]), sc)
+				
 		clock.tick(FPS)
 
 if __name__ == '__main__':
