@@ -182,7 +182,7 @@ images = {
 		}
 
 pre_levels = map(lambda x: pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve(), range(1,31))
-file_levels = tuple(map(lambda x: str(x), filter(lambda y: y.exists(), pre_levels)))
+files_levels = tuple(map(lambda x: str(x), filter(lambda y: y.exists(), pre_levels)))
 del pre_levels
 
 pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
