@@ -4,6 +4,7 @@
 import pygame
 import pathlib
 from typing import Tuple
+from enum import Enum
 
 pygame.mixer.pre_init(44100, -16, 2, 512) # важно прописать до pygame.init()
 pygame.init()
@@ -184,6 +185,41 @@ images = {
 pre_levels = map(lambda x: pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve(), range(1,31))
 files_levels = tuple(map(lambda x: str(x), filter(lambda y: y.exists(), pre_levels)))
 del pre_levels
+
+class NoValue(Enum):
+	''' Base Enum class elements '''
+
+	def __repr__(self):
+		return f"{self.__class__}: {self.name}"
+	
+	def __str__(self):
+		return f"{self.name}"
+	
+	def __call__(self):
+		return f"{self.value}"
+
+class LevelCode(NoValue):
+	Tile = 1
+	Ladder = 2
+	Door = 3
+	HatchBombs = 4
+	LeftPistol = 5
+	RightPistol = 6
+	
+	@classmethod
+	def GetLevelValue(cls, value):
+		for x in cls:
+			if value == x.value:
+				return x
+		return None
+	
+	@classmethod
+	def GetLevelName(cls, OnName):
+		''' Get Weight to name elements '''
+		for x in cls:
+			if OnName == x:
+				return x
+		return None
 
 pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
 
