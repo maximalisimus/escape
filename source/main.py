@@ -227,7 +227,6 @@ class LevelCode(NoValue):
 	
 	@classmethod
 	def GetCodeName(cls, OnName):
-		''' Get Weight to name elements '''
 		for x in cls:
 			if OnName == x:
 				return x
