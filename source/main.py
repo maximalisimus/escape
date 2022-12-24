@@ -184,6 +184,14 @@ images = {
 						0: pygame.image.load(str(pathlib.Path('./images/hero.png').resolve())).convert_alpha(),
 						1: pygame.image.load(str(pathlib.Path('./images/hero-side.png').resolve())).convert_alpha()
 					},
+			'explotion': {
+							0: pygame.image.load(str(pathlib.Path('./images/exp-1.png').resolve())).convert_alpha(),
+							1: pygame.image.load(str(pathlib.Path('./images/exp-2.png').resolve())).convert_alpha(),
+							2: pygame.image.load(str(pathlib.Path('./images/exp-3.png').resolve())).convert_alpha(),
+							3: pygame.image.load(str(pathlib.Path('./images/exp-4.png').resolve())).convert_alpha(),
+							4: pygame.image.load(str(pathlib.Path('./images/exp-5.png').resolve())).convert_alpha(),
+							5: pygame.image.load(str(pathlib.Path('./images/exp-6.png').resolve())).convert_alpha(),
+						},
 		}
 
 pre_levels = map(lambda x: pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve(), range(1,31))
