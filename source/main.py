@@ -32,16 +32,16 @@ size_surf_lives = (128,32)
 
 # 16 row x 18 column (24 pixel x 24 pixel)
 size_table = (434, 385)
-surf_table = pygame.Surface((size_table[0], size_table[1]))
+surf_table = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
 
 coord_score = (475,40)
 coord_level = (510, 110.5)
 coord_live = (460, 160)
 coord_score_bg = (450, 0)
 
-surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]))
-surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]))
-surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]))
+surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
+surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
+surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]), pygame.SRCALPHA, 32).convert_alpha()
 
 pos_live_x = {
 				0: 0,
@@ -180,6 +180,10 @@ images = {
 					'8': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-8.png').resolve())).convert_alpha(),
 					'9': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-9.png').resolve())).convert_alpha(),
 				},
+			'hero': {
+						0: pygame.image.load(str(pathlib.Path('./images/hero.png').resolve())).convert_alpha(),
+						1: pygame.image.load(str(pathlib.Path('./images/hero-side.png').resolve())).convert_alpha()
+					},
 		}
 
 pre_levels = map(lambda x: pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve(), range(1,31))
@@ -461,6 +465,20 @@ def main():
 	
 	Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
+	
+	# Hero Draw Test and how to animation legs ?
+	sc.blit(images['bg'][1], (0, 0))
+	surf_hero = pygame.Surface((15, 19), pygame.SRCALPHA, 32).convert_alpha()
+	# Hero, images['hero'][1] - Hero-Side
+	surf_hero.blit(images['hero'][0], (0, 0))
+	surf_left_legs = pygame.Surface((6, 4), pygame.SRCALPHA, 32).convert_alpha()
+	pygame.draw.rect(surf_left_legs, (139, 139, 139), (4, 0, 2, 4))
+	pygame.draw.rect(surf_left_legs, (139, 139, 139), (0, 2, 6, 2))
+	surf_hero.blit(surf_left_legs, (0, 15))
+	# surf_hero.blit(surf_left_legs, (6, 13))
+	surf_right_legs = pygame.transform.flip(surf_left_legs, True, False)
+	surf_hero.blit(surf_right_legs, (8, 15))
+	sc.blit(surf_hero, (100, 100))
 	
 	#surf_start_bg = pygame.transform.scale(images['bg'][7], (W, H))
 	#sc.blit(surf_start_bg, (0, 0))
