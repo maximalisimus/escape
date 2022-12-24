@@ -207,14 +207,14 @@ class LevelCode(NoValue):
 	RightPistol = 6
 	
 	@classmethod
-	def GetLevelValue(cls, value):
+	def GetCodeValue(cls, value):
 		for x in cls:
 			if value == x.value:
 				return x
 		return None
 	
 	@classmethod
-	def GetLevelName(cls, OnName):
+	def GetCodeName(cls, OnName):
 		''' Get Weight to name elements '''
 		for x in cls:
 			if OnName == x:
