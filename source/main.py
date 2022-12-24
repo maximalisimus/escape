@@ -233,6 +233,125 @@ class LevelCode(NoValue):
 				return x
 		return None
 
+def SwitchShot(CasePos):
+	return {
+			LevelCode.LeftPistol: images['weapon'][2]['surf'],
+			LevelCode.RightPistol: pygame.transform.flip(images['weapon'][2]['surf'], True, False),
+	}.get(CasePos, images['weapon'][2]['surf'])
+
+def SwitchDoor(level_code):
+	return {
+			LevelCode.Door: images['else'][13],
+	}.get(level_code, images['else'][13])
+
+def SwitchPistol(CasePos):
+	return {
+			LevelCode.LeftPistol: images['else'][9],
+			LevelCode.RightPistol: images['else'][10],
+	}.get(CasePos, images['else'][9])
+
+def SwitchHatchBombs(CaseLevel):
+	return {
+			1: images['else'][1],
+			2: images['else'][1],
+			3: images['else'][1],
+			4: images['else'][1],
+			5: images['else'][1],
+			6: images['else'][1],
+			7: images['else'][1],
+			8: images['else'][1],
+			9: images['else'][1],
+			10: images['else'][1],
+			11: images['else'][1],
+			12: images['else'][1],
+			13: images['else'][1],
+			14: images['else'][1],
+			15: images['else'][1],
+			16: images['else'][1],
+			17: images['else'][1],
+			18: images['else'][1],
+			19: images['else'][1],
+			20: images['else'][1],
+			21: images['else'][1],
+			22: images['else'][1],
+			23: images['else'][1],
+			24: images['else'][1],
+			25: images['else'][1],
+			26: images['else'][1],
+			27: images['else'][1],
+			28: images['else'][1],
+			29: images['else'][1],
+			30: images['else'][2],
+	}.get(CaseLevel, images['else'][1])
+
+def SwitchLadder(CaseLevel):
+	return {
+			1: images['else'][7],
+			2: images['else'][7],
+			3: images['else'][7],
+			4: images['else'][7],
+			5: images['else'][7],
+			6: images['else'][7],
+			7: images['else'][7],
+			8: images['else'][7],
+			9: images['else'][7],
+			10: images['else'][7],
+			11: images['else'][7],
+			12: images['else'][7],
+			13: images['else'][7],
+			14: images['else'][7],
+			15: images['else'][7],
+			16: images['else'][7],
+			17: images['else'][7],
+			18: images['else'][7],
+			19: images['else'][7],
+			20: images['else'][7],
+			21: images['else'][7],
+			22: images['else'][7],
+			23: images['else'][7],
+			24: images['else'][7],
+			25: images['else'][7],
+			26: images['else'][7],
+			27: images['else'][7],
+			28: images['else'][7],
+			29: images['else'][7],
+			30: images['else'][8],
+	}.get(CaseLevel, images['else'][7])
+
+def SwitchTile(CaseLevel):
+	return {
+		1: images['wall'][1],
+		2: images['wall'][1],
+		3: images['wall'][1],
+		4: images['wall'][1],
+		5: images['wall'][1],
+		6: images['wall'][2],
+		7: images['wall'][2],
+		8: images['wall'][2],
+		9: images['wall'][2],
+		10: images['wall'][2],
+		11: images['wall'][2],
+		12: images['wall'][3],
+		13: images['wall'][3],
+		14: images['wall'][3],
+		15: images['wall'][3],
+		16: images['wall'][3],
+		17: images['wall'][3],
+		18: images['wall'][4],
+		19: images['wall'][4],
+		20: images['wall'][4],
+		21: images['wall'][4],
+		22: images['wall'][4],
+		23: images['wall'][4],
+		24: images['wall'][5],
+		25: images['wall'][5],
+		26: images['wall'][5],
+		27: images['wall'][5],
+		28: images['wall'][5],
+		29: images['wall'][5],
+		30: images['wall'][6],
+	}.get(CaseLevel, images['wall'][1])
+
 pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
 
 sounds = {
