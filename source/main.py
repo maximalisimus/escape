@@ -352,6 +352,40 @@ def SwitchTile(CaseLevel):
 		30: images['wall'][6],
 	}.get(CaseLevel, images['wall'][1])
 
+def SwitchBG(CaseLevel):
+	return {
+			1: images['bg'][1],
+			2: images['bg'][1],
+			3: images['bg'][1],
+			4: images['bg'][1],
+			5: images['bg'][1],
+			6: images['bg'][2],
+			7: images['bg'][2],
+			8: images['bg'][2],
+			9: images['bg'][2],
+			10: images['bg'][2],
+			11: images['bg'][2],
+			12: images['bg'][3],
+			13: images['bg'][3],
+			14: images['bg'][3],
+			15: images['bg'][3],
+			16: images['bg'][3],
+			17: images['bg'][3],
+			18: images['bg'][4],
+			19: images['bg'][4],
+			20: images['bg'][4],
+			21: images['bg'][4],
+			22: images['bg'][4],
+			23: images['bg'][4],
+			24: images['bg'][5],
+			25: images['bg'][5],
+			26: images['bg'][5],
+			27: images['bg'][5],
+			28: images['bg'][5],
+			29: images['bg'][5],
+			30: images['bg'][6],
+	}.get(CaseLevel, images['bg'][1])
+
 pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
 
 sounds = {
