@@ -44,7 +44,7 @@ coord_score_bg = (450, 0)
 surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]), pygame.SRCALPHA, 32).convert_alpha()
-empty_block = pygame.Surface((size_blocks, size_blocks), pygame.SRCALPHA, 32).convert_alpha()
+surf_empty= pygame.Surface((size_blocks, size_blocks), pygame.SRCALPHA, 32).convert_alpha()
 
 pos_live_x = {
 				0: 0,
@@ -713,6 +713,7 @@ def main():
 	
 	# Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
+	
 	
 	surf_start_bg = pygame.transform.scale(images['bg'][7], (W, H))
 	sc.blit(surf_start_bg, (0, 0))
