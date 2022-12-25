@@ -65,55 +65,55 @@ pos_score_y = 1
 
 images = {
 		'bonus': {
-					1: {
+					0: {
 						'name': 'alarm',
 						'surf': pygame.image.load(str(pathlib.Path('./images/alarm.png').resolve())).convert_alpha(),
 						'score': 100,
 						'type': 'bonus',
 						},
-					2: {
+					1: {
 						'name': 'burger',
 						'surf': pygame.image.load(str(pathlib.Path('./images/burger.png').resolve())).convert_alpha(),
 						'score': 50,
 						'type': 'bonus',
 						},
-					3: {
+					2: {
 						'name': 'clock',
 						'surf': pygame.image.load(str(pathlib.Path('./images/clock.png').resolve())).convert_alpha(),
 						'score': 30,
 						'type': 'bonus',
 						},
-					4: {
+					3: {
 						'name': 'coffee',
 						'surf': pygame.image.load(str(pathlib.Path('./images/coffee.png').resolve())).convert_alpha(),
 						'score': 20,
 						'type': 'bonus',
 						},
-					5: {
+					4: {
 						'name': 'cola',
 						'surf': pygame.image.load(str(pathlib.Path('./images/cola.png').resolve())).convert_alpha(),
 						'score': 10,
 						'type': 'bonus',
 						},
-					6: {
+					5: {
 						'name': 'medicine_chest',
 						'surf': pygame.image.load(str(pathlib.Path('./images/medicine-chest.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': 'bonus',
 						},
-					7: {
+					6: {
 						'name': 'stop',
 						'surf': pygame.image.load(str(pathlib.Path('./images/stop.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': 'bonus',
 						},
-					8: {
+					7: {
 						'name': 'thermos',
 						'surf': pygame.image.load(str(pathlib.Path('./images/thermos.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': 'bonus',
 						},
-					9: {
+					8: {
 						'name': 'heart',
 						'surf': pygame.image.load(str(pathlib.Path('./images/heart.png').resolve())).convert_alpha(),
 						'score': 1,
@@ -198,6 +198,49 @@ pre_levels = map(lambda x: pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").re
 files_levels = tuple(map(lambda x: str(x), filter(lambda y: y.exists(), pre_levels)))
 del pre_levels
 
+pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
+
+sounds = {
+			'alarm': pygame.mixer.Sound(str(pathlib.Path('./sounds/alarm.WAV').resolve())),
+			'applause': pygame.mixer.Sound(str(pathlib.Path('./sounds/applause.WAV').resolve())),
+			'bomb': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
+			'burger': pygame.mixer.Sound(str(pathlib.Path('./sounds/burger.WAV').resolve())),
+			'clock': pygame.mixer.Sound(str(pathlib.Path('./sounds/clock.WAV').resolve())),
+			'coffee': pygame.mixer.Sound(str(pathlib.Path('./sounds/coffee.WAV').resolve())),
+			'cola': pygame.mixer.Sound(str(pathlib.Path('./sounds/cola.WAV').resolve())),
+			'heart': pygame.mixer.Sound(str(pathlib.Path('./sounds/heart.WAV').resolve())),
+			'jump': pygame.mixer.Sound(str(pathlib.Path('./sounds/jump.WAV').resolve())),
+			'live': pygame.mixer.Sound(str(pathlib.Path('./sounds/live.WAV').resolve())),
+			'final': pygame.mixer.Sound(str(pathlib.Path('./sounds/final.WAV').resolve())),
+			'shot': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
+			'start': pygame.mixer.Sound(str(pathlib.Path('./sounds/start.WAV').resolve())),
+			'stop': pygame.mixer.Sound(str(pathlib.Path('./sounds/stop.WAV').resolve())),
+			'thermos': pygame.mixer.Sound(str(pathlib.Path('./sounds/thermos.WAV').resolve())),
+		}
+
+pos_clicked = {
+				1: {
+						0: (516, 222),
+						1: (538, 246),
+					},
+				2: {
+						0: (492, 246),
+						1: (516, 268),
+					},
+				3: {
+						0: (516, 246),
+						1: (538, 268),
+					},
+				4: {
+						0: (538, 246),
+						1: (562, 268),
+					},
+				5: {
+						0: (516, 268),
+						1: (538, 294),
+					},
+			}
+
 class NoValue(Enum):
 	''' Base Enum class elements '''
 
@@ -227,6 +270,25 @@ class LevelCode(NoValue):
 	
 	@classmethod
 	def GetCodeName(cls, OnName):
+		for x in cls:
+			if OnName == x:
+				return x
+		return None
+
+class SelectHeroPos(NoValue):
+	CENTER = 1
+	LEFT = 2
+	RIGHT = 3
+	
+	@classmethod
+	def GetHeroPosValue(cls, value):
+		for x in cls:
+			if value == x.value:
+				return x
+		return None
+	
+	@classmethod
+	def GetHeroPosName(cls, OnName):
 		for x in cls:
 			if OnName == x:
 				return x
@@ -385,48 +447,12 @@ def SwitchBG(CaseLevel):
 			30: images['bg'][6],
 	}.get(CaseLevel, images['bg'][1])
 
-pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
-
-sounds = {
-			'alarm': pygame.mixer.Sound(str(pathlib.Path('./sounds/alarm.WAV').resolve())),
-			'applause': pygame.mixer.Sound(str(pathlib.Path('./sounds/applause.WAV').resolve())),
-			'bomb': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
-			'burger': pygame.mixer.Sound(str(pathlib.Path('./sounds/burger.WAV').resolve())),
-			'clock': pygame.mixer.Sound(str(pathlib.Path('./sounds/clock.WAV').resolve())),
-			'coffee': pygame.mixer.Sound(str(pathlib.Path('./sounds/coffee.WAV').resolve())),
-			'cola': pygame.mixer.Sound(str(pathlib.Path('./sounds/cola.WAV').resolve())),
-			'heart': pygame.mixer.Sound(str(pathlib.Path('./sounds/heart.WAV').resolve())),
-			'jump': pygame.mixer.Sound(str(pathlib.Path('./sounds/jump.WAV').resolve())),
-			'live': pygame.mixer.Sound(str(pathlib.Path('./sounds/live.WAV').resolve())),
-			'final': pygame.mixer.Sound(str(pathlib.Path('./sounds/final.WAV').resolve())),
-			'shot': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
-			'start': pygame.mixer.Sound(str(pathlib.Path('./sounds/start.WAV').resolve())),
-			'stop': pygame.mixer.Sound(str(pathlib.Path('./sounds/stop.WAV').resolve())),
-			'thermos': pygame.mixer.Sound(str(pathlib.Path('./sounds/thermos.WAV').resolve())),
-		}
-
-pos_clicked = {
-				1: {
-						0: (516, 222),
-						1: (538, 246),
-					},
-				2: {
-						0: (492, 246),
-						1: (516, 268),
-					},
-				3: {
-						0: (516, 246),
-						1: (538, 268),
-					},
-				4: {
-						0: (538, 246),
-						1: (562, 268),
-					},
-				5: {
-						0: (516, 268),
-						1: (538, 294),
-					},
-			}
+def SwitchHero(CasePos):
+	return {
+			SelectHeroPos.CENTER: images['hero'][0],
+			SelectHeroPos.LEFT: images['hero'][1],
+			SelectHeroPos.RIGHT: pygame.transform.flip(images['hero'][1], True, False),
+	}.get(CasePos, images['hero'][0])
 
 def print_level(level: int) -> str:
 	if level<10:
