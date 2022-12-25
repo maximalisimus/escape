@@ -485,11 +485,10 @@ class TypeBlock(NoValue):
 
 class Block:
 	
-	def __init__(self, OnType: TypeBlock, image, x, y):
+	def __init__(self, OnType: TypeBlock, image, x: int, y: int, sizex: int, sizey: int):
 		self.Type = OnType
 		self.image = image
-		self.x = x
-		self.y = y
+		self.rect = pygame.Rect(x, y, sizex, sizey)
 		
 	def update(self):
 		pass
