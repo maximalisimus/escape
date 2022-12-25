@@ -73,54 +73,63 @@ images = {
 						'surf': pygame.image.load(str(pathlib.Path('./images/alarm.png').resolve())).convert_alpha(),
 						'score': 100,
 						'type': 'bonus',
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/alarm.WAV').resolve())),
 						},
 					1: {
 						'name': 'burger',
 						'surf': pygame.image.load(str(pathlib.Path('./images/burger.png').resolve())).convert_alpha(),
 						'score': 50,
 						'type': 'bonus',
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/burger.WAV').resolve())),
 						},
 					2: {
 						'name': 'clock',
 						'surf': pygame.image.load(str(pathlib.Path('./images/clock.png').resolve())).convert_alpha(),
 						'score': 30,
 						'type': 'bonus',
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/clock.WAV').resolve())),
 						},
 					3: {
 						'name': 'coffee',
 						'surf': pygame.image.load(str(pathlib.Path('./images/coffee.png').resolve())).convert_alpha(),
 						'score': 20,
 						'type': 'bonus',
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/coffee.WAV').resolve())),
 						},
 					4: {
 						'name': 'cola',
 						'surf': pygame.image.load(str(pathlib.Path('./images/cola.png').resolve())).convert_alpha(),
 						'score': 10,
 						'type': 'bonus',
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/cola.WAV').resolve())),
 						},
 					5: {
 						'name': 'medicine_chest',
 						'surf': pygame.image.load(str(pathlib.Path('./images/medicine-chest.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': 'bonus',
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/live.WAV').resolve())),
 						},
 					6: {
 						'name': 'stop',
 						'surf': pygame.image.load(str(pathlib.Path('./images/stop.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': 'bonus',
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/stop.WAV').resolve())),
 						},
 					7: {
 						'name': 'thermos',
 						'surf': pygame.image.load(str(pathlib.Path('./images/thermos.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': 'bonus',
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/thermos.WAV').resolve())),
 						},
 					8: {
 						'name': 'heart',
 						'surf': pygame.image.load(str(pathlib.Path('./images/heart.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': 'bonus',
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/heart.WAV').resolve())),
 						},
 				},
 		'wall': {
@@ -147,11 +156,13 @@ images = {
 							'name': 'bomb',
 							'surf': pygame.image.load(str(pathlib.Path('./images/bomb.png').resolve())).convert_alpha(),
 							'type': 'weapon',
+							'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
 						},
 					2: { 
 							'name': 'shot',
 							'surf': pygame.image.load(str(pathlib.Path('./images/bullet.png').resolve())).convert_alpha(),
 							'type': 'weapon',
+							'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
 						},
 				},
 		'else': {
@@ -203,22 +214,11 @@ del pre_levels
 
 pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
 
-sounds = {
-			'alarm': pygame.mixer.Sound(str(pathlib.Path('./sounds/alarm.WAV').resolve())),
+effects = {
 			'applause': pygame.mixer.Sound(str(pathlib.Path('./sounds/applause.WAV').resolve())),
-			'bomb': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
-			'burger': pygame.mixer.Sound(str(pathlib.Path('./sounds/burger.WAV').resolve())),
-			'clock': pygame.mixer.Sound(str(pathlib.Path('./sounds/clock.WAV').resolve())),
-			'coffee': pygame.mixer.Sound(str(pathlib.Path('./sounds/coffee.WAV').resolve())),
-			'cola': pygame.mixer.Sound(str(pathlib.Path('./sounds/cola.WAV').resolve())),
-			'heart': pygame.mixer.Sound(str(pathlib.Path('./sounds/heart.WAV').resolve())),
 			'jump': pygame.mixer.Sound(str(pathlib.Path('./sounds/jump.WAV').resolve())),
-			'live': pygame.mixer.Sound(str(pathlib.Path('./sounds/live.WAV').resolve())),
 			'final': pygame.mixer.Sound(str(pathlib.Path('./sounds/final.WAV').resolve())),
-			'shot': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
 			'start': pygame.mixer.Sound(str(pathlib.Path('./sounds/start.WAV').resolve())),
-			'stop': pygame.mixer.Sound(str(pathlib.Path('./sounds/stop.WAV').resolve())),
-			'thermos': pygame.mixer.Sound(str(pathlib.Path('./sounds/thermos.WAV').resolve())),
 		}
 
 pos_clicked = {
@@ -243,6 +243,8 @@ pos_clicked = {
 						1: (538, 294),
 					},
 			}
+
+objects = pygame.sprite.Group()
 
 class NoValue(Enum):
 	''' Base Enum class elements '''
@@ -468,6 +470,8 @@ class TypeBlock(NoValue):
 	DoorOut = 8
 	DoorIn = 9
 	Empty = 10
+	Hero = 11
+	Explotion = 12
 	
 	@classmethod
 	def GetTypeBlocksValue(cls, value):
@@ -483,20 +487,21 @@ class TypeBlock(NoValue):
 				return x
 		return None
 
-class Block:
+class Block(pygame.sprite.Sprite):
 	
-	def __init__(self, OnType: TypeBlock, x: int, y: int, image, isMove: bool = False, speed: int = 0, name = None):
+	def __init__(self, OnType: TypeBlock, x: int, y: int, surf, group, score: int = 0, speed: int = 0, name = None):
 		self.Type = OnType
-		self.image = image
+		self.image = surf
 		self.rect = self.image.get_rect(topleft=(x, y))
-		self.isMove = isMove
 		self.speed = speed
 		self.name = name
-		
-	def update(self):
-		pass
+		self.score = score
+		self.add(group)
 	
-	def draw(self):
+	def update(self, *args):
+		# self.rect.x = args[0]
+		# self.rect.y = args[1]
+		# self.kill()
 		pass
 
 def print_level(level: int) -> str:
@@ -798,7 +803,11 @@ def main():
 		# if mouse_pressed[0]:
 		#	mouse_pos = pygame.mouse.get_pos()
 		#	MouseClicked((mouse_pos[0],mouse_pos[1]), sc)
-				
+		
+		# objects.draw(sc)
+		# pygame.display.update()
+		# objects.update()
+		
 		clock.tick(FPS)
 
 if __name__ == '__main__':
