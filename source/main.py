@@ -485,10 +485,13 @@ class TypeBlock(NoValue):
 
 class Block:
 	
-	def __init__(self, OnType: TypeBlock, image, x: int, y: int, sizex: int, sizey: int):
+	def __init__(self, OnType: TypeBlock, x: int, y: int, image, isMove: bool = False, speed: int = 0, name: str = None):
 		self.Type = OnType
 		self.image = image
-		self.rect = pygame.Rect(x, y, sizex, sizey)
+		self.rect = self.image.get_rect(topleft=(x, y))
+		self.isMove = isMove
+		self.speed = speed
+		self.name = name
 		
 	def update(self):
 		pass
