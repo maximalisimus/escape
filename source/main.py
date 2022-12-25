@@ -474,6 +474,8 @@ class TypeBlock(NoValue):
 	Empty = 10
 	Hero = 11
 	Explotion = 12
+	Clouds = 13
+	Helicopter = 14
 	
 	@classmethod
 	def GetTypeBlocksValue(cls, value):
@@ -491,14 +493,11 @@ class TypeBlock(NoValue):
 
 class Block(pygame.sprite.Sprite):
 	
-	def __init__(self, OnType: TypeBlock, surf, x: int, y: int, group, score: int = 0, speed: int = 0, sizex: int = 0, sizey: int = 0, name = None):
+	def __init__(self, OnType: TypeBlock, surf, CoordXY: Tuple[int, int], group, score: int = 0, speed: int = 0, name = None):
 		pygame.sprite.Sprite.__init__(self)
 		self.Type = OnType
 		self.image = surf
-		if sizex == 0 and sizey == 0:
-			self.rect = self.image.get_rect(topleft=(x, y))
-		else:
-			self.rect = self.image.get_rect(x, y, sizex, sizey)
+		self.rect = self.image.get_rect(topleft=(CoordXY[0], CoordXY[1]))
 		self.speed = speed
 		self.score = score
 		self.name = name
@@ -574,6 +573,13 @@ def DrawTotal(surface, score: int, level: int, live: int, isBG: bool = False):
 	if isBG:
 		surface.blit(images['bg'][8], (0, 0))
 		surface.blit(images['bg'][9], (coord_score_bg[0], coord_score_bg[1]))
+		DrawScore(surf_score, score)
+		Old_Score = score
+		DrawLevel(surf_level, level)
+		Old_Level = level
+		for i in range(1, live+1):
+			DrawLive(surf_lives, images['else'][11], (pos_live_x[i], 0))
+		Old_Live = live
 	
 	if score != Old_Score:
 		DrawScore(surf_score, score)
@@ -588,7 +594,7 @@ def DrawTotal(surface, score: int, level: int, live: int, isBG: bool = False):
 		surface.blit(surf_level, (coord_level[0], coord_level[1]))
 	else:
 		surface.blit(surf_level, (coord_level[0], coord_level[1]))
-		
+	
 	if live != Old_Live:
 		if live > Old_Live:
 			DrawLive(surf_lives, images['else'][11], (pos_live_x[live], 0))
@@ -606,15 +612,6 @@ def DrawTotal(surface, score: int, level: int, live: int, isBG: bool = False):
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 
 def Restart(surface):
-	global surf_score
-	global surf_level
-	global surf_lives
-	global coord_score
-	global coord_level
-	global coord_live
-	global images
-	global pos_live_x
-	
 	global Score
 	global Level
 	global Live
@@ -622,19 +619,10 @@ def Restart(surface):
 	global Old_Level
 	global Old_Live
 	
-	surface.blit(images['bg'][8], (0, 0))
-	surface.blit(images['bg'][9], (coord_score_bg[0], coord_score_bg[1]))
-	
 	Score = Old_Score = 0
 	Level = Old_Level = 1
 	Live = Old_Live = 4
-	DrawScore(surf_score, 0)
-	surface.blit(surf_score, (coord_score[0], coord_score[1]))
-	DrawLevel(surf_level, 1)
-	surface.blit(surf_level, (coord_level[0], coord_level[1]))
-	for i in range(1,5):
-		DrawLive(surf_lives, images['else'][11], (pos_live_x[i], pos_live_y))
-	surface.blit(surf_lives, (coord_live[0], coord_live[1]))
+	DrawTotal(surface, 0, 1, 4, True)
 
 def SwitchInitImage(pos: Tuple[int, int], surface):
 	global isGame
