@@ -489,13 +489,17 @@ class TypeBlock(NoValue):
 
 class Block(pygame.sprite.Sprite):
 	
-	def __init__(self, OnType: TypeBlock, x: int, y: int, surf, group, score: int = 0, speed: int = 0, name = None):
+	def __init__(self, OnType: TypeBlock, surf, x: int, y: int, group, score: int = 0, speed: int = 0, sizex: int = 0, sizey: int = 0, name = None):
+		pygame.sprite.Sprite.__init__(self)
 		self.Type = OnType
 		self.image = surf
-		self.rect = self.image.get_rect(topleft=(x, y))
+		if sizex == 0 and sizey == 0:
+			self.rect = self.image.get_rect(topleft=(x, y))
+		else:
+			self.rect = self.image.get_rect(x, y, sizex, sizey)
 		self.speed = speed
-		self.name = name
 		self.score = score
+		self.name = name
 		self.add(group)
 	
 	def update(self, *args):
