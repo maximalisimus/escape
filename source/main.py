@@ -157,12 +157,14 @@ images = {
 							'surf': pygame.image.load(str(pathlib.Path('./images/bomb.png').resolve())).convert_alpha(),
 							'type': 'weapon',
 							'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
+							'score': 0,
 						},
 					2: { 
 							'name': 'shot',
 							'surf': pygame.image.load(str(pathlib.Path('./images/bullet.png').resolve())).convert_alpha(),
 							'type': 'weapon',
 							'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
+							'score': 0,
 						},
 				},
 		'else': {
