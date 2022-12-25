@@ -715,7 +715,7 @@ def main():
 	Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
 	# DrawHero(sc)
-	
+		
 	#surf_start_bg = pygame.transform.scale(images['bg'][7], (W, H))
 	#sc.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
