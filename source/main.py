@@ -462,8 +462,11 @@ class TypeBlock(NoValue):
 	Bonus = 3
 	Bomb = 4
 	Shot = 5
-	DoorIn = 6
-	DoorOut = 7
+	HatchBombs = 6
+	Pistol = 7
+	DoorOut = 8
+	DoorIn = 9
+	Empty = 10
 	
 	@classmethod
 	def GetTypeBlocksValue(cls, value):
