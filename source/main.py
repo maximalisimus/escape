@@ -491,17 +491,25 @@ class TypeBlock(NoValue):
 
 class Block(pygame.sprite.Sprite):
 	
-	def __init__(self, OnType: TypeBlock, surf, x: int, y: int, group, score: int = 0, speed: int = 0, sizex: int = 0, sizey: int = 0, name = None):
+	def __init__(self, OnType: TypeBlock, surf, x: int, y: int, group, sound, score: int = 0, speed: int = 0, sizex: int = 0, sizey: int = 0, name = None):
 		pygame.sprite.Sprite.__init__(self)
 		self.Type = OnType
-		self.image = surf
+		self.picture = surf
+		self.pictureRect = surf.get_rect()
 		if sizex == 0 and sizey == 0:
-			self.rect = self.image.get_rect(topleft=(x, y))
+			self.surface = pygame.Surface((self.pictureRect[2], self.pictureRect[3]), pygame.SRCALPHA, 32).convert_alpha()
+			self.image = pygame.Surface.copy(self.surface)
+			self.image.blit(self.picture, (0, 0))
+			self.rect = pygame.Rect((x, y, pictureRect[2], pictureRect[3]))
 		else:
-			self.rect = self.image.get_rect(x, y, sizex, sizey)
+			self.surface = pygame.Surface((sizex, sizey), pygame.SRCALPHA, 32).convert_alpha()
+			self.image = pygame.Surface.copy(self.surface)
+			self.image.blit(self.picture, (0, 0))
+			self.rect = pygame.Rect((x, y, sizex, sizey))
 		self.speed = speed
 		self.score = score
 		self.name = name
+		self.sound = sound
 		self.add(group)
 	
 	def update(self, *args):
@@ -723,14 +731,13 @@ def main():
 	# start_sound.unpause()
 	# sounds['start'].play()
 	
-	Restart(sc)
+	#Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
-	# DrawHero(sc)
-		
-	#surf_start_bg = pygame.transform.scale(images['bg'][7], (W, H))
-	#sc.blit(surf_start_bg, (0, 0))
+	
+	surf_start_bg = pygame.transform.scale(images['bg'][7], (W, H))
+	sc.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
-	#isStart = True
+	isStart = True
 	
 	RUN = True
 	while RUN:
