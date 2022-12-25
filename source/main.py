@@ -198,7 +198,7 @@ images = {
 				},
 			'hero': {
 						0: pygame.image.load(str(pathlib.Path('./images/hero.png').resolve())).convert_alpha(),
-						1: pygame.image.load(str(pathlib.Path('./images/hero-side.png').resolve())).convert_alpha()
+						1: pygame.image.load(str(pathlib.Path('./images/hero-side-left.png').resolve())).convert_alpha()
 					},
 			'explotion': {
 							0: pygame.image.load(str(pathlib.Path('./images/exp-1.png').resolve())).convert_alpha(),
