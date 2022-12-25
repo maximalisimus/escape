@@ -30,6 +30,8 @@ size_surf_score = (92,22)
 size_surf_level = (26, 22)
 size_surf_lives = (128,32)
 
+size_blocks = 24
+
 # 16 row x 18 column (24 pixel x 24 pixel)
 size_table = (432, 384)
 surf_table = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
@@ -453,6 +455,43 @@ def SwitchHero(CasePos):
 			SelectHeroPos.LEFT: images['hero'][1],
 			SelectHeroPos.RIGHT: pygame.transform.flip(images['hero'][1], True, False),
 	}.get(CasePos, images['hero'][0])
+
+class TypeBlock(NoValue):
+	Wall = 1
+	Ladder = 2
+	Bonus = 3
+	Bomb = 4
+	Shot = 5
+	DoorIn = 6
+	DoorOut = 7
+	
+	@classmethod
+	def GetTypeBlocksValue(cls, value):
+		for x in cls:
+			if value == x.value:
+				return x
+		return None
+	
+	@classmethod
+	def GetTypeBlocksName(cls, OnName):
+		for x in cls:
+			if OnName == x:
+				return x
+		return None
+
+class Block:
+	
+	def __init__(self, OnType: TypeBlock, image, x, y):
+		self.Type = OnType
+		self.image = image
+		self.x = x
+		self.y = y
+		
+	def update(self):
+		pass
+	
+	def draw(self):
+		pass
 
 def print_level(level: int) -> str:
 	if level<10:
