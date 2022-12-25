@@ -723,7 +723,7 @@ def SwitchHero(CasePos):
 
 class Block(pygame.sprite.Sprite):
 	
-	def __init__(self, OnType: TypeBlock, surf, CoordXY: Tuple[int, int], group, score: int = 0, speed: int = 0, name = None):
+	def __init__(self, OnType: TypeBlock, surf, CoordXY: Tuple[int, int], group, score: int = 0, speed: int = 0, sound = None, name = None):
 		pygame.sprite.Sprite.__init__(self)
 		self.Type = OnType
 		self.image = surf
@@ -731,6 +731,7 @@ class Block(pygame.sprite.Sprite):
 		self.speed = speed
 		self.score = score
 		self.name = name
+		self.sound = sound
 		self.add(group)
 	
 	def update(self, *args):
