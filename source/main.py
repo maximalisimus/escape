@@ -908,7 +908,7 @@ def main():
 	DoorMap = pygame.sprite.Group()
 	PistolMap = pygame.sprite.Group()
 	HatchBombMap = pygame.sprite.Group()
-	BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 30)
+	BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 1)
 	sc.blit(surf_table, (0, 0))
 	
 	#surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
