@@ -19,7 +19,7 @@ class NoValue(Enum):
 		return f"{self.value}"
 
 class LevelCode(NoValue):
-	Tile = 1
+	Wall = 1
 	Ladder = 2
 	Door = 3
 	HatchBombs = 4
@@ -563,7 +563,7 @@ def SwitchLadder(CaseLevel):
 			30: images['else'][8]['surf'],
 	}.get(CaseLevel, images['else'][7]['surf'])
 
-def SwitchTile(CaseLevel):
+def SwitchWall(CaseLevel):
 	return {
 		1: images['wall'][0]['surf'],
 		2: images['wall'][0]['surf'],
@@ -637,6 +637,16 @@ def SwitchHero(CasePos):
 			SelectHeroPos.LEFT: images['hero'][1]['surf'],
 			SelectHeroPos.RIGHT: pygame.transform.flip(images['hero'][1]['surf'], True, False),
 	}.get(CasePos, images['hero'][0]['surf'])
+
+def SelectBlock(code: LevelCode, level: int):
+	return {
+			LevelCode.Wall: SwitchWall(level),
+			LevelCode.Door: SwitchDoor(code),
+			LevelCode.HatchBombs: SwitchHatchBombs(level),
+			LevelCode.Ladder: SwitchLadder(level),
+			LevelCode.LeftPistol: SwitchPistol(code),
+			LevelCode.RightPistol: SwitchPistol(code),
+	}.get(code, None)
 
 class Block(pygame.sprite.Sprite):
 	
@@ -854,8 +864,7 @@ def main():
 	
 	# Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
-	
-	
+		
 	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
 	sc.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
