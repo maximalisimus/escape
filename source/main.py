@@ -23,8 +23,9 @@ class LevelCode(NoValue):
 	Ladder = 2
 	Door = 3
 	HatchBombs = 4
-	LeftPistol = 5
-	RightPistol = 6
+	LeftPistol = 6
+	RightPistol = 5
+	Empty = 7
 	
 	@classmethod
 	def GetCodeValue(cls, value):
@@ -72,6 +73,7 @@ class TypeBlock(NoValue):
 	Clouds = 10
 	Helicopter = 11
 	Unknown = 12
+	Empty = 13
 	
 	@classmethod
 	def GetTypeBlocksValue(cls, value):
@@ -126,6 +128,7 @@ coord_score_bg = (450, 0)
 surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]), pygame.SRCALPHA, 32).convert_alpha()
+surf_empty = pygame.Surface((size_blocks, size_blocks), pygame.SRCALPHA, 32).convert_alpha()
 
 pos_live_x = {
 				0: 0,
@@ -638,6 +641,7 @@ def SwitchHero(CasePos):
 	}.get(CasePos, images['hero'][0]['surf'])
 
 def SwitchBlockMap(code: LevelCode, level: int = 1):
+	global surf_empty
 	return {
 			LevelCode.Wall: SwitchWall(level),
 			LevelCode.Door: SwitchDoor(code),
@@ -645,7 +649,8 @@ def SwitchBlockMap(code: LevelCode, level: int = 1):
 			LevelCode.Ladder: SwitchLadder(level),
 			LevelCode.LeftPistol: SwitchPistol(code),
 			LevelCode.RightPistol: SwitchPistol(code),
-	}.get(code, None)
+			LevelCode.Empty: (surf_empty, TypeBlock.Empty),
+	}.get(code, (surf_empty, TypeBlock.Empty))
 
 class Block(pygame.sprite.Sprite):
 	
@@ -667,8 +672,19 @@ class Block(pygame.sprite.Sprite):
 		pass
 
 def BuildLevel(surface, group, level):
-	# files_levels
-	pass
+	global size_blocks
+	surface.blit(SwitchClouds(level), (0, 0))
+	with open(files_levels[level-1], 'r') as f:
+		lines = f.readlines()
+	x = y = 0
+	for row in lines:
+		for col in row.replace('\n', '').replace(' ','7'):
+			tmp = SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)
+			Block(tmp[0], tmp[1], (x, y), group)
+			x+=size_blocks
+		y+=size_blocks
+		x=0
+	group.draw(surface)
 
 def print_level(level: int) -> str:
 	if level<10:
@@ -873,7 +889,7 @@ def main():
 	Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
 	BuildLevel(surf_table, LevelMap, 1)
-	LevelMap.draw(sc)
+	sc.blit(surf_table, (0, 0))
 			
 	#surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
 	#sc.blit(surf_start_bg, (0, 0))
