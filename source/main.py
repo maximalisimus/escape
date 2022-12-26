@@ -672,7 +672,7 @@ class Block(pygame.sprite.Sprite):
 		# self.kill()
 		pass
 
-def BuildLevel(surface, GroupMap, level):
+def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 	global size_blocks
 	surface.blit(SwitchClouds(level), (0, 0))
 	with open(files_levels[level-1], 'r') as f:
@@ -685,12 +685,20 @@ def BuildLevel(surface, GroupMap, level):
 				tmp = SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)
 				if tmp[1] == TypeBlock.Door:
 					if DoorInOut:
-						Block(tmp[0], TypeBlock.DoorOut, (x, y), GroupMap)
+						block = Block(tmp[0], TypeBlock.DoorOut, (x, y), GroupMap)
 						DoorInOut = False
 					else:
-						Block(tmp[0], TypeBlock.DoorIn, (x, y), GroupMap)
+						block = Block(tmp[0], TypeBlock.DoorIn, (x, y), GroupMap)
 				else:
-					Block(tmp[0], tmp[1], (x, y), GroupMap)
+					block = Block(tmp[0], tmp[1], (x, y), GroupMap)
+				if tmp[1] == TypeBlock.HatchBombs:
+					block.add(GroupHatch)
+				elif tmp[1] == TypeBlock.LeftPistol:
+					block.add(GroupPistol)
+				elif tmp[1] == TypeBlock.RightPistol:
+					block.add(GroupPistol)
+				elif tmp[1] == TypeBlock.Door:
+					block.add(GroupDoor)
 			x+=size_blocks
 		y+=size_blocks
 		x=0
@@ -897,10 +905,12 @@ def main():
 	Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
 	LevelMap = pygame.sprite.Group()
-	BuildLevel(surf_table, LevelMap, 1)
+	DoorMap = pygame.sprite.Group()
+	PistolMap = pygame.sprite.Group()
+	HatchBombMap = pygame.sprite.Group()
+	BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 30)
 	sc.blit(surf_table, (0, 0))
 	
-			
 	#surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
 	#sc.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
