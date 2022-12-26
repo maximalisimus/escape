@@ -125,7 +125,6 @@ coord_score_bg = (450, 0)
 surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]), pygame.SRCALPHA, 32).convert_alpha()
-surf_empty= pygame.Surface((size_blocks, size_blocks), pygame.SRCALPHA, 32).convert_alpha()
 
 pos_live_x = {
 				0: 0,
@@ -477,8 +476,6 @@ pos_clicked = {
 					},
 			}
 
-objects = pygame.sprite.Group()
-
 def SwitchShot(CasePos):
 	return {
 			LevelCode.LeftPistol: (images['weapon'][2]['surf'], images['weapon'][2]['name'], images['weapon'][2]['type'], images['weapon'][2]['sound']),
@@ -639,7 +636,7 @@ def SwitchHero(CasePos):
 			SelectHeroPos.RIGHT: pygame.transform.flip(images['hero'][1]['surf'], True, False),
 	}.get(CasePos, images['hero'][0]['surf'])
 
-def SelectSurfBlock(code: LevelCode, level: int = 1):
+def SwitchBlockMap(code: LevelCode, level: int = 1):
 	return {
 			LevelCode.Wall: SwitchWall(level),
 			LevelCode.Door: SwitchDoor(code),
