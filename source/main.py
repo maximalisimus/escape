@@ -65,15 +65,17 @@ class TypeBlock(NoValue):
 	Ladder = 2
 	Bonus = 3
 	Weapon = 4
-	Hatch = 5
-	DoorOut = 6
-	DoorIn = 7
-	Door = 8
-	Explotion = 1
-	Clouds = 10
-	Helicopter = 11
-	Unknown = 12
-	Empty = 13
+	HatchBombs = 5
+	LeftPistol = 6
+	RightPistol = 7
+	DoorOut = 8
+	DoorIn = 9
+	Door = 10
+	Explotion = 11
+	Clouds = 12
+	Helicopter = 13
+	Hero = 14
+	Unknown = 15
 	
 	@classmethod
 	def GetTypeBlocksValue(cls, value):
@@ -128,7 +130,6 @@ coord_score_bg = (450, 0)
 surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]), pygame.SRCALPHA, 32).convert_alpha()
-surf_empty = pygame.Surface((size_blocks, size_blocks), pygame.SRCALPHA, 32).convert_alpha()
 
 pos_live_x = {
 				0: 0,
@@ -313,12 +314,12 @@ images = {
 					1: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/hatch-bombs.png').resolve())).convert_alpha(),
 						'name': 'hatchbombs',
-						'type': TypeBlock.Hatch,
+						'type': TypeBlock.HatchBombs,
 						},
 					2: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/hatch-bombs-2.png').resolve())).convert_alpha(),
 						'name': 'hatchbombs',
-						'type': TypeBlock.Hatch,
+						'type': TypeBlock.HatchBombs,
 						},
 					3: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/Helicopter_1.png').resolve())).convert_alpha(),
@@ -353,12 +354,12 @@ images = {
 					9: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/left-pistol.png').resolve())).convert_alpha(),
 						'name': 'pistol',
-						'type': TypeBlock.Hatch,
+						'type': TypeBlock.LeftPistol,
 						},
 					10: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/right-pistol.png').resolve())).convert_alpha(),
 						'name': 'pistol',
-						'type': TypeBlock.Hatch,
+						'type': TypeBlock.RightPistol,
 						},
 					11: {
 						'surf': pygame.image.load(str(pathlib.Path('./images/live-bg.png').resolve())).convert_alpha(),
@@ -373,7 +374,7 @@ images = {
 					13: {
 						'surf': pygame.image.load(str(pathlib.Path('./images/door.png').resolve())).convert_alpha(),
 						'name': 'door',
-						'type': TypeBlock.Unknown,
+						'type': TypeBlock.Door,
 						},
 					14: {
 						'surf': pygame.image.load(str(pathlib.Path('./images/blade-rear.png').resolve())).convert_alpha(),
@@ -402,10 +403,12 @@ images = {
 						0: { 
 							'surf': pygame.image.load(str(pathlib.Path('./images/hero.png').resolve())).convert_alpha(),
 							'name': 'hero',
+							'type': TypeBlock.Hero,
 							},
 						1: { 
 							'surf': pygame.image.load(str(pathlib.Path('./images/hero-side-left.png').resolve())).convert_alpha(),
 							'name': 'hero',
+							'type': TypeBlock.Hero,
 							},
 					},
 			'explotion': {
@@ -433,7 +436,6 @@ images = {
 								'surf': pygame.image.load(str(pathlib.Path('./images/exp-5.png').resolve())).convert_alpha(),
 								'name': 'explotion',
 								'type': TypeBlock.Explotion,
-								'sound': None,
 								},
 							5: {
 								'surf': pygame.image.load(str(pathlib.Path('./images/exp-6.png').resolve())).convert_alpha(),
@@ -649,15 +651,14 @@ def SwitchBlockMap(code: LevelCode, level: int = 1):
 			LevelCode.Ladder: SwitchLadder(level),
 			LevelCode.LeftPistol: SwitchPistol(code),
 			LevelCode.RightPistol: SwitchPistol(code),
-			LevelCode.Empty: (surf_empty, TypeBlock.Empty),
-	}.get(code, (surf_empty, TypeBlock.Empty))
+	}.get(code, None)
 
 class Block(pygame.sprite.Sprite):
 	
-	def __init__(self, surf, OnType: TypeBlock, CoordXY: Tuple[int, int], group = None, score = None, sound = None, onName = None):
+	def __init__(self, surf, ontype: TypeBlock, CoordXY: Tuple[int, int], group = None, score = None, sound = None, onName = None):
 		pygame.sprite.Sprite.__init__(self)
 		self.image = surf
-		self.OnType = OnType
+		self.ontype = ontype
 		self.rect = self.image.get_rect(topleft=CoordXY)
 		self.score = score
 		self.sound = sound
@@ -671,20 +672,20 @@ class Block(pygame.sprite.Sprite):
 		# self.kill()
 		pass
 
-def BuildLevel(surface, group, level):
+def BuildLevel(surface, GroupMap, level):
 	global size_blocks
 	surface.blit(SwitchClouds(level), (0, 0))
 	with open(files_levels[level-1], 'r') as f:
 		lines = f.readlines()
 	x = y = 0
+	DoorInOut = True
 	for row in lines:
 		for col in row.replace('\n', '').replace(' ','7'):
-			tmp = SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)
-			Block(tmp[0], tmp[1], (x, y), group)
+			if LevelCode.GetCodeValue(int(col)) != LevelCode.Empty:
+				pass
 			x+=size_blocks
 		y+=size_blocks
 		x=0
-	group.draw(surface)
 
 def print_level(level: int) -> str:
 	if level<10:
@@ -871,8 +872,6 @@ def main():
 	global surf_table
 	global rect_table
 	
-	LevelMap = pygame.sprite.Group()
-	
 	# pygame.mixer.music.play(-1)
 	# pygame.mixer.music.pause()
 	# pygame.mixer.music.unpause()
@@ -888,6 +887,7 @@ def main():
 	
 	Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
+	LevelMap = pygame.sprite.Group()
 	BuildLevel(surf_table, LevelMap, 1)
 	sc.blit(surf_table, (0, 0))
 			
