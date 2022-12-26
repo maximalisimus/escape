@@ -648,11 +648,11 @@ def SwitchBlockMap(code: LevelCode, level: int = 1):
 
 class Block(pygame.sprite.Sprite):
 	
-	def __init__(self, OnType: TypeBlock, surf, CoordXY: Tuple[int, int], group = None, score = None, sound = None, onName = None):
+	def __init__(self, surf, OnType: TypeBlock, CoordXY: Tuple[int, int], group = None, score = None, sound = None, onName = None):
 		pygame.sprite.Sprite.__init__(self)
-		self.Type = OnType
 		self.image = surf
-		self.rect = self.image.get_rect(topleft=(CoordXY[0], CoordXY[1]))
+		self.OnType = OnType
+		self.rect = self.image.get_rect(topleft=CoordXY)
 		self.score = score
 		self.sound = sound
 		self.onName = onName
@@ -862,7 +862,7 @@ def main():
 	
 	# Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
-		
+			
 	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
 	sc.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
