@@ -67,10 +67,11 @@ class TypeBlock(NoValue):
 	Hatch = 5
 	DoorOut = 6
 	DoorIn = 7
-	Explotion = 8
-	Clouds = 9
-	Helicopter = 10
-	Unknown = 11
+	Door = 8
+	Explotion = 1
+	Clouds = 10
+	Helicopter = 11
+	Unknown = 12
 	
 	@classmethod
 	def GetTypeBlocksValue(cls, value):
@@ -646,6 +647,16 @@ def SelectBlock(code: LevelCode, level: int):
 			LevelCode.Ladder: SwitchLadder(level),
 			LevelCode.LeftPistol: SwitchPistol(code),
 			LevelCode.RightPistol: SwitchPistol(code),
+	}.get(code, None)
+
+def SelectTypeBlock(code: LevelCode):
+	return {
+			LevelCode.Wall: TypeBlock.Wall,
+			LevelCode.Ladder: TypeBlock.Ladder,
+			LevelCode.Door: TypeBlock.Door,
+			LevelCode.HatchBombs: TypeBlock.Hatch,
+			LevelCode.LeftPistol: TypeBlock.Hatch,
+			LevelCode.RightPistol: TypeBlock.Hatch,
 	}.get(code, None)
 
 class Block(pygame.sprite.Sprite):
