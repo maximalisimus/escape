@@ -116,6 +116,7 @@ size_blocks = 24
 # 16 row x 18 column (24 pixel x 24 pixel)
 size_table = (432, 384)
 surf_table = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
+rect_table = surf_table.get_rect(topleft=(0, 0))
 
 coord_score = (475,40)
 coord_level = (510, 110.5)
@@ -665,6 +666,10 @@ class Block(pygame.sprite.Sprite):
 		# self.kill()
 		pass
 
+def BuildLevel(surface, group, level):
+	# files_levels
+	pass
+
 def print_level(level: int) -> str:
 	if level<10:
 		return f"0{level}"
@@ -847,6 +852,11 @@ def main():
 	global isDown
 	global isJump
 	
+	global surf_table
+	global rect_table
+	
+	LevelMap = pygame.sprite.Group()
+	
 	# pygame.mixer.music.play(-1)
 	# pygame.mixer.music.pause()
 	# pygame.mixer.music.unpause()
@@ -860,13 +870,15 @@ def main():
 	# start_sound.unpause()
 	# sounds['start'].play()
 	
-	# Restart(sc)
+	Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
+	BuildLevel(surf_table, LevelMap, 1)
+	LevelMap.draw(sc)
 			
-	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
-	sc.blit(surf_start_bg, (0, 0))
+	#surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
+	#sc.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
-	isStart = True
+	#isStart = True
 	
 	RUN = True
 	while RUN:
