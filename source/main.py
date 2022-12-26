@@ -639,7 +639,7 @@ def SwitchHero(CasePos):
 			SelectHeroPos.RIGHT: pygame.transform.flip(images['hero'][1]['surf'], True, False),
 	}.get(CasePos, images['hero'][0]['surf'])
 
-def SelectBlock(code: LevelCode, level: int):
+def SelectSurfBlock(code: LevelCode, level: int):
 	return {
 			LevelCode.Wall: SwitchWall(level),
 			LevelCode.Door: SwitchDoor(code),
