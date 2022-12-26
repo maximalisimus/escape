@@ -63,19 +63,14 @@ class TypeBlock(NoValue):
 	Wall = 1
 	Ladder = 2
 	Bonus = 3
-	Bomb = 4
-	Shot = 5
-	HatchBombs = 6
-	Pistol = 7
-	DoorOut = 8
-	DoorIn = 9
-	Empty = 10
-	Hero = 11
-	Explotion = 12
-	Clouds = 13
-	Helicopter = 14
-	BG = 15
-	Unknown = 16
+	Weapon = 4
+	Hatch = 5
+	DoorOut = 6
+	DoorIn = 7
+	Explotion = 8
+	Clouds = 9
+	Helicopter = 10
+	Unknown = 11
 	
 	@classmethod
 	def GetTypeBlocksValue(cls, value):
@@ -221,232 +216,170 @@ images = {
 				0: {
 					'surf': pygame.image.load(str(pathlib.Path('./images/tile-1.png').resolve())).convert_alpha(),
 					'name': 'tile',
-					'score': 0,
 					'type': TypeBlock.Wall,
-					'sound': None,
 					},
 				1: {
 					'surf': pygame.image.load(str(pathlib.Path('./images/tile-2.png').resolve())).convert_alpha(),
 					'name': 'tile',
-					'score': 0,
 					'type': TypeBlock.Wall,
-					'sound': None,
 					},
 				2: {
 					'surf': pygame.image.load(str(pathlib.Path('./images/tile-3.png').resolve())).convert_alpha(),
 					'name': 'tile',
-					'score': 0,
 					'type': TypeBlock.Wall,
-					'sound': None,
 					},
 				3: {
 					'surf': pygame.image.load(str(pathlib.Path('./images/tile-4.png').resolve())).convert_alpha(),
 					'name': 'tile',
-					'score': 0,
 					'type': TypeBlock.Wall,
-					'sound': None,
 					},
 				4: { 
 					'surf': pygame.image.load(str(pathlib.Path('./images/tile-5.png').resolve())).convert_alpha(),
 					'name': 'tile',
-					'score': 0,
 					'type': TypeBlock.Wall,
-					'sound': None,
 					},
 				5: {
 					'surf': pygame.image.load(str(pathlib.Path('./images/tile-6.png').resolve())).convert_alpha(),
 					'name': 'tile',
-					'score': 0,
 					'type': TypeBlock.Wall,
-					'sound': None,
 					},
 				},
 		'bg': {
 				0: {
 					'surf': pygame.image.load(str(pathlib.Path('./images/esc_1.png').resolve())).convert_alpha(),
 					'name': 'bg',
-					'score': 0,
 					'type': TypeBlock.Clouds,
-					'sound': None,
 					},
 				1: {
 					'surf': pygame.image.load(str(pathlib.Path('./images/esc_2.png').resolve())).convert_alpha(),
 					'name': 'bg',
-					'score': 0,
 					'type': TypeBlock.Clouds,
-					'sound': None,
 					},
 				2: { 
 					'surf': pygame.image.load(str(pathlib.Path('./images/esc_3.png').resolve())).convert_alpha(),
 					'name': 'bg',
-					'score': 0,
 					'type': TypeBlock.Clouds,
-					'sound': None,
 					},
 				3: {
 					'surf': pygame.image.load(str(pathlib.Path('./images/esc_4.png').resolve())).convert_alpha(),
 					'name': 'bg',
-					'score': 0,
 					'type': TypeBlock.Clouds,
-					'sound': None,
 					},
 				4: { 
 					'surf': pygame.image.load(str(pathlib.Path('./images/esc_5.png').resolve())).convert_alpha(),
 					'name': 'bg',
-					'score': 0,
 					'type': TypeBlock.Clouds,
-					'sound': None,
 					},
 				5: { 
 					'surf': pygame.image.load(str(pathlib.Path('./images/esc_6.png').resolve())).convert_alpha(),
 					'name': 'bg',
-					'score': 0,
 					'type': TypeBlock.Clouds,
-					'sound': None,
 					},
 				6: { 
 					'surf': pygame.image.load(str(pathlib.Path('./images/esc_t.png').resolve())).convert_alpha(),
 					'name': 'bg',
-					'score': 0,
-					'type': TypeBlock.BG,
-					'sound': None,
+					'type': TypeBlock.Unknown,
 					},
 				7: { 
 					'surf': pygame.image.load(str(pathlib.Path('./images/esc-bg.png').resolve())).convert_alpha(),
 					'name': 'bg',
-					'score': 0,
-					'type': TypeBlock.BG,
-					'sound': None,
+					'type': TypeBlock.Unknown,
 					},
 				8: { 
 					'surf': pygame.image.load(str(pathlib.Path('./images/score-bg.png').resolve())).convert_alpha(),
 					'name': 'bg',
-					'score': 0,
-					'type': TypeBlock.BG,
-					'sound': None,
+					'type': TypeBlock.Unknown,
 					},
 			},
 		'weapon': {
 					1: { 
 							'name': 'bomb',
 							'surf': pygame.image.load(str(pathlib.Path('./images/bomb.png').resolve())).convert_alpha(),
-							'type': TypeBlock.Bomb,
+							'type': TypeBlock.Weapon,
 							'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
-							'score': 0,
 						},
 					2: { 
 							'name': 'shot',
 							'surf': pygame.image.load(str(pathlib.Path('./images/bullet.png').resolve())).convert_alpha(),
-							'type': TypeBlock.Shot,
+							'type': TypeBlock.Weapon,
 							'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
-							'score': 0,
 						},
 				},
 		'else': {
 					1: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/hatch-bombs.png').resolve())).convert_alpha(),
 						'name': 'hatchbombs',
-						'score': 0,
-						'type': TypeBlock.HatchBombs,
-						'sound': None,
+						'type': TypeBlock.Hatch,
 						},
 					2: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/hatch-bombs-2.png').resolve())).convert_alpha(),
 						'name': 'hatchbombs',
-						'score': 0,
-						'type': TypeBlock.HatchBombs,
-						'sound': None,
+						'type': TypeBlock.Hatch,
 						},
 					3: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/Helicopter_1.png').resolve())).convert_alpha(),
 						'name': 'helicopter',
-						'score': 0,
 						'type': TypeBlock.Helicopter,
-						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/helicopter.WAV').resolve())),
 						},
 					4: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/Helicopter_2.png').resolve())).convert_alpha(),
 						'name': 'helicopter',
-						'score': 0,
 						'type': TypeBlock.Helicopter,
-						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/helicopter.WAV').resolve())),
 						},
 					5: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/Helicopter_3.png').resolve())).convert_alpha(),
 						'name': 'helicopter',
-						'score': 0,
 						'type': TypeBlock.Helicopter,
-						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/helicopter.WAV').resolve())),
 						},
 					6: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/Helicopter_4.png').resolve())).convert_alpha(),
 						'name': 'helicopter',
-						'score': 0,
 						'type': TypeBlock.Helicopter,
-						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/helicopter.WAV').resolve())),
 						},
 					7: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/ladder.png').resolve())).convert_alpha(),
 						'name': 'ladder',
-						'score': 0,
 						'type': TypeBlock.Ladder,
-						'sound': None,
 						},
 					8: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/ladder-2.png').resolve())).convert_alpha(),
 						'name': 'ladder',
-						'score': 0,
 						'type': TypeBlock.Ladder,
-						'sound': None,
 						},
 					9: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/left-pistol.png').resolve())).convert_alpha(),
 						'name': 'pistol',
-						'score': 0,
-						'type': TypeBlock.Pistol,
-						'sound': None,
+						'type': TypeBlock.Hatch,
 						},
 					10: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/right-pistol.png').resolve())).convert_alpha(),
 						'name': 'pistol',
-						'score': 0,
-						'type': TypeBlock.Pistol,
-						'sound': None,
+						'type': TypeBlock.Hatch,
 						},
 					11: {
 						'surf': pygame.image.load(str(pathlib.Path('./images/live-bg.png').resolve())).convert_alpha(),
 						'name': 'live-bg',
-						'score': 0,
 						'type': TypeBlock.Unknown,
-						'sound': None,
 						},
 					12: { 
 						'surf': pygame.image.load(str(pathlib.Path('./images/died-bg.png').resolve())).convert_alpha(),
 						'name': 'died-bg',
-						'score': 0,
 						'type': TypeBlock.Unknown,
-						'sound': None,
 						},
 					13: {
 						'surf': pygame.image.load(str(pathlib.Path('./images/door.png').resolve())).convert_alpha(),
 						'name': 'door',
-						'score': 0,
 						'type': TypeBlock.Unknown,
-						'sound': None,
 						},
 					14: {
 						'surf': pygame.image.load(str(pathlib.Path('./images/blade-rear.png').resolve())).convert_alpha(),
 						'name': 'blade-rear',
-						'score': 0,
 						'type': TypeBlock.Unknown,
-						'sound': None,
 						},
 					15: {
 						'surf': pygame.image.load(str(pathlib.Path('./images/blade-up.png').resolve())).convert_alpha(),
 						'name': 'blade-up',
-						'score': 0,
 						'type': TypeBlock.Unknown,
-						'sound': None,
 						},
 				},
 			'LCD': {
@@ -465,60 +398,43 @@ images = {
 						0: { 
 							'surf': pygame.image.load(str(pathlib.Path('./images/hero.png').resolve())).convert_alpha(),
 							'name': 'hero',
-							'score': 0,
-							'type': TypeBlock.Hero,
-							'sound': None,
 							},
 						1: { 
 							'surf': pygame.image.load(str(pathlib.Path('./images/hero-side-left.png').resolve())).convert_alpha(),
 							'name': 'hero',
-							'score': 0,
-							'type': TypeBlock.Hero,
-							'sound': None,
 							},
 					},
 			'explotion': {
 							0: {
 								'surf': pygame.image.load(str(pathlib.Path('./images/exp-1.png').resolve())).convert_alpha(),
-								'name': 'hero',
-								'score': 0,
+								'name': 'explotion',
 								'type': TypeBlock.Explotion,
-								'sound': None,
 								},
 							1: {
 								'surf': pygame.image.load(str(pathlib.Path('./images/exp-2.png').resolve())).convert_alpha(),
-								'name': 'hero',
-								'score': 0,
+								'name': 'explotion',
 								'type': TypeBlock.Explotion,
-								'sound': None,
 								},
 							2: {
 								'surf': pygame.image.load(str(pathlib.Path('./images/exp-3.png').resolve())).convert_alpha(),
-								'name': 'hero',
-								'score': 0,
+								'name': 'explotion',
 								'type': TypeBlock.Explotion,
-								'sound': None,
 								},
 							3: {
 								'surf': pygame.image.load(str(pathlib.Path('./images/exp-4.png').resolve())).convert_alpha(),
-								'name': 'hero',
-								'score': 0,
+								'name': 'explotion',
 								'type': TypeBlock.Explotion,
-								'sound': None,
 								},
 							4: {
 								'surf': pygame.image.load(str(pathlib.Path('./images/exp-5.png').resolve())).convert_alpha(),
-								'name': 'hero',
-								'score': 0,
+								'name': 'explotion',
 								'type': TypeBlock.Explotion,
 								'sound': None,
 								},
 							5: {
 								'surf': pygame.image.load(str(pathlib.Path('./images/exp-6.png').resolve())).convert_alpha(),
 								'name': 'hero',
-								'score': 0,
 								'type': TypeBlock.Explotion,
-								'sound': None,
 								},
 						},
 		}
@@ -534,6 +450,7 @@ effects = {
 			'jump': pygame.mixer.Sound(str(pathlib.Path('./sounds/jump.WAV').resolve())),
 			'final': pygame.mixer.Sound(str(pathlib.Path('./sounds/final.WAV').resolve())),
 			'start': pygame.mixer.Sound(str(pathlib.Path('./sounds/start.WAV').resolve())),
+			'helicopter': pygame.mixer.Sound(str(pathlib.Path('./sounds/helicopter.WAV').resolve()))
 		}
 
 pos_clicked = {
@@ -723,7 +640,7 @@ def SwitchHero(CasePos):
 
 class Block(pygame.sprite.Sprite):
 	
-	def __init__(self, OnType: TypeBlock, surf, CoordXY: Tuple[int, int], group, score: int = 0, speed: int = 0, sound = None, name = None):
+	def __init__(self, OnType: TypeBlock, surf, CoordXY: Tuple[int, int], group = None):
 		pygame.sprite.Sprite.__init__(self)
 		self.Type = OnType
 		self.image = surf
@@ -732,7 +649,8 @@ class Block(pygame.sprite.Sprite):
 		self.score = score
 		self.name = name
 		self.sound = sound
-		self.add(group)
+		if group != None:
+			self.add(group)
 	
 	def update(self, *args):
 		# self.rect.x = args[0]
