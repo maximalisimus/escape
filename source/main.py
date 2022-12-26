@@ -102,9 +102,9 @@ pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath
 clock = pygame.time.Clock()
 FPS = 60
 
-Score = Old_Score = 0
-Level = Old_Level = 1
-Live = Old_Live = 4
+Old_Score = 0
+Old_Level = 1
+Old_Live = 4
 
 isStart = False
 isGame = False
@@ -785,11 +785,8 @@ def DrawLevel(surf, on_level: int):
 def DrawLive(screen_surf, surf, coord: Tuple[int, int]):
 	screen_surf.blit(surf, (coord[0], coord[1]))
 
-def DrawTotal(surface, score: int, level: int, live: int, isBG: bool = False):
+def DrawTotal(surface, score: int, level: int, live: int, isFull: bool = False, isBG: bool = False):
 	global images
-	global Score
-	global Level
-	global Live
 	global Old_Score
 	global Old_Level
 	global Old_Live
@@ -804,6 +801,8 @@ def DrawTotal(surface, score: int, level: int, live: int, isBG: bool = False):
 	if isBG:
 		surface.blit(images['bg'][7]['surf'], (0, 0))
 		surface.blit(images['bg'][8]['surf'], (coord_score_bg[0], coord_score_bg[1]))
+	
+	if isFull:
 		DrawScore(surf_score, score)
 		Old_Score = score
 		DrawLevel(surf_level, level)
@@ -843,17 +842,14 @@ def DrawTotal(surface, score: int, level: int, live: int, isBG: bool = False):
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 
 def Restart(surface):
-	global Score
-	global Level
-	global Live
 	global Old_Score
 	global Old_Level
 	global Old_Live
 	
-	Score = Old_Score = 0
-	Level = Old_Level = 1
-	Live = Old_Live = 4
-	DrawTotal(surface, 0, 1, 4, True)
+	Old_Score = 0
+	Old_Level = 1
+	Old_Live = 4
+	DrawTotal(surface, 0, 1, 4, True, True)
 
 def SwitchInitImage(pos: Tuple[int, int], surface):
 	global isGame
@@ -913,9 +909,6 @@ def DrawHero(surface):
 	surface.blit(surf_hero, (100, 100))
 
 def main():
-	global Score
-	global Level
-	global Live
 	global sc
 	global clock
 	global FPS
