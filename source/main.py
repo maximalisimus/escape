@@ -645,10 +645,6 @@ class Block(pygame.sprite.Sprite):
 		self.Type = OnType
 		self.image = surf
 		self.rect = self.image.get_rect(topleft=(CoordXY[0], CoordXY[1]))
-		self.speed = speed
-		self.score = score
-		self.name = name
-		self.sound = sound
 		if group != None:
 			self.add(group)
 	
