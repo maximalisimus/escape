@@ -708,6 +708,7 @@ class Helicopter(pygame.sprite.Sprite):
 	def update(self, *args):
 		if (self.rect.x + size_helicopter[0] > size_table[0] and self.rect.y + size_helicopter[1] <= 0):
 			self.isFine = True
+			self.isAnim = False
 		else:
 			if self.isAnim:
 				now = pygame.time.get_ticks()
