@@ -114,6 +114,7 @@ isUp = isLeft = isRight = isDown = isJump = False
 size_surf_score = (92,22)
 size_surf_level = (26, 22)
 size_surf_lives = (128,32)
+size_helicopter = (72, 48)
 
 size_blocks = 24
 
@@ -126,6 +127,9 @@ coord_score = (475,40)
 coord_level = (510, 110.5)
 coord_live = (460, 160)
 coord_score_bg = (450, 0)
+coord_helicopter = (216, 48)
+coord_blade_side = (5, 15)
+coord_blade_up = (22, 12)
 
 surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
@@ -677,6 +681,68 @@ class Block(pygame.sprite.Sprite):
 		# self.kill()
 		pass
 
+class Helicopter(pygame.sprite.Sprite):
+	
+	def __init__(self):
+		self.copters = (images['else'][3]['surf'], images['else'][4]['surf'], images['else'][5]['surf'], images['else'][6]['surf'])
+		self.blade = (images['else'][14]['surf'], images['else'][15]['surf'])
+		self.image = self.copters[0]
+		self.rect = self.image.get_rect(topleft=(coord_helicopter[0], coord_helicopter[1]))
+		self.ontype = images['else'][1]['type']
+		self.sound = effects['helicopter']
+		self.isAnim = False
+		self.isBlade = False
+		self.last_update = pygame.time.get_ticks()
+		self.frame = 0
+		self.frame_rate = 500
+		self.blade_last_update = pygame.time.get_ticks()
+		self.blade_frame_rate = 30
+		self.takeoff_last_update = pygame.time.get_ticks()
+		self.takeoff_frame_rate = 50
+		self.count = 0
+		self.isTakeoff = False
+		self.isFine = False
+		self.blade_rear = self.blade[0]
+		self.blade_up = self.blade[1]
+		
+	def update(self, *args):
+		if (self.rect.x + size_helicopter[0] > size_table[0] and self.rect.y + size_helicopter[1] <= 0):
+			self.isFine = True
+		else:
+			if self.isAnim:
+				now = pygame.time.get_ticks()
+				if now - self.blade_last_update > self.blade_frame_rate:
+					self.blade_last_update = now
+					if self.isBlade:
+						self.image = pygame.Surface.copy(self.copters[self.frame])
+						self.blade_rear = self.rotate_surf(self.blade_rear, 90)
+						self.image.blit(self.blade_rear, (coord_blade_side[0], coord_blade_side[1]))
+						self.blade_up = self.rotate_surf(self.blade_up, 180)
+						self.blade_up = pygame.transform.flip(self.blade_up, False, True)
+						self.image.blit(self.blade_up, (coord_blade_up[0], coord_blade_up[1]))
+				if now - self.takeoff_last_update > self.takeoff_frame_rate:
+					self.takeoff_last_update = now
+					if self.isBlade:
+						self.count += 1
+					if self.count == 10:
+						self.isTakeoff = True
+					if self.isTakeoff:
+						self.rect.x += 1
+						self.rect.y -= 1
+				if now - self.last_update > self.frame_rate:
+					self.last_update = now
+					if self.frame == 3:
+						self.isBlade = True
+					else:
+						self.image = pygame.Surface.copy(self.copters[self.frame])
+						self.frame += 1
+
+	def rotate_surf(self, surf, angle):
+		loc = surf.get_rect().center
+		rot_sprite = pygame.transform.rotate(surf, angle)
+		rot_sprite.get_rect().center = loc
+		return rot_sprite
+
 def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 	global size_blocks
 	GroupMap.empty()
@@ -926,8 +992,12 @@ def main():
 	
 	# Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
-	# BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 1)
+	# BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 30)
+	# helicopter = Helicopter()
+	# surf_table.blit(helicopter.image, helicopter.rect)
 	# sc.blit(surf_table, (0, 0))
+	# sc.blit(helicopter.image, helicopter.rect)
+	# helicopter.isAnim = True
 	
 	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
 	sc.blit(surf_start_bg, (0, 0))
@@ -1012,9 +1082,12 @@ def main():
 		#	mouse_pos = pygame.mouse.get_pos()
 		#	MouseClicked((mouse_pos[0],mouse_pos[1]), sc)
 		
+		#sc.blit(surf_table, (0, 0))
+		#sc.blit(helicopter.image, helicopter.rect)
 		# objects.draw(sc)
-		# pygame.display.update()
+		#pygame.display.update()
 		# objects.update()
+		#helicopter.update()
 		
 		clock.tick(FPS)
 
