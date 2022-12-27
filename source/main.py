@@ -482,6 +482,11 @@ pos_clicked = {
 					},
 			}
 
+LevelMap = pygame.sprite.Group()
+DoorMap = pygame.sprite.Group()
+PistolMap = pygame.sprite.Group()
+HatchBombMap = pygame.sprite.Group()
+
 def SwitchShot(CasePos):
 	return {
 			LevelCode.LeftPistol: (images['weapon'][2]['surf'], images['weapon'][2]['name'], images['weapon'][2]['type'], images['weapon'][2]['sound']),
@@ -814,10 +819,17 @@ def Restart(surface):
 	global Old_Level
 	global Old_Live
 	
+	global LevelMap
+	global DoorMap
+	global PistolMap
+	global HatchBombMap
+	
 	Old_Score = 0
 	Old_Level = 1
 	Old_Live = 4
 	DrawTotal(surface, 0, 1, 4, True, True)
+	BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 1)
+	surface.blit(surf_table, (0, 0))
 
 def SwitchInitImage(pos: Tuple[int, int], surface):
 	global isGame
@@ -893,6 +905,11 @@ def main():
 	global surf_table
 	global rect_table
 	
+	global LevelMap
+	global DoorMap
+	global PistolMap
+	global HatchBombMap
+	
 	# pygame.mixer.music.play(-1)
 	# pygame.mixer.music.pause()
 	# pygame.mixer.music.unpause()
@@ -906,19 +923,15 @@ def main():
 	# start_sound.unpause()
 	# sounds['start'].play()
 	
-	Restart(sc)
+	# Restart(sc)
 	# DrawTotal(sc, 0, 1, 4)
-	LevelMap = pygame.sprite.Group()
-	DoorMap = pygame.sprite.Group()
-	PistolMap = pygame.sprite.Group()
-	HatchBombMap = pygame.sprite.Group()
-	BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 1)
-	sc.blit(surf_table, (0, 0))
+	# BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 1)
+	# sc.blit(surf_table, (0, 0))
 	
-	#surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
-	#sc.blit(surf_start_bg, (0, 0))
+	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
+	sc.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
-	#isStart = True
+	isStart = True
 	
 	RUN = True
 	while RUN:
