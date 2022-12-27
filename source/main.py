@@ -706,7 +706,7 @@ class Helicopter(pygame.sprite.Sprite):
 		self.blade_up = self.blade[1]
 		
 	def update(self, *args):
-		if (self.rect.x + size_helicopter[0] > size_table[0] and self.rect.y + size_helicopter[1] <= 0):
+		if (self.rect.y + size_helicopter[1] <= 0):
 			self.isFine = True
 			self.isAnim = False
 		else:
@@ -991,14 +991,13 @@ def main():
 	# start_sound.unpause()
 	# sounds['start'].play()
 	
-	# Restart(sc)
-	# DrawTotal(sc, 0, 1, 4)
-	# BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 30)
-	# helicopter = Helicopter()
-	# surf_table.blit(helicopter.image, helicopter.rect)
-	# sc.blit(surf_table, (0, 0))
-	# sc.blit(helicopter.image, helicopter.rect)
-	# helicopter.isAnim = True
+	#Restart(sc)
+	#DrawTotal(sc, 0, 1, 4)
+	#BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 30)
+	#helicopter = Helicopter()
+	#sc.blit(surf_table, (0, 0))
+	#sc.blit(helicopter.image, helicopter.rect)
+	#helicopter.isAnim = True
 	
 	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
 	sc.blit(surf_start_bg, (0, 0))
@@ -1085,9 +1084,7 @@ def main():
 		
 		#sc.blit(surf_table, (0, 0))
 		#sc.blit(helicopter.image, helicopter.rect)
-		# objects.draw(sc)
 		#pygame.display.update()
-		# objects.update()
 		#helicopter.update()
 		
 		clock.tick(FPS)
