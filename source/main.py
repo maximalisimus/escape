@@ -674,6 +674,7 @@ class Block(pygame.sprite.Sprite):
 
 def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 	global size_blocks
+	GroupMap.empty()
 	GroupDoor.empty()
 	GroupHatch.empty()
 	GroupPistol.empty()
