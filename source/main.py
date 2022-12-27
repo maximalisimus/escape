@@ -823,6 +823,7 @@ def Restart(surface):
 	global DoorMap
 	global PistolMap
 	global HatchBombMap
+	global surf_table
 	
 	Old_Score = 0
 	Old_Level = 1
