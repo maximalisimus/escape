@@ -674,6 +674,9 @@ class Block(pygame.sprite.Sprite):
 
 def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 	global size_blocks
+	GroupDoor.empty()
+	GroupHatch.empty()
+	GroupPistol.empty()
 	surface.blit(SwitchClouds(level), (0, 0))
 	with open(files_levels[level-1], 'r') as f:
 		lines = f.readlines()
