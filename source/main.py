@@ -701,13 +701,13 @@ def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 				else:
 					block = Block(tmp[0], tmp[1], (x, y), GroupMap)
 				if tmp[1] == TypeBlock.HatchBombs:
-					block.add(GroupHatch)
+					GroupHatch.add(block)
 				elif tmp[1] == TypeBlock.LeftPistol:
-					block.add(GroupPistol)
+					GroupPistol.add(block)
 				elif tmp[1] == TypeBlock.RightPistol:
-					block.add(GroupPistol)
+					GroupPistol.add(block)
 				elif tmp[1] == TypeBlock.Door:
-					block.add(GroupDoor)
+					GroupDoor.add(block)
 			x+=size_blocks
 		y+=size_blocks
 		x=0
