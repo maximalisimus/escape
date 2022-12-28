@@ -91,7 +91,7 @@ class TypeBlock(NoValue):
 				return x
 		return None
 
-pygame.mixer.pre_init(44100, -16, 2, 512) # важно прописать до pygame.init()
+pygame.mixer.pre_init(44100, -16, 1, 512) # важно прописать до pygame.init()
 pygame.init()
 
 W, H = 596, 385
@@ -686,7 +686,7 @@ class Helicopter(pygame.sprite.Sprite):
 	def __init__(self):
 		self.copters = (images['else'][3]['surf'], images['else'][4]['surf'], images['else'][5]['surf'], images['else'][6]['surf'])
 		self.blade = (images['else'][14]['surf'], images['else'][15]['surf'])
-		self.image = self.copters[0]
+		self.image = pygame.Surface.copy(self.copters[0])
 		self.rect = self.image.get_rect(topleft=(coord_helicopter[0], coord_helicopter[1]))
 		self.ontype = images['else'][1]['type']
 		self.sound = effects['helicopter']
@@ -699,44 +699,68 @@ class Helicopter(pygame.sprite.Sprite):
 		self.blade_frame_rate = 30
 		self.takeoff_last_update = pygame.time.get_ticks()
 		self.takeoff_frame_rate = 50
+		self.sound_last_update = pygame.time.get_ticks()
+		self.sound_frame_rate = 600
 		self.count = 0
 		self.isTakeoff = False
 		self.isFine = False
-		self.blade_rear = self.blade[0]
-		self.blade_up = self.blade[1]
-		
+		self.blade_rear = pygame.Surface.copy(self.blade[0])
+		self.blade_up = pygame.Surface.copy(self.blade[1])
+	
+	def reset(self):
+		self.image = pygame.Surface.copy(self.copters[0])
+		self.rect = self.image.get_rect(topleft=(coord_helicopter[0], coord_helicopter[1]))
+		self.isAnim = False
+		self.isBlade = False
+		self.last_update = pygame.time.get_ticks()
+		self.frame = 0
+		self.blade_last_update = pygame.time.get_ticks()
+		self.takeoff_last_update = pygame.time.get_ticks()
+		self.count = 0
+		self.isTakeoff = False
+		self.isFine = False
+		self.blade_rear = pygame.Surface.copy(self.blade[0])
+		self.blade_up = pygame.Surface.copy(self.blade[1])
+		self.sound_last_update = pygame.time.get_ticks()
+		self.sound_frame_rate = 600
+	
 	def update(self, *args):
-		if (self.rect.y + size_helicopter[1] <= 0):
-			self.isFine = True
-			self.isAnim = False
-		else:
-			if self.isAnim:
-				now = pygame.time.get_ticks()
-				if now - self.blade_last_update > self.blade_frame_rate:
-					self.blade_last_update = now
-					if self.isBlade:
-						self.image = pygame.Surface.copy(self.copters[self.frame])
-						self.blade_rear = self.rotate_surf(self.blade_rear, 90)
-						self.image.blit(self.blade_rear, (coord_blade_side[0], coord_blade_side[1]))
-						self.blade_up = self.rotate_surf(self.blade_up, 180)
-						self.blade_up = pygame.transform.flip(self.blade_up, False, True)
-						self.image.blit(self.blade_up, (coord_blade_up[0], coord_blade_up[1]))
-				if now - self.takeoff_last_update > self.takeoff_frame_rate:
-					self.takeoff_last_update = now
-					if self.isBlade:
-						self.count += 1
-					if self.count == 10:
-						self.isTakeoff = True
-					if self.isTakeoff:
-						self.rect.x += 1
-						self.rect.y -= 1
-				if now - self.last_update > self.frame_rate:
-					self.last_update = now
-					if self.frame == 3:
-						self.isBlade = True
-					else:
-						self.image = pygame.Surface.copy(self.copters[self.frame])
-						self.frame += 1
+		if not self.isFine:
+			if (self.rect.y + size_helicopter[1] <= 0):
+				self.isFine = True
+				self.isAnim = False
+			else:
+				if self.isAnim:
+					now = pygame.time.get_ticks()
+					if now - self.blade_last_update > self.blade_frame_rate:
+						self.blade_last_update = now
+						if self.isBlade:
+							self.image = pygame.Surface.copy(self.copters[self.frame])
+							self.blade_rear = self.rotate_surf(self.blade_rear, 90)
+							self.image.blit(self.blade_rear, (coord_blade_side[0], coord_blade_side[1]))
+							self.blade_up = self.rotate_surf(self.blade_up, 180)
+							self.blade_up = pygame.transform.flip(self.blade_up, False, True)
+							self.image.blit(self.blade_up, (coord_blade_up[0], coord_blade_up[1]))
+					if now - self.takeoff_last_update > self.takeoff_frame_rate:
+						self.takeoff_last_update = now
+						if self.isBlade:
+							self.count += 1
+						if self.count == 10:
+							self.isTakeoff = True
+						if self.isTakeoff:
+							self.rect.x += 1
+							self.rect.y -= 1
+					if now - self.sound_last_update > self.sound_frame_rate:
+						self.sound_last_update = now
+						if self.isBlade:
+							self.sound.play()
+					if now - self.last_update > self.frame_rate:
+						self.last_update = now
+						if self.frame == 3:
+							self.isBlade = True
+						else:
+							self.image = pygame.Surface.copy(self.copters[self.frame])
+							self.frame += 1
 
 	def rotate_surf(self, surf, angle):
 		loc = surf.get_rect().center
