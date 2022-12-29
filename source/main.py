@@ -196,34 +196,37 @@ images = {
 						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/cola.WAV').resolve())),
 						},
 					5: {
-						'name': 'medicine_chest',
-						'surf': pygame.image.load(str(pathlib.Path('./images/medicine-chest.png').resolve())).convert_alpha(),
-						'score': 1,
-						'type': TypeBlock.Bonus,
-						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/live.WAV').resolve())),
-						},
-					6: {
 						'name': 'stop',
 						'surf': pygame.image.load(str(pathlib.Path('./images/stop.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': TypeBlock.Bonus,
 						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/stop.WAV').resolve())),
 						},
-					7: {
+					6: {
 						'name': 'thermos',
 						'surf': pygame.image.load(str(pathlib.Path('./images/thermos.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': TypeBlock.Bonus,
 						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/thermos.WAV').resolve())),
 						},
-					8: {
-						'name': 'heart',
-						'surf': pygame.image.load(str(pathlib.Path('./images/heart.png').resolve())).convert_alpha(),
+				},
+		'sep_bonus': 
+					{
+						0: {
+							'name': 'heart',
+							'surf': pygame.image.load(str(pathlib.Path('./images/heart.png').resolve())).convert_alpha(),
+							'score': 1,
+							'type': TypeBlock.Bonus,
+							'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/heart.WAV').resolve())),
+							},
+						1: {
+						'name': 'medicine_chest',
+						'surf': pygame.image.load(str(pathlib.Path('./images/medicine-chest.png').resolve())).convert_alpha(),
 						'score': 1,
 						'type': TypeBlock.Bonus,
-						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/heart.WAV').resolve())),
+						'sound': pygame.mixer.Sound(str(pathlib.Path('./sounds/live.WAV').resolve())),
 						},
-				},
+					},
 		'wall': {
 				0: {
 					'surf': pygame.image.load(str(pathlib.Path('./images/tile-1.png').resolve())).convert_alpha(),
@@ -898,13 +901,26 @@ def GenerateBonus(level: int):
 	empty_surf = pygame.Surface((size_blocks, size_blocks), pygame.SRCALPHA, 32).convert_alpha()
 	pygame.draw.rect(empty_surf, (0, 0, 0), (0, 0, size_blocks, size_blocks))
 	empty_block = Block(empty_surf, TypeBlock.Unknown, (0, 0))
-	rand_bonus_num = random.randint(0, 8)
-	select_row = random.choice(bonus_line)
-	on_row = select_row - 1
+	rand_bonus_num = random.randint(0, 6)
+	select_col = random.choice(bonus_line)
+	on_col = select_col - 1
+	y = empty_block.rect.y = on_col * size_blocks
+	collisions = PosCollision.get(level, dict()).get(select_col, False)
+	on_row = random.randint(1, col_table-2)
 	x = empty_block.rect.x = on_row * size_blocks
-	#collisions = PosCollision.get(level, None).get(select_row, False)
-	#print(on_row, collisions)
-	#Block(images['bonus'][rand_bonus_num]['surf'], images['bonus'][rand_bonus_num]['type'], (x, y), BonusMap, images['bonus'][rand_bonus_num]['score'], images['bonus'][rand_bonus_num]['sound'], images['bonus'][rand_bonus_num]['name'])
+	hits = pygame.sprite.spritecollide(empty_block, LevelMap, False)
+	if collisions:
+		while ((on_row in range(collisions[0]-1, collisions[1])) or hits):
+			on_row = random.randint(1, col_table-2)
+			x = empty_block.rect.x = on_row * size_blocks
+			hits = pygame.sprite.spritecollide(empty_block, LevelMap, False)
+	else:
+		while (hits):
+			on_row = random.randint(1, col_table-2)
+			x = empty_block.rect.x = on_row * size_blocks
+			hits = pygame.sprite.spritecollide(empty_block, LevelMap, False)
+	block = Block(images['bonus'][rand_bonus_num]['surf'], images['bonus'][rand_bonus_num]['type'], (x, y), BonusMap, images['bonus'][rand_bonus_num]['score'], images['bonus'][rand_bonus_num]['sound'], images['bonus'][rand_bonus_num]['name'])
+	LevelMap.add(block)
 	
 def print_level(level: int) -> str:
 	if level<10:
@@ -1118,18 +1134,20 @@ def main():
 	# start_sound.unpause()
 	# sounds['start'].play()
 	
-	Restart(screen1)
-	DrawTotal(screen1, 0, 1, 4)
-	BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 1)
+	#Restart(screen1)
+	#DrawTotal(screen1, 0, 1, 4)
+	#levels = 1
+	#BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, levels)
+	#screen1.blit(surf_table, (0, 0))
 	#helicopter.isAnim = True
-	for i in range(10):
-		GenerateBonus(1)
-	BonusMap.draw(screen1)
+	#for i in range(5):
+	#	GenerateBonus(levels)
+	#BonusMap.draw(screen1)
 	
-	#surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
-	#screen1.blit(surf_start_bg, (0, 0))
+	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
+	screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
-	#isStart = True
+	isStart = True
 	
 	RUN = True
 	while RUN:
