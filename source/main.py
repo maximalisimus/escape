@@ -95,7 +95,7 @@ pygame.mixer.pre_init(44100, -16, 1, 512) # важно прописать до p
 pygame.init()
 
 W, H = 596, 385
-sc = pygame.display.set_mode((W, H))
+screen1 = pygame.display.set_mode((W, H))
 pygame.display.set_caption("Esc")
 pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath('logo.png').resolve())))
 
@@ -774,7 +774,7 @@ class Helicopter(pygame.sprite.Sprite):
 helicopter = Helicopter()
 
 def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
-	global sc
+	global screen1
 	global LevelMap
 	global DoorMap
 	global PistolMap
@@ -818,8 +818,8 @@ def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 	GroupMap.draw(surface)
 	if level == 30:
 		helicopter.reset()
-		sc.blit(surf_table, (0, 0))
-		sc.blit(helicopter.image, helicopter.rect)
+		screen1.blit(surf_table, (0, 0))
+		screen1.blit(helicopter.image, helicopter.rect)
 
 def print_level(level: int) -> str:
 	if level<10:
@@ -998,7 +998,7 @@ def DrawHero(surface):
 	surface.blit(surf_hero, (100, 100))
 
 def main():
-	global sc
+	global screen1
 	global clock
 	global FPS
 	
@@ -1033,13 +1033,13 @@ def main():
 	# start_sound.unpause()
 	# sounds['start'].play()
 	
-	#Restart(sc)
-	#DrawTotal(sc, 0, 1, 4)
+	#Restart(screen1)
+	#DrawTotal(screen1, 0, 1, 4)
 	#BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 30)
 	#helicopter.isAnim = True
-	
+		
 	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
-	sc.blit(surf_start_bg, (0, 0))
+	screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
 	isStart = True
 	
@@ -1067,7 +1067,7 @@ def main():
 					# pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				if isStart:
-					SwitchInitImage((event.pos[0],event.pos[1]), sc)
+					SwitchInitImage((event.pos[0],event.pos[1]), screen1)
 				elif isGame:
 					MouseClicked((event.pos[0],event.pos[1]), True)
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
@@ -1116,13 +1116,9 @@ def main():
 		#	print('F10')
 		# elif keys[pygame.K_F11]:
 		#	print('F11')
-		# mouse_pressed = pygame.mouse.get_pressed()
-		# if mouse_pressed[0]:
-		#	mouse_pos = pygame.mouse.get_pos()
-		#	MouseClicked((mouse_pos[0],mouse_pos[1]), sc)
 		
-		#sc.blit(surf_table, (0, 0))
-		#sc.blit(helicopter.image, helicopter.rect)
+		#screen1.blit(surf_table, (0, 0))
+		#screen1.blit(helicopter.image, helicopter.rect)
 		#pygame.display.update()
 		#helicopter.update()
 		
