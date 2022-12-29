@@ -120,6 +120,8 @@ size_helicopter = (72, 48)
 size_blocks = 24
 
 # 16 row x 18 column (24 pixel x 24 pixel)
+row_table = 16
+col_table = 18
 size_table = (432, 384)
 surf_table = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
 rect_table = surf_table.get_rect(topleft=(0, 0))
@@ -493,70 +495,70 @@ LevelMap = pygame.sprite.Group()
 DoorMap = pygame.sprite.Group()
 PistolMap = pygame.sprite.Group()
 HatchBombMap = pygame.sprite.Group()
+BonusMap = pygame.sprite.Group()
 
-def SwitchPosCollision(SelectLevel):
-	return {
-			1: {
-					12: (6, 8),
-				},
-			2: {
-					6: (8, 13),
-				},
-			3: {
-					6: (7, 12),
-				},
-			4: {
-					12: (5, 10),
-				},
-			8: {
-					9: (7, 13),
-					12: (7, 15),
-				},
-			9: {
-					6: (5, 11),
-				},
-			11: {
-					12: (7, 9),
-				},
-			13: {
-					6: (7, 18),
-					9: (7, 18),
-					12: (7, 18),
-				},
-			15: {
-					3: (11, 13),
-					6: (5, 7),
-					9: (11, 13),
-					12: (7, 9),
-				},
-			16: {
-					3: (8, 10),
-				},
-			20: {
-					9: (7, 13),
-					12: (7, 15),
-				},
-			24: {
-					9: (6, 10),
-					12: (5, 11),
-				},
-			27: {
-					3: (11, 13),
-					6: (5, 7),
-					9: (11, 13),
-					12: (7, 9),
-				},
-			28: {
-					6: (5, 11),
-				},
-			29: {
-					9: (7, 13),
-					12: (7, 15),
-				},
-			30: {
-					3: (1, 18),
-				},
-	}.get(SelectLevel, False)
+PosCollision = {
+				1: {
+						12: (6, 8),
+					},
+				2: {
+						6: (8, 13),
+					},
+				3: {
+						6: (7, 12),
+					},
+				4: {
+						12: (5, 10),
+					},
+				8: {
+						9: (7, 13),
+						12: (7, 15),
+					},
+				9: {
+						6: (5, 11),
+					},
+				11: {
+						12: (7, 9),
+					},
+				13: {
+						6: (7, 18),
+						9: (7, 18),
+						12: (7, 18),
+					},
+				15: {
+						3: (11, 13),
+						6: (5, 7),
+						9: (11, 13),
+						12: (7, 9),
+					},
+				16: {
+						3: (8, 10),
+					},
+				20: {
+						9: (7, 13),
+						12: (7, 15),
+					},
+				24: {
+						9: (6, 10),
+						12: (5, 11),
+					},
+				27: {
+						3: (11, 13),
+						6: (5, 7),
+						9: (11, 13),
+						12: (7, 9),
+					},
+				28: {
+						6: (5, 11),
+					},
+				29: {
+						9: (7, 13),
+						12: (7, 15),
+					},
+				30: {
+						3: (1, 17),
+					},
+				}
 
 def SwitchShot(CasePos):
 	return {
@@ -888,6 +890,22 @@ def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 		screen1.blit(surf_table, (0, 0))
 		screen1.blit(helicopter.image, helicopter.rect)
 
+def GenerateBonus(level: int):
+	global LevelMap
+	global BonusMap
+	global row_table
+	global col_table
+	empty_surf = pygame.Surface((size_blocks, size_blocks), pygame.SRCALPHA, 32).convert_alpha()
+	pygame.draw.rect(empty_surf, (0, 0, 0), (0, 0, size_blocks, size_blocks))
+	empty_block = Block(empty_surf, TypeBlock.Unknown, (0, 0))
+	rand_bonus_num = random.randint(0, 8)
+	select_row = random.choice(bonus_line)
+	on_row = select_row - 1
+	x = empty_block.rect.x = on_row * size_blocks
+	#collisions = PosCollision.get(level, None).get(select_row, False)
+	#print(on_row, collisions)
+	#Block(images['bonus'][rand_bonus_num]['surf'], images['bonus'][rand_bonus_num]['type'], (x, y), BonusMap, images['bonus'][rand_bonus_num]['score'], images['bonus'][rand_bonus_num]['sound'], images['bonus'][rand_bonus_num]['name'])
+	
 def print_level(level: int) -> str:
 	if level<10:
 		return f"0{level}"
@@ -1100,15 +1118,18 @@ def main():
 	# start_sound.unpause()
 	# sounds['start'].play()
 	
-	#Restart(screen1)
-	#DrawTotal(screen1, 0, 1, 4)
-	#BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 30)
+	Restart(screen1)
+	DrawTotal(screen1, 0, 1, 4)
+	BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 1)
 	#helicopter.isAnim = True
-		
-	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
-	screen1.blit(surf_start_bg, (0, 0))
+	for i in range(10):
+		GenerateBonus(1)
+	BonusMap.draw(screen1)
+	
+	#surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
+	#screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
-	isStart = True
+	#isStart = True
 	
 	RUN = True
 	while RUN:
