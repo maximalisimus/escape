@@ -723,6 +723,8 @@ class Helicopter(pygame.sprite.Sprite):
 		self.blade_up = pygame.Surface.copy(self.blade[1])
 		self.sound_last_update = pygame.time.get_ticks()
 		self.sound_frame_rate = 600
+		self.takeoff_frame_rate = 50
+		self.blade_frame_rate = 30
 	
 	def update(self, *args):
 		if not self.isFine:
@@ -768,8 +770,18 @@ class Helicopter(pygame.sprite.Sprite):
 		rot_sprite.get_rect().center = loc
 		return rot_sprite
 
+helicopter = Helicopter()
+
 def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
+	global sc
+	global LevelMap
+	global DoorMap
+	global PistolMap
+	global HatchBombMap
+	global helicopter
+	
 	global size_blocks
+	
 	GroupMap.empty()
 	GroupDoor.empty()
 	GroupHatch.empty()
@@ -803,6 +815,10 @@ def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 		y+=size_blocks
 		x=0
 	GroupMap.draw(surface)
+	if level == 30:
+		helicopter.reset()
+		sc.blit(surf_table, (0, 0))
+		sc.blit(helicopter.image, helicopter.rect)
 
 def print_level(level: int) -> str:
 	if level<10:
@@ -1001,6 +1017,7 @@ def main():
 	global DoorMap
 	global PistolMap
 	global HatchBombMap
+	global helicopter
 	
 	# pygame.mixer.music.play(-1)
 	# pygame.mixer.music.pause()
@@ -1018,9 +1035,6 @@ def main():
 	#Restart(sc)
 	#DrawTotal(sc, 0, 1, 4)
 	#BuildLevel(surf_table, LevelMap, DoorMap, HatchBombMap, PistolMap, 30)
-	#helicopter = Helicopter()
-	#sc.blit(surf_table, (0, 0))
-	#sc.blit(helicopter.image, helicopter.rect)
 	#helicopter.isAnim = True
 	
 	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
