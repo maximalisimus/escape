@@ -5,6 +5,7 @@ import pygame
 import pathlib
 from typing import Tuple
 from enum import Enum
+import random
 
 class NoValue(Enum):
 	''' Base Enum class elements '''
@@ -486,10 +487,76 @@ pos_clicked = {
 					},
 			}
 
+bonus_line = (3, 6, 9, 12, 15)
+
 LevelMap = pygame.sprite.Group()
 DoorMap = pygame.sprite.Group()
 PistolMap = pygame.sprite.Group()
 HatchBombMap = pygame.sprite.Group()
+
+def SwitchPosCollision(SelectLevel):
+	return {
+			1: {
+					12: (6, 8),
+				},
+			2: {
+					6: (8, 13),
+				},
+			3: {
+					6: (7, 12),
+				},
+			4: {
+					12: (5, 10),
+				},
+			8: {
+					9: (7, 13),
+					12: (7, 15),
+				},
+			9: {
+					6: (5, 11),
+				},
+			11: {
+					12: (7, 9),
+				},
+			13: {
+					6: (7, 18),
+					9: (7, 18),
+					12: (7, 18),
+				},
+			15: {
+					3: (11, 13),
+					6: (5, 7),
+					9: (11, 13),
+					12: (7, 9),
+				},
+			16: {
+					3: (8, 10),
+				},
+			20: {
+					9: (7, 13),
+					12: (7, 15),
+				},
+			24: {
+					9: (6, 10),
+					12: (5, 11),
+				},
+			27: {
+					3: (11, 13),
+					6: (5, 7),
+					9: (11, 13),
+					12: (7, 9),
+				},
+			28: {
+					6: (5, 11),
+				},
+			29: {
+					9: (7, 13),
+					12: (7, 15),
+				},
+			30: {
+					3: (1, 18),
+				},
+	}.get(SelectLevel, False)
 
 def SwitchShot(CasePos):
 	return {
