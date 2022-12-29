@@ -714,17 +714,18 @@ class Helicopter(pygame.sprite.Sprite):
 		self.isBlade = False
 		self.last_update = pygame.time.get_ticks()
 		self.frame = 0
+		self.frame_rate = 500
 		self.blade_last_update = pygame.time.get_ticks()
+		self.blade_frame_rate = 30
 		self.takeoff_last_update = pygame.time.get_ticks()
+		self.takeoff_frame_rate = 50
+		self.sound_last_update = pygame.time.get_ticks()
+		self.sound_frame_rate = 600
 		self.count = 0
 		self.isTakeoff = False
 		self.isFine = False
 		self.blade_rear = pygame.Surface.copy(self.blade[0])
 		self.blade_up = pygame.Surface.copy(self.blade[1])
-		self.sound_last_update = pygame.time.get_ticks()
-		self.sound_frame_rate = 600
-		self.takeoff_frame_rate = 50
-		self.blade_frame_rate = 30
 	
 	def update(self, *args):
 		if not self.isFine:
