@@ -748,9 +748,6 @@ class Block(pygame.sprite.Sprite):
 			self.add(group)
 	
 	def update(self, *args):
-		# self.rect.x = args[0]
-		# self.rect.y = args[1]
-		# self.kill()
 		pass
 
 class Helicopter(pygame.sprite.Sprite):
@@ -875,22 +872,21 @@ def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 	for row in lines:
 		for col in row.replace('\n', '').replace(' ','7'):
 			if LevelCode.GetCodeValue(int(col)) != LevelCode.Empty:
-				tmp = SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)
-				if tmp[1] == TypeBlock.Door:
+				if SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)[1] == TypeBlock.Door:
 					if DoorInOut:
-						block = Block(tmp[0], TypeBlock.DoorOut, (x, y), GroupMap)
+						block = Block(SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)[0], TypeBlock.DoorOut, (x, y), GroupMap)
 						DoorInOut = False
 					else:
-						block = Block(tmp[0], TypeBlock.DoorIn, (x, y), GroupMap)
+						block = Block(SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)[0], TypeBlock.DoorIn, (x, y), GroupMap)
 				else:
-					block = Block(tmp[0], tmp[1], (x, y), GroupMap)
-				if tmp[1] == TypeBlock.HatchBombs:
+					block = Block(SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)[0], SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)[1], (x, y), GroupMap)
+				if SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)[1] == TypeBlock.HatchBombs:
 					GroupHatch.add(block)
-				elif tmp[1] == TypeBlock.LeftPistol:
+				elif SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)[1] == TypeBlock.LeftPistol:
 					GroupPistol.add(block)
-				elif tmp[1] == TypeBlock.RightPistol:
+				elif SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)[1] == TypeBlock.RightPistol:
 					GroupPistol.add(block)
-				elif tmp[1] == TypeBlock.Door:
+				elif SwitchBlockMap(LevelCode.GetCodeValue(int(col)), level)[1] == TypeBlock.Door:
 					GroupDoor.add(block)
 			x+=size_blocks
 		y+=size_blocks
@@ -901,7 +897,7 @@ def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 		screen1.blit(surf_table, (0, 0))
 		screen1.blit(helicopter.image, helicopter.rect)
 
-def GenerateBonus(level: int):
+def CreateBonus(level: int):
 	global LevelMap
 	global BonusMap
 	global row_table
@@ -1147,7 +1143,7 @@ def main():
 	#screen1.blit(surf_table, (0, 0))
 	#helicopter.isAnim = True
 	#for i in range(5):
-	#	GenerateBonus(levels)
+	#	CreateBonus(levels)
 	#BonusMap.draw(screen1)
 	
 	surf_start_bg = pygame.transform.scale(images['bg'][6]['surf'], (W, H))
