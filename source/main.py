@@ -898,30 +898,28 @@ def GenerateBonus(level: int):
 	global BonusMap
 	global row_table
 	global col_table
-	empty_surf = pygame.Surface((size_blocks, size_blocks), pygame.SRCALPHA, 32).convert_alpha()
-	pygame.draw.rect(empty_surf, (0, 0, 0), (0, 0, size_blocks, size_blocks))
-	empty_block = Block(empty_surf, TypeBlock.Unknown, (0, 0))
 	rand_bonus_num = random.randint(0, 6)
+	block = Block(images['bonus'][rand_bonus_num]['surf'], images['bonus'][rand_bonus_num]['type'], (0, 0), None, images['bonus'][rand_bonus_num]['score'], images['bonus'][rand_bonus_num]['sound'], images['bonus'][rand_bonus_num]['name'])
 	select_col = random.choice(bonus_line)
 	on_col = select_col - 1
-	y = empty_block.rect.y = on_col * size_blocks
+	block.rect.y = on_col * size_blocks
 	collisions = PosCollision.get(level, dict()).get(select_col, False)
 	on_row = random.randint(1, col_table-2)
-	x = empty_block.rect.x = on_row * size_blocks
-	hits = pygame.sprite.spritecollide(empty_block, LevelMap, False)
+	block.rect.x = on_row * size_blocks
+	hits = pygame.sprite.spritecollide(block, LevelMap, False)
 	if collisions:
 		while ((on_row in range(collisions[0]-1, collisions[1])) or hits):
 			on_row = random.randint(1, col_table-2)
-			x = empty_block.rect.x = on_row * size_blocks
-			hits = pygame.sprite.spritecollide(empty_block, LevelMap, False)
+			block.rect.x = on_row * size_blocks
+			hits = pygame.sprite.spritecollide(block, LevelMap, False)
 	else:
 		while (hits):
 			on_row = random.randint(1, col_table-2)
-			x = empty_block.rect.x = on_row * size_blocks
-			hits = pygame.sprite.spritecollide(empty_block, LevelMap, False)
-	block = Block(images['bonus'][rand_bonus_num]['surf'], images['bonus'][rand_bonus_num]['type'], (x, y), BonusMap, images['bonus'][rand_bonus_num]['score'], images['bonus'][rand_bonus_num]['sound'], images['bonus'][rand_bonus_num]['name'])
+			block.rect.x = on_row * size_blocks
+			hits = pygame.sprite.spritecollide(block, LevelMap, False)
+	BonusMap.add(block)
 	LevelMap.add(block)
-	
+
 def print_level(level: int) -> str:
 	if level<10:
 		return f"0{level}"
