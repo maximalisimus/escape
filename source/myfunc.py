@@ -1,3 +1,4 @@
+import pygame
 from enum import Enum
 
 class NoValue(Enum):
@@ -88,3 +89,4 @@ class TypeBlock(NoValue):
 def CollideRectAB(obj_a_rect, obj_b_rect):
 	if obj_a_rect.right > obj_b_rect.left and obj_a_rect.left < obj_b_rect.right and obj_a_rect.bottom > obj_b_rect.top and obj_a_rect.top < obj_b_rect.bottom:
 		return True
+
