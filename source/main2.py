@@ -18,7 +18,6 @@ pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath
 clock = pygame.time.Clock()
 
 def main():
-	
 	RUN = True
 	while RUN:
 		for event in pygame.event.get():
