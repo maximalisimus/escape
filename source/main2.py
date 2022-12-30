@@ -18,7 +18,15 @@ pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath
 clock = pygame.time.Clock()
 
 def main():
-	pass
+	
+	RUN = True
+	while RUN:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				RUN = False
+				exit()
+		
+		clock.tick(FPS)
 
 if __name__ == '__main__':
 	main()
