@@ -855,10 +855,18 @@ def BuildLevel(surface, GroupMap, GroupDoor, GroupHatch, GroupPistol, level):
 	
 	global size_blocks
 	
-	GroupMap.empty()
-	GroupDoor.empty()
-	GroupHatch.empty()
-	GroupPistol.empty()
+	if len(GroupMap.sprites()) > 0:
+		for obj in GroupMap.sprites():
+			obj.kill()
+	if len(GroupDoor.sprites()) > 0:
+		for obj in GroupDoor.sprites():
+			obj.kill()
+	if len(GroupHatch.sprites()) > 0:
+		for obj in GroupHatch.sprites():
+			obj.kill()
+	if len(GroupPistol.sprites()) > 0:
+		for obj in GroupPistol.sprites():
+			obj.kill()
 	surface.blit(SwitchClouds(level), (0, 0))
 	with open(files_levels[level-1], 'r') as f:
 		lines = f.readlines()
