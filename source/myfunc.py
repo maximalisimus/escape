@@ -1,5 +1,9 @@
 import pygame
+import pathlib
+from typing import Tuple
 from enum import Enum
+import random
+from variables import *
 
 class NoValue(Enum):
 	''' Base Enum class elements '''
@@ -90,3 +94,115 @@ def CollideRectAB(obj_a_rect, obj_b_rect):
 	if obj_a_rect.right > obj_b_rect.left and obj_a_rect.left < obj_b_rect.right and obj_a_rect.bottom > obj_b_rect.top and obj_a_rect.top < obj_b_rect.bottom:
 		return True
 
+def LoadSurf(paths):
+	return pygame.image.load(pathlib.Path(paths).resolve()).convert_alpha()
+
+def PosCollisions(level: int):
+	return {
+			1: {
+					12: (6, 8),
+				},
+			2: {
+					6: (8, 13),
+				},
+			3: {
+					6: (7, 12),
+				},
+			4: {
+					12: (5, 10),
+				},
+			8: {
+					9: (7, 13),
+					12: (7, 15),
+				},
+			9: {
+					6: (5, 11),
+				},
+			11: {
+					12: (7, 9),
+				},
+			13: {
+					6: (7, 18),
+					9: (7, 18),
+					12: (7, 18),
+				},
+			15: {
+					3: (11, 13),
+					6: (5, 7),
+					9: (11, 13),
+					12: (7, 9),
+				},
+			16: {
+					3: (8, 10),
+				},
+			20: {
+					9: (7, 13),
+					12: (7, 15),
+				},
+			24: {
+					9: (6, 10),
+					12: (5, 11),
+				},
+			27: {
+					3: (11, 13),
+					6: (5, 7),
+					9: (11, 13),
+					12: (7, 9),
+				},
+			28: {
+					6: (5, 11),
+				},
+			29: {
+					9: (7, 13),
+					12: (7, 15),
+				},
+			30: {
+					3: (1, 17),
+				},
+	}.get(level, dict())
+
+def SelectBonus(num): # 0 - 6
+	return {
+			0: {
+				'name': 'alarm',
+				'path': pathlib.Path('./images/alarm.png').resolve(),
+				'score': 100,
+				'type': TypeBlock.Bonus,
+				},
+			1: {
+				'name': 'burger',
+				'path': pathlib.Path('./images/burger.png').resolve(),
+				'score': 50,
+				'type': TypeBlock.Bonus,
+				},
+			2: {
+				'name': 'clock',
+				'path': pathlib.Path('./images/clock.png').resolve(),
+				'score': 30,
+				'type': TypeBlock.Bonus,
+				},
+			3: {
+				'name': 'coffee',
+				'path': pathlib.Path('./images/coffee.png').resolve(),
+				'score': 20,
+				'type': TypeBlock.Bonus,
+				},
+			4: {
+				'name': 'cola',
+				'path': pathlib.Path('./images/cola.png').resolve(),
+				'score': 10,
+				'type': TypeBlock.Bonus,
+				},
+			5: {
+				'name': 'stop',
+				'path': pathlib.Path('./images/stop.png').resolve(),
+				'score': 1,
+				'type': TypeBlock.Bonus,
+				},
+			6: {
+				'name': 'thermos',
+				'path': pathlib.Path('./images/thermos.png').resolve(),
+				'score': 1,
+				'type': TypeBlock.Bonus,
+				},
+	}.get(num, dict())
