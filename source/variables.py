@@ -113,8 +113,8 @@ bomb_path = pathlib.Path('./images/bomb.png').resolve()
 
 shot_path = pathlib.Path('./images/bullet.png').resolve()
 
-blade_rear = pathlib.Path('./images/blade-rear.png').resolve()
-blade_up = pathlib.Path('./images/blade-up.png').resolve()
+blade_rear_path = pathlib.Path('./images/blade-rear.png').resolve()
+blade_up_path = pathlib.Path('./images/blade-up.png').resolve()
 
 surf_table = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
 rect_table = surf_table.get_rect(topleft=(0, 0))
