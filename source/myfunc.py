@@ -206,7 +206,10 @@ class Block:
 		self.rect = pygame.Rect((RectXY[0], RectXY[1], size_blocks, size_blocks))
 
 def CollideRectAB(obj_a_rect, obj_b_rect):
-	if obj_a_rect.right > obj_b_rect.left and obj_a_rect.left < obj_b_rect.right and obj_a_rect.bottom > obj_b_rect.top and obj_a_rect.top < obj_b_rect.bottom:
+	if obj_a_rect.right > obj_b_rect.left and \
+	obj_a_rect.left < obj_b_rect.right and \
+	obj_a_rect.bottom > obj_b_rect.top and \
+	obj_a_rect.top < obj_b_rect.bottom:
 		return True
 
 def LoadSurf(paths):
