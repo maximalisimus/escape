@@ -64,12 +64,7 @@ def main():
 		#if pressed[0]:
 		#	pos = pygame.mouse.get_pos()
 		#	print(pos)
-		
-		#screen1.blit(surf_table, rect_table)
-		#screen1.blit(helicopter.image, helicopter.rect)
-		#pygame.display.update()
-		#helicopter.update()
-		
+				
 		clock.tick(FPS)
 
 if __name__ == '__main__':
