@@ -101,6 +101,7 @@ heart = {
 		}
 
 logo = pathlib.Path('./images/esc_t.png').resolve()
+
 background = pathlib.Path('./images/esc-bg.png').resolve()
 score_bg = pathlib.Path('./images/score-bg.png').resolve()
 live_bg = pygame.image.load(pathlib.Path('./images/live-bg.png').resolve()).convert_alpha()

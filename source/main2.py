@@ -3,16 +3,15 @@
 
 from myfunc import *
 
-surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
-
 def main():
 	global screen1
 	global clock
 	
-	global surf_start_bg
+	global logo	
+	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
-	del surf_start_bg
+	del surf_start_bg, logo
 	
 	RUN = True
 	
