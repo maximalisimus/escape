@@ -156,6 +156,15 @@ class TGroup(TList):
 	def sprites(self):
 		return self.copy()
 
+	def CollideRect(self, player, dkill: bool = False):
+		tmp = []
+		for item in self.value.copy():
+			if CollideRectAB(player.rect, item.rect):
+				tmp.append(item)
+				if dkill:
+					self.value.remove(item)
+		return tmp
+
 class TSprite:
 	
 	def __init__(self, image = None, rect = None, ongroup = None):
