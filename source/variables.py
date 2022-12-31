@@ -78,3 +78,27 @@ pos_clicked = {
 						1: (538, 294),
 					},
 			}
+
+medicine = {
+			'name': 'medicine_chest',
+			'path': pathlib.Path('./images/medicine-chest.png').resolve(),
+			'score': 1,
+			}
+
+heart = {
+			'name': 'heart',
+			'path': pathlib.Path('./images/heart.png').resolve(),
+			'score': 1,
+		}
+
+logo = pathlib.Path('./images/esc_t.png').resolve()
+background = pathlib.Path('./images/esc-bg.png').resolve()
+live_bg = pathlib.Path('./images/live-bg.png').resolve()
+died_bg = pathlib.Path('./images/died-bg.png').resolve()
+
+bomb_path = pathlib.Path('./images/bomb.png').resolve()
+
+shot_path = pathlib.Path('./images/bullet.png').resolve()
+
+blade_rear = pathlib.Path('./images/blade-rear.png').resolve()
+blade_up = pathlib.Path('./images/blade-up.png').resolve()

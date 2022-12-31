@@ -161,7 +161,7 @@ def PosCollision(level: int):
 				},
 	}.get(level, dict())
 
-def SwitchBonus(num):
+def SelectBonus(num):
 	return {
 			0: {
 				'name': 'alarm',
@@ -207,18 +207,79 @@ def SwitchBonus(num):
 				},
 	}.get(num, dict())
 
-def SwitchHeart():
+def SelectWall(num):
 	return {
-				'name': 'heart',
-				'path': pathlib.Path('./images/heart.png').resolve(),
-				'score': 1,
-				'type': TypeBlock.Bonus,
-			}
+			0: pathlib.Path('./images/tile-1.png').resolve(),
+			1: pathlib.Path('./images/tile-2.png').resolve(),
+			2: pathlib.Path('./images/tile-3.png').resolve(),
+			3: pathlib.Path('./images/tile-4.png').resolve(),
+			4: pathlib.Path('./images/tile-5.png').resolve(),
+			5: pathlib.Path('./images/tile-6.png').resolve(),
+	}.get(num, pathlib.Path('./images/tile-1.png').resolve())
 
-def SwitchMedicine():
+def SelectClouds(num):
 	return {
-				'name': 'medicine_chest',
-				'path': pathlib.Path('./images/medicine-chest.png').resolve(),
-				'score': 1,
-				'type': TypeBlock.Bonus,
-			}
+			0: pathlib.Path('./images/esc_1.png').resolve(),
+			1: pathlib.Path('./images/esc_2.png').resolve(),
+			2: pathlib.Path('./images/esc_3.png').resolve(),
+			3: pathlib.Path('./images/esc_4.png').resolve(),
+			4: pathlib.Path('./images/esc_5.png').resolve(),
+			5: pathlib.Path('./images/esc_6.png').resolve(),
+	}.get(num, pathlib.Path('./images/esc_1.png').resolve())
+
+def SelectHatchBombs(num):
+	return {
+			0: pathlib.Path('./images/hatch-bombs.png').resolve(),
+			1: pathlib.Path('./images/hatch-bombs-2.png').resolve(),
+	}.get(num, pathlib.Path('./images/hatch-bombs.png').resolve())
+
+def SelectHelicopter(num):
+	return {
+			0: pathlib.Path('./images/Helicopter_1.png').resolve(),
+			1: pathlib.Path('./images/Helicopter_2.png').resolve(),
+			2: pathlib.Path('./images/Helicopter_3.png').resolve(),
+			3: pathlib.Path('./images/Helicopter_4.png').resolve(),
+	}.get(num, pathlib.Path('./images/Helicopter_1.png').resolve())
+
+def SelectLadder(num):
+	return {
+			0: pathlib.Path('./images/ladder.png').resolve(),
+			1: pathlib.Path('./images/ladder-2.png').resolve(),
+	}.get(num, pathlib.Path('./images/ladder.png').resolve())
+
+def SelectPistol(pistol: TypeBlock):
+	return {
+			TypeBlock.LeftPistol: pathlib.Path('./images/left-pistol.png').resolve(),
+			TypeBlock.RightPistol: pathlib.Path('./images/right-pistol.png').resolve(),
+	}.get(pistol, False)
+
+def SelectHero(num):
+	return {
+			0: pathlib.Path('./images/hero.png').resolve(),
+			1: pathlib.Path('./images/hero-side-left.png').resolve(),
+			2: pathlib.Path('./images/hero-side-right.png').resolve(),
+	}.get(num, pathlib.Path('./images/hero.png').resolve())
+
+def SelectExplotion(num):
+	return {
+			0: pathlib.Path('./images/exp-1.png').resolve(),
+			1: pathlib.Path('./images/exp-2.png').resolve(),
+			2: pathlib.Path('./images/exp-3.png').resolve(),
+			3: pathlib.Path('./images/exp-4.png').resolve(),
+			4: pathlib.Path('./images/exp-5.png').resolve(),
+			5: pathlib.Path('./images/exp-6.png').resolve(),
+	}.get(num, pathlib.Path('./images/exp-1.png').resolve())
+
+def SwitchLCD(num: str):
+	return {
+			'0': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-0.png').resolve())).convert_alpha(),
+			'1': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-1.png').resolve())).convert_alpha(),
+			'2': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-2.png').resolve())).convert_alpha(),
+			'3': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-3.png').resolve())).convert_alpha(),
+			'4': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-4.png').resolve())).convert_alpha(),
+			'5': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-5.png').resolve())).convert_alpha(),
+			'6': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-6.png').resolve())).convert_alpha(),
+			'7': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-7.png').resolve())).convert_alpha(),
+			'8': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-8.png').resolve())).convert_alpha(),
+			'9': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-9.png').resolve())).convert_alpha(),
+	}.get(num, False)

@@ -18,6 +18,8 @@ surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRC
 surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]), pygame.SRCALPHA, 32).convert_alpha()
 
+surf_score_bg = pygame.image.load(str(pathlib.Path('./images/score-bg.png').resolve())).convert_alpha()
+
 pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
 
 effects = {
