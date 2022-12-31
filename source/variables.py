@@ -31,9 +31,10 @@ row_table = 16
 col_table = 18
 size_table = (432, 384)
 
-coord_score = (475,40)
-coord_level = (510, 110.5)
-coord_live = (460, 160)
+coord_score = (26,40)
+coord_level = (60, 110)
+coord_live = (10, 160)
+
 coord_score_bg = (450, 0)
 coord_helicopter = (216, 48)
 coord_blade_side = (5, 15)
@@ -133,7 +134,7 @@ bonuses = {
 logo = pathlib.Path('./images/esc_t.png').resolve()
 
 background = pathlib.Path('./images/esc-bg.png').resolve()
-score_bg = pathlib.Path('./images/score-bg.png').resolve()
+score_bg = pygame.image.load(pathlib.Path('./images/score-bg.png').resolve()).convert_alpha()
 live_bg = pygame.image.load(pathlib.Path('./images/live-bg.png').resolve()).convert_alpha()
 died_bg = pygame.image.load(pathlib.Path('./images/died-bg.png').resolve()).convert_alpha()
 

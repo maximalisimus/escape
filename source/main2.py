@@ -10,6 +10,9 @@ def main():
 	global surf_table
 	global rect_table
 	
+	global coord_score_bg
+	global score_bg
+	
 	# Groups
 	global blocks
 	
@@ -21,15 +24,17 @@ def main():
 	
 	RUN = True
 	
-	# Debug
+	### Debug
 	SwitchInitImage(screen1)
 	#Restart(screen1)
 	onlevel = 1
 	BuildLevel(surf_table, blocks, onlevel)
-	#screen1.blit(surf_table, rect_table)
+	DrawTotal(score_bg, 0, onlevel, 4, False)
+	screen1.blit(surf_table, rect_table)
+	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	pygame.display.update()
-	#helicopter.isAnim = True
-			
+	### Debug
+	
 	while RUN:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -49,9 +54,15 @@ def main():
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
 		
-		screen1.blit(surf_table, rect_table)
+		#keys = pygame.key.get_pressed()
+		#pressed = pygame.mouse.get_pressed()
+		#if pressed[0]:
+		#	pos = pygame.mouse.get_pos()
+		#	print(pos)
+		
+		#screen1.blit(surf_table, rect_table)
 		#screen1.blit(helicopter.image, helicopter.rect)
-		pygame.display.update()
+		#pygame.display.update()
 		#helicopter.update()
 		
 		clock.tick(FPS)

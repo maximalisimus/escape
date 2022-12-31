@@ -424,7 +424,7 @@ def SwitchInitImage(surface):
 	isGame = True
 	isStart = False
 	surface.blit(LoadSurf(background), (0, 0))
-	surface.blit(LoadSurf(score_bg), (coord_score_bg[0], coord_score_bg[1]))
+	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	Restart(surface)
 
 def print_level(level: int) -> str:
