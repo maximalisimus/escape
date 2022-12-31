@@ -15,6 +15,9 @@ def main():
 	
 	RUN = True
 	
+	# Debug
+	SwitchInitImage(screen1)
+	
 	while RUN:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
