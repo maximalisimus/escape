@@ -270,30 +270,152 @@ def SelectExplotion(num):
 			5: pathlib.Path('./images/exp-6.png').resolve(),
 	}.get(num, pathlib.Path('./images/exp-1.png').resolve())
 
-def SwitchShot(CasePos: LevelCode):
+def SwitchPistol(CasePos: LevelCode):
 	return {
 			LevelCode.LeftPistol: LoadSurf(SelectPistol(LevelCode.LeftPistol)),
 			LevelCode.RightPistol: LoadSurf(SelectPistol(LevelCode.RightPistol)),
 	}.get(CasePos, None)
+
+def SwitchShot(CaseShot: LevelCode):
+	return {
+			LevelCode.LeftPistol: LoadSurf(shot_path),
+			LevelCode.RightPistol: pygame.transform.flip(LoadSurf(shot_path), True, False),
+	}.get(CaseShot, LoadSurf(shot_path))
 
 def SwitchDoor(level_code: LevelCode):
 	return {
 			LevelCode.Door: LoadSurf(door_path),
 	}.get(level_code, LoadSurf(door_path))
 
-def SwitchLCD(num: str):
+def SwitchHatchBombs(CaseLevel):
 	return {
-			'0': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-0.png').resolve())).convert_alpha(),
-			'1': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-1.png').resolve())).convert_alpha(),
-			'2': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-2.png').resolve())).convert_alpha(),
-			'3': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-3.png').resolve())).convert_alpha(),
-			'4': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-4.png').resolve())).convert_alpha(),
-			'5': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-5.png').resolve())).convert_alpha(),
-			'6': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-6.png').resolve())).convert_alpha(),
-			'7': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-7.png').resolve())).convert_alpha(),
-			'8': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-8.png').resolve())).convert_alpha(),
-			'9': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-9.png').resolve())).convert_alpha(),
-	}.get(num, False)
+			1: LoadSurf(SelectHatchBombs(0)),
+			2: LoadSurf(SelectHatchBombs(0)),
+			3: LoadSurf(SelectHatchBombs(0)),
+			4: LoadSurf(SelectHatchBombs(0)),
+			5: LoadSurf(SelectHatchBombs(0)),
+			6: LoadSurf(SelectHatchBombs(0)),
+			7: LoadSurf(SelectHatchBombs(0)),
+			8: LoadSurf(SelectHatchBombs(0)),
+			9: LoadSurf(SelectHatchBombs(0)),
+			10: LoadSurf(SelectHatchBombs(0)),
+			11: LoadSurf(SelectHatchBombs(0)),
+			12: LoadSurf(SelectHatchBombs(0)),
+			13: LoadSurf(SelectHatchBombs(0)),
+			14: LoadSurf(SelectHatchBombs(0)),
+			15: LoadSurf(SelectHatchBombs(0)),
+			16: LoadSurf(SelectHatchBombs(0)),
+			17: LoadSurf(SelectHatchBombs(0)),
+			18: LoadSurf(SelectHatchBombs(0)),
+			19: LoadSurf(SelectHatchBombs(0)),
+			20: LoadSurf(SelectHatchBombs(0)),
+			21: LoadSurf(SelectHatchBombs(0)),
+			22: LoadSurf(SelectHatchBombs(0)),
+			23: LoadSurf(SelectHatchBombs(0)),
+			24: LoadSurf(SelectHatchBombs(0)),
+			25: LoadSurf(SelectHatchBombs(0)),
+			26: LoadSurf(SelectHatchBombs(0)),
+			27: LoadSurf(SelectHatchBombs(0)),
+			28: LoadSurf(SelectHatchBombs(0)),
+			29: LoadSurf(SelectHatchBombs(0)),
+			30: LoadSurf(SelectHatchBombs(1)),
+	}.get(CaseLevel, LoadSurf(SelectHatchBombs(0)))
+
+def SwitchLadder(CaseLevel):
+	return {
+			1: LoadSurf(SelectLadder(0)),
+			2: LoadSurf(SelectLadder(0)),
+			3: LoadSurf(SelectLadder(0)),
+			4: LoadSurf(SelectLadder(0)),
+			5: LoadSurf(SelectLadder(0)),
+			6: LoadSurf(SelectLadder(0)),
+			7: LoadSurf(SelectLadder(0)),
+			8: LoadSurf(SelectLadder(0)),
+			9: LoadSurf(SelectLadder(0)),
+			10: LoadSurf(SelectLadder(0)),
+			11: LoadSurf(SelectLadder(0)),
+			12: LoadSurf(SelectLadder(0)),
+			13: LoadSurf(SelectLadder(0)),
+			14: LoadSurf(SelectLadder(0)),
+			15: LoadSurf(SelectLadder(0)),
+			16: LoadSurf(SelectLadder(0)),
+			17: LoadSurf(SelectLadder(0)),
+			18: LoadSurf(SelectLadder(0)),
+			19: LoadSurf(SelectLadder(0)),
+			20: LoadSurf(SelectLadder(0)),
+			21: LoadSurf(SelectLadder(0)),
+			22: LoadSurf(SelectLadder(0)),
+			23: LoadSurf(SelectLadder(0)),
+			24: LoadSurf(SelectLadder(0)),
+			25: LoadSurf(SelectLadder(0)),
+			26: LoadSurf(SelectLadder(0)),
+			27: LoadSurf(SelectLadder(0)),
+			28: LoadSurf(SelectLadder(0)),
+			29: LoadSurf(SelectLadder(0)),
+			30: LoadSurf(SelectLadder(1)),
+	}.get(CaseLevel, LoadSurf(SelectLadder(0)))
+
+def SwitchWall(CaseLevel):
+	return {
+			1: LoadSurf(SelectWall(0)),
+			2: LoadSurf(SelectWall(0)),
+			3: LoadSurf(SelectWall(0)),
+			4: LoadSurf(SelectWall(0)),
+			5: LoadSurf(SelectWall(0)),
+			6: LoadSurf(SelectWall(1)),
+			7: LoadSurf(SelectWall(1)),
+			8: LoadSurf(SelectWall(1)),
+			9: LoadSurf(SelectWall(1)),
+			10: LoadSurf(SelectWall(1)),
+			11: LoadSurf(SelectWall(1)),
+			12: LoadSurf(SelectWall(2)),
+			13: LoadSurf(SelectWall(2)),
+			14: LoadSurf(SelectWall(2)),
+			15: LoadSurf(SelectWall(2)),
+			16: LoadSurf(SelectWall(2)),
+			17: LoadSurf(SelectWall(2)),
+			18: LoadSurf(SelectWall(3)),
+			19: LoadSurf(SelectWall(3)),
+			20: LoadSurf(SelectWall(3)),
+			21: LoadSurf(SelectWall(3)),
+			22: LoadSurf(SelectWall(3)),
+			23: LoadSurf(SelectWall(3)),
+			24: LoadSurf(SelectWall(4)),
+			25: LoadSurf(SelectWall(4)),
+			26: LoadSurf(SelectWall(4)),
+			27: LoadSurf(SelectWall(4)),
+			28: LoadSurf(SelectWall(4)),
+			29: LoadSurf(SelectWall(4)),
+			30: LoadSurf(SelectWall(5)),
+	}.get(CaseLevel, LoadSurf(SelectWall(0)))
+
+def SelectLCD(num: str):
+	return {
+			'0': pathlib.Path('./images/LCD/lcd-0.png').resolve(),
+			'1': pathlib.Path('./images/LCD/lcd-1.png').resolve(),
+			'2': pathlib.Path('./images/LCD/lcd-2.png').resolve(),
+			'3': pathlib.Path('./images/LCD/lcd-3.png').resolve(),
+			'4': pathlib.Path('./images/LCD/lcd-4.png').resolve(),
+			'5': pathlib.Path('./images/LCD/lcd-5.png').resolve(),
+			'6': pathlib.Path('./images/LCD/lcd-6.png').resolve(),
+			'7': pathlib.Path('./images/LCD/lcd-7.png').resolve(),
+			'8': pathlib.Path('./images/LCD/lcd-8.png').resolve(),
+			'9': pathlib.Path('./images/LCD/lcd-9.png').resolve(),
+	}.get(num, pathlib.Path('./images/LCD/lcd-0.png').resolve())
+
+def SwitchLCD(CaseNum: str):
+	return {
+			'0': LoadSurf(SelectLCD('0')),
+			'1': LoadSurf(SelectLCD('1')),
+			'2': LoadSurf(SelectLCD('2')),
+			'3': LoadSurf(SelectLCD('3')),
+			'4': LoadSurf(SelectLCD('4')),
+			'5': LoadSurf(SelectLCD('5')),
+			'6': LoadSurf(SelectLCD('6')),
+			'7': LoadSurf(SelectLCD('7')),
+			'8': LoadSurf(SelectLCD('8')),
+			'9': LoadSurf(SelectLCD('9')),
+	}.get(CaseNum, LoadSurf(SelectLCD('0')))
 
 def SwitchInitImage(surface):
 	global isGame
