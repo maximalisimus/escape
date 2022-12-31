@@ -579,15 +579,16 @@ def BuildLevel(surface, group: list, level: int):
 	if level == 30:
 		# helicopter
 		pass
-	pygame.display.update()
 
 def Restart(surf):
 	global Old_Score
 	global Old_Level
 	global Old_Live
 	global surf_table
+	global rect_table
 	Old_Score = 0
 	Old_Level = 1
 	Old_Live = 4
 	DrawTotal(surf, 0, 1, 4, True)
-	pygame.display.update()
+	BuildLevel(surf_table, blocks, 1)
+	surf.blit(surf_table, rect_table)

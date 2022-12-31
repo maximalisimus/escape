@@ -142,7 +142,7 @@ door_path = pathlib.Path('./images/door.png').resolve()
 bomb_path = pathlib.Path('./images/bomb.png').resolve()
 bomb_name = 'bomb'
 
-shot_surf = pygame.image.load(pathlib.Path('./images/bullet.png').resolve()).convert_alpha()
+shot_path = pathlib.Path('./images/bullet.png').resolve()
 shot_name = 'shot'
 
 heart_path = pathlib.Path('./images/heart.png').resolve()

@@ -23,8 +23,8 @@ def main():
 	
 	# Debug
 	SwitchInitImage(screen1)
+	#Restart(screen1)
 	BuildLevel(surf_table, blocks, 1)
-	screen1.blit(surf_table, rect_table)
 	pygame.display.update()
 			
 	while RUN:
