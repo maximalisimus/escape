@@ -524,12 +524,108 @@ def DrawTotal(surface, score: int, level: int, live: int, isFull: bool = False):
 	else:
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 
+class Helicopter:
+	
+	def __init__(self):
+		self.copters = (LoadSurf(SelectHelicopter(0)), LoadSurf(SelectHelicopter(1)), LoadSurf(SelectHelicopter(2)), LoadSurf(SelectHelicopter(3)))
+		self.blade = (LoadSurf(blade_rear_path), LoadSurf(blade_up_path))
+		self.image = pygame.Surface.copy(self.copters[0])
+		self.rect = self.image.get_rect(topleft=(coord_helicopter[0], coord_helicopter[1]))
+		self.ontype = TypeBlock.Helicopter
+		self.isAnim = False
+		self.isBlade = False
+		self.last_update = pygame.time.get_ticks()
+		self.frame = 0
+		self.frame_rate = 500
+		self.blade_last_update = pygame.time.get_ticks()
+		self.blade_frame_rate = 30
+		self.takeoff_last_update = pygame.time.get_ticks()
+		self.takeoff_frame_rate = 50
+		self.sound_last_update = pygame.time.get_ticks()
+		self.sound_frame_rate = 600
+		self.count = 0
+		self.isTakeoff = False
+		self.isFine = False
+		self.blade_rear = pygame.Surface.copy(self.blade[0])
+		self.blade_up = pygame.Surface.copy(self.blade[1])
+	
+	def reset(self):
+		self.image = pygame.Surface.copy(self.copters[0])
+		self.rect = self.image.get_rect(topleft=(coord_helicopter[0], coord_helicopter[1]))
+		self.isAnim = False
+		self.isBlade = False
+		self.last_update = pygame.time.get_ticks()
+		self.frame = 0
+		self.frame_rate = 500
+		self.blade_last_update = pygame.time.get_ticks()
+		self.blade_frame_rate = 30
+		self.takeoff_last_update = pygame.time.get_ticks()
+		self.takeoff_frame_rate = 50
+		self.sound_last_update = pygame.time.get_ticks()
+		self.sound_frame_rate = 600
+		self.count = 0
+		self.isTakeoff = False
+		self.isFine = False
+		self.blade_rear = pygame.Surface.copy(self.blade[0])
+		self.blade_up = pygame.Surface.copy(self.blade[1])
+	
+	def update(self, *args):
+		if not self.isFine:
+			if (self.rect.y + size_helicopter[1] <= 0):
+				self.isFine = True
+				self.isAnim = False
+			else:
+				if self.isAnim:
+					now = pygame.time.get_ticks()
+					if now - self.blade_last_update > self.blade_frame_rate:
+						self.blade_last_update = now
+						if self.isBlade:
+							self.image = pygame.Surface.copy(self.copters[self.frame])
+							self.blade_rear = self.rotate_surf(self.blade_rear, 90)
+							self.image.blit(self.blade_rear, (coord_blade_side[0], coord_blade_side[1]))
+							self.blade_up = self.rotate_surf(self.blade_up, 180)
+							self.blade_up = pygame.transform.flip(self.blade_up, False, True)
+							self.image.blit(self.blade_up, (coord_blade_up[0], coord_blade_up[1]))
+					if now - self.takeoff_last_update > self.takeoff_frame_rate:
+						self.takeoff_last_update = now
+						if self.isBlade:
+							self.count += 1
+						if self.count == 10:
+							self.isTakeoff = True
+						if self.isTakeoff:
+							self.rect.x += 1
+							self.rect.y -= 1
+					if now - self.sound_last_update > self.sound_frame_rate:
+						self.sound_last_update = now
+						if self.isBlade:
+							effects['helicopter'].play()
+					if now - self.last_update > self.frame_rate:
+						self.last_update = now
+						if self.frame == 3:
+							self.isBlade = True
+						else:
+							self.image = pygame.Surface.copy(self.copters[self.frame])
+							self.frame += 1
+
+	def rotate_surf(self, surf, angle):
+		loc = surf.get_rect().center
+		rot_sprite = pygame.transform.rotate(surf, angle)
+		rot_sprite.get_rect().center = loc
+		return rot_sprite
+
+	def draw(self, surf):
+		surf.blit(self.image, self.rect)
+
+helicopter = Helicopter()
+
 def BuildLevel(surface, group: list, level: int):
 	global screen1
 	global door_path
 	global surf_table
 	global rect_table
 	global door_path
+	
+	global helicopter
 	
 	group.clear()
 	
@@ -577,8 +673,10 @@ def BuildLevel(surface, group: list, level: int):
 		y+=size_blocks
 		x=0
 	if level == 30:
-		# helicopter
-		pass
+		helicopter.reset()
+		global screen1
+		screen1.blit(surf_table, (0, 0))
+		screen1.blit(helicopter.image, helicopter.rect)
 
 def Restart(surf):
 	global Old_Score

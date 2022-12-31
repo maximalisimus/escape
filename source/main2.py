@@ -24,8 +24,11 @@ def main():
 	# Debug
 	SwitchInitImage(screen1)
 	#Restart(screen1)
-	BuildLevel(surf_table, blocks, 1)
+	onlevel = 1
+	BuildLevel(surf_table, blocks, onlevel)
+	#screen1.blit(surf_table, rect_table)
 	pygame.display.update()
+	#helicopter.isAnim = True
 			
 	while RUN:
 		for event in pygame.event.get():
@@ -45,6 +48,11 @@ def main():
 					pass
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
+		
+		screen1.blit(surf_table, rect_table)
+		#screen1.blit(helicopter.image, helicopter.rect)
+		pygame.display.update()
+		#helicopter.update()
 		
 		clock.tick(FPS)
 
