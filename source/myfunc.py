@@ -97,7 +97,7 @@ def CollideRectAB(obj_a_rect, obj_b_rect):
 def LoadSurf(paths):
 	return pygame.image.load(paths).convert_alpha()
 
-def PosCollisions(level: int):
+def PosCollision(level: int):
 	return {
 			1: {
 					12: (6, 8),
@@ -161,7 +161,7 @@ def PosCollisions(level: int):
 				},
 	}.get(level, dict())
 
-def SelectBonus(num):
+def SwitchBonus(num):
 	return {
 			0: {
 				'name': 'alarm',
