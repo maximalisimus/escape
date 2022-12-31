@@ -1,5 +1,5 @@
-import pygame
-import pathlib
+#import pygame
+#import pathlib
 from typing import Tuple
 from enum import Enum
 import random
@@ -283,3 +283,120 @@ def SwitchLCD(num: str):
 			'8': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-8.png').resolve())).convert_alpha(),
 			'9': pygame.image.load(str(pathlib.Path('./images/LCD/lcd-9.png').resolve())).convert_alpha(),
 	}.get(num, False)
+
+def SwitchInitImage(surface):
+	global isGame
+	global isStart
+	isGame = True
+	isStart = False
+	surface.blit(LoadSurf(background), (0, 0))
+	surface.blit(LoadSurf(score_bg), (coord_score_bg[0], coord_score_bg[1]))
+	Restart(surface)
+
+def print_level(level: int) -> str:
+	if level<10:
+		return f"0{level}"
+	else:
+		return f"{level}"
+
+def print_score(score: int) -> str:
+	if score < 10:
+		return f"000000{score}"
+	elif score < 100:
+		return f"00000{score}"
+	elif score < 1000:
+		return f"0000{score}"
+	elif score < 10000:
+		return f"000{score}"
+	elif score < 100000:
+		return f"00{score}"
+	elif score < 1000000:
+		return f"0{score}"
+	else:
+		return f"{score}"
+
+def DrawScore(surf, on_score: int):
+	global size_surf_score
+	global pos_score_x
+	global pos_score_y
+	pygame.draw.rect(surf, (0, 0, 0), (0, 0, size_surf_score[0], size_surf_score[1]))
+	OnScore = tuple(print_score(on_score))
+	for i in range(len(OnScore)):
+		surf.blit(SwitchLCD(OnScore[i]), (pos_score_x[i], pos_score_y))
+
+def DrawLevel(surf, on_level: int):
+	global size_surf_level
+	global pos_score_x
+	global pos_score_y
+	pygame.draw.rect(surf, (0, 0, 0), (0, 0, size_surf_level[0], size_surf_level[1]))
+	OnLevel = tuple(print_level(on_level))
+	for i in range(len(OnLevel)):
+		surf.blit(SwitchLCD(OnLevel[i]), (pos_score_x[i], pos_score_y))
+
+def DrawLive(screen_surf, surf, coord: Tuple[int, int]):
+	screen_surf.blit(surf, (coord[0], coord[1]))
+
+def DrawTotal(surface, score: int, level: int, live: int, isFull: bool = False):
+	global Old_Score
+	global Old_Level
+	global Old_Live
+	
+	global surf_score
+	global surf_level
+	global surf_lives
+	
+	global live_bg
+	global died_bg
+	
+	global pos_live_x
+	global pos_live_y
+	
+	if isFull:
+		DrawScore(surf_score, score)
+		Old_Score = score
+		DrawLevel(surf_level, level)
+		Old_Level = level
+		for i in range(1, live+1):
+			DrawLive(surf_lives, live_bg, (pos_live_x[i], 0))
+		Old_Live = live
+	
+	if score != Old_Score:
+		DrawScore(surf_score, score)
+		Old_Score = score
+		surface.blit(surf_score, (coord_score[0], coord_score[1]))
+	else:
+		surface.blit(surf_score, (coord_score[0], coord_score[1]))
+	
+	if level != Old_Level:
+		DrawLevel(surf_level, level)
+		Old_Level = level
+		surface.blit(surf_level, (coord_level[0], coord_level[1]))
+	else:
+		surface.blit(surf_level, (coord_level[0], coord_level[1]))
+	
+	if live != Old_Live:
+		if live > Old_Live:
+			DrawLive(surf_lives, live_bg, (pos_live_x[live], 0))
+		elif live == Old_Live:
+			pass
+		elif (live < Old_Live):
+			if (Old_Live - live) == 1:
+				DrawLive(surf_lives, died_bg, (pos_live_x[Old_Live], 0))
+			else:
+				for i in range(Old_Live, live, -1):
+					DrawLive(surf_lives, died_bg, (pos_live_x[i], 0))
+		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
+		Old_Live = live
+	else:
+		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
+
+def Restart(surf):
+	global Old_Score
+	global Old_Level
+	global Old_Live
+	global surf_table
+	Old_Score = 0
+	Old_Level = 1
+	Old_Live = 4
+	DrawTotal(surf, 0, 1, 4, True)
+	pygame.display.update()
