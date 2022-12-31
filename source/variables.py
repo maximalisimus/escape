@@ -181,4 +181,6 @@ effects = {
 			'shot': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
 		}
 
+groups = []
+
 blocks = []

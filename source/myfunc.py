@@ -754,8 +754,6 @@ class TGroup(TList):
 	def sprites(self):
 		return self.copy()
 
-groups = []
-
 class TSprite:
 	
 	def __init__(self, image = None, rect = None, ongroup = None):
