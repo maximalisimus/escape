@@ -162,7 +162,7 @@ class TGroup(TList):
 			if CollideRectAB(player.rect, item.rect):
 				tmp.append(item)
 				if dkill:
-					self.value.remove(item)
+					self.remove(item)
 		return tmp
 
 class TSprite:
