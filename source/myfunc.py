@@ -156,13 +156,35 @@ class TGroup(TList):
 	def sprites(self):
 		return self.copy()
 
-	def CollideRect(self, player, dkill: bool = False):
+	@staticmethod
+	def CollideGroup(objects, ongroup, dkill: bool = False, reverse: bool = False):
+		tmp = []
+		for item in ongroup.copy():
+			if not reverse:
+				if CollideRectAB(objects.rect, item.rect):
+					tmp.append(item)
+					if dkill:
+						ongroup.remove(item)
+			else:
+				if CollideRectAB(item.rect, objects.rect):
+					tmp.append(item)
+					if dkill:
+						ongroup.remove(item)
+		return tmp
+
+	def CollideRect(self, objects, dkill: bool = False, reverse: bool = False):
 		tmp = []
 		for item in self.value.copy():
-			if CollideRectAB(player.rect, item.rect):
-				tmp.append(item)
-				if dkill:
-					self.remove(item)
+			if not reverse:
+				if CollideRectAB(objects.rect, item.rect):
+					tmp.append(item)
+					if dkill:
+						self.remove(item)
+			else:
+				if CollideRectAB(item.rect, objects.rect):
+					tmp.append(item)
+					if dkill:
+						self.remove(item)
 		return tmp
 
 class TSprite:
