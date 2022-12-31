@@ -672,7 +672,6 @@ def BuildLevel(surface, group: list, level: int):
 		y+=size_blocks
 		x=0
 	if level == 30:
-		global screen1
 		builtins.helicopter = Helicopter()
 		global helicopter
 		helicopter.reset()
