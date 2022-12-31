@@ -389,6 +389,40 @@ def SwitchWall(CaseLevel):
 			30: LoadSurf(SelectWall(5)),
 	}.get(CaseLevel, LoadSurf(SelectWall(0)))
 
+def SwitchClouds(CaseLevel):
+	return {
+			1: LoadSurf(SelectClouds(0)),
+			2: LoadSurf(SelectClouds(0)),
+			3: LoadSurf(SelectClouds(0)),
+			4: LoadSurf(SelectClouds(0)),
+			5: LoadSurf(SelectClouds(0)),
+			6: LoadSurf(SelectClouds(1)),
+			7: LoadSurf(SelectClouds(1)),
+			8: LoadSurf(SelectClouds(1)),
+			9: LoadSurf(SelectClouds(1)),
+			10: LoadSurf(SelectClouds(1)),
+			11: LoadSurf(SelectClouds(1)),
+			12: LoadSurf(SelectClouds(2)),
+			13: LoadSurf(SelectClouds(2)),
+			14: LoadSurf(SelectClouds(2)),
+			15: LoadSurf(SelectClouds(2)),
+			16: LoadSurf(SelectClouds(2)),
+			17: LoadSurf(SelectClouds(2)),
+			18: LoadSurf(SelectClouds(3)),
+			19: LoadSurf(SelectClouds(3)),
+			20: LoadSurf(SelectClouds(3)),
+			21: LoadSurf(SelectClouds(3)),
+			22: LoadSurf(SelectClouds(3)),
+			23: LoadSurf(SelectClouds(3)),
+			24: LoadSurf(SelectClouds(4)),
+			25: LoadSurf(SelectClouds(4)),
+			26: LoadSurf(SelectClouds(4)),
+			27: LoadSurf(SelectClouds(4)),
+			28: LoadSurf(SelectClouds(4)),
+			29: LoadSurf(SelectClouds(4)),
+			30: LoadSurf(SelectClouds(5)),
+	}.get(CaseLevel, LoadSurf(SelectClouds(0)))
+
 def SelectLCD(num: str):
 	return {
 			'0': pathlib.Path('./images/LCD/lcd-0.png').resolve(),
@@ -416,6 +450,13 @@ def SwitchLCD(CaseNum: str):
 			'8': LoadSurf(SelectLCD('8')),
 			'9': LoadSurf(SelectLCD('9')),
 	}.get(CaseNum, LoadSurf(SelectLCD('0')))
+
+def SwitchHero(CasePos):
+	return {
+			0: LoadSurf(SelectHero(0)),
+			1: LoadSurf(SelectHero(1)),
+			2: LoadSurf(SelectHero(2)),
+	}.get(CasePos, LoadSurf(SelectHero(0)))
 
 def SwitchInitImage(surface):
 	global isGame
