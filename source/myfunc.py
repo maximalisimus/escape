@@ -95,7 +95,7 @@ def CollideRectAB(obj_a_rect, obj_b_rect):
 		return True
 
 def LoadSurf(paths):
-	return pygame.image.load(pathlib.Path(paths).resolve()).convert_alpha()
+	return pygame.image.load(paths).convert_alpha()
 
 def PosCollisions(level: int):
 	return {
@@ -161,7 +161,7 @@ def PosCollisions(level: int):
 				},
 	}.get(level, dict())
 
-def SelectBonus(num): # 0 - 6
+def SelectBonus(num):
 	return {
 			0: {
 				'name': 'alarm',
@@ -206,3 +206,19 @@ def SelectBonus(num): # 0 - 6
 				'type': TypeBlock.Bonus,
 				},
 	}.get(num, dict())
+
+def SwitchHeart():
+	return {
+				'name': 'heart',
+				'path': pathlib.Path('./images/heart.png').resolve(),
+				'score': 1,
+				'type': TypeBlock.Bonus,
+			}
+
+def SwitchMedicine():
+	return {
+				'name': 'medicine_chest',
+				'path': pathlib.Path('./images/medicine-chest.png').resolve(),
+				'score': 1,
+				'type': TypeBlock.Bonus,
+			}
