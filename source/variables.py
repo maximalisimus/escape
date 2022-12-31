@@ -88,17 +88,47 @@ pos_clicked = {
 					},
 			}
 
-medicine = {
-			'name': 'medicine_chest',
-			'path': pathlib.Path('./images/medicine-chest.png').resolve(),
-			'score': 1,
-			}
+medicine = pygame.image.load(pathlib.Path('./images/medicine-chest.png').resolve()).convert_alpha()
+mdeicine_score = 1
+medicine_name = 'medicine_chest'
 
-heart = {
-			'name': 'heart',
-			'path': pathlib.Path('./images/heart.png').resolve(),
-			'score': 1,
-		}
+bonuses = {
+				0: {
+					'name': 'alarm',
+					'surf': pygame.image.load(pathlib.Path('./images/alarm.png').resolve()).convert_alpha(),
+					'score': 100,
+					},
+				1: {
+					'name': 'burger',
+					'surf': pygame.image.load(pathlib.Path('./images/burger.png').resolve()).convert_alpha(),
+					'score': 50,
+					},
+				2: {
+					'name': 'clock',
+					'surf': pygame.image.load(pathlib.Path('./images/clock.png').resolve()).convert_alpha(),
+					'score': 30,
+					},
+				3: {
+					'name': 'coffee',
+					'surf': pygame.image.load(pathlib.Path('./images/coffee.png').resolve()).convert_alpha(),
+					'score': 20,
+					},
+				4: {
+					'name': 'cola',
+					'surf': pygame.image.load(pathlib.Path('./images/cola.png').resolve()).convert_alpha(),
+					'score': 10,
+					},
+				5: {
+					'name': 'stop',
+					'surf': pygame.image.load(pathlib.Path('./images/stop.png').resolve()).convert_alpha(),
+					'score': 1,
+					},
+				6: {
+					'name': 'thermos',
+					'surf': pygame.image.load(pathlib.Path('./images/thermos.png').resolve()).convert_alpha(),
+					'score': 1,
+					},
+			}
 
 logo = pathlib.Path('./images/esc_t.png').resolve()
 
@@ -110,8 +140,14 @@ died_bg = pygame.image.load(pathlib.Path('./images/died-bg.png').resolve()).conv
 door_path = pathlib.Path('./images/door.png').resolve()
 
 bomb_path = pathlib.Path('./images/bomb.png').resolve()
+bomb_name = 'bomb'
 
-shot_path = pathlib.Path('./images/bullet.png').resolve()
+shot_surf = pygame.image.load(pathlib.Path('./images/bullet.png').resolve()).convert_alpha()
+shot_name = 'shot'
+
+heart_path = pathlib.Path('./images/heart.png').resolve()
+heart_score = 5
+heart_name = 'heart'
 
 blade_rear_path = pathlib.Path('./images/blade-rear.png').resolve()
 blade_up_path = pathlib.Path('./images/blade-up.png').resolve()
@@ -143,3 +179,5 @@ effects = {
 			'bomb': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
 			'shot': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
 		}
+
+blocks = []

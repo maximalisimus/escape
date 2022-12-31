@@ -90,6 +90,12 @@ class TypeBlock(NoValue):
 				return x
 		return None
 
+class Block:
+	
+	def __init__(self, ontype: TypeBlock, RectXY: Tuple[int, int]):
+		self.ontype = ontype
+		self.rect = pygame.Rect((RectXY[0], RectXY[1], size_blocks, size_blocks))
+
 def CollideRectAB(obj_a_rect, obj_b_rect):
 	if obj_a_rect.right > obj_b_rect.left and obj_a_rect.left < obj_b_rect.right and obj_a_rect.bottom > obj_b_rect.top and obj_a_rect.top < obj_b_rect.bottom:
 		return True
@@ -161,52 +167,6 @@ def PosCollision(level: int):
 				},
 	}.get(level, dict())
 
-def SelectBonus(num):
-	return {
-			0: {
-				'name': 'alarm',
-				'path': pathlib.Path('./images/alarm.png').resolve(),
-				'score': 100,
-				'type': TypeBlock.Bonus,
-				},
-			1: {
-				'name': 'burger',
-				'path': pathlib.Path('./images/burger.png').resolve(),
-				'score': 50,
-				'type': TypeBlock.Bonus,
-				},
-			2: {
-				'name': 'clock',
-				'path': pathlib.Path('./images/clock.png').resolve(),
-				'score': 30,
-				'type': TypeBlock.Bonus,
-				},
-			3: {
-				'name': 'coffee',
-				'path': pathlib.Path('./images/coffee.png').resolve(),
-				'score': 20,
-				'type': TypeBlock.Bonus,
-				},
-			4: {
-				'name': 'cola',
-				'path': pathlib.Path('./images/cola.png').resolve(),
-				'score': 10,
-				'type': TypeBlock.Bonus,
-				},
-			5: {
-				'name': 'stop',
-				'path': pathlib.Path('./images/stop.png').resolve(),
-				'score': 1,
-				'type': TypeBlock.Bonus,
-				},
-			6: {
-				'name': 'thermos',
-				'path': pathlib.Path('./images/thermos.png').resolve(),
-				'score': 1,
-				'type': TypeBlock.Bonus,
-				},
-	}.get(num, dict())
-
 def SelectWall(num):
 	return {
 			0: pathlib.Path('./images/tile-1.png').resolve(),
@@ -270,11 +230,11 @@ def SelectExplotion(num):
 			5: pathlib.Path('./images/exp-6.png').resolve(),
 	}.get(num, pathlib.Path('./images/exp-1.png').resolve())
 
-def SwitchPistol(CasePos: LevelCode):
+def SwitchPistol(CasePos):
 	return {
-			LevelCode.LeftPistol: LoadSurf(SelectPistol(LevelCode.LeftPistol)),
-			LevelCode.RightPistol: LoadSurf(SelectPistol(LevelCode.RightPistol)),
-	}.get(CasePos, None)
+			0: LoadSurf(SelectPistol(LevelCode.LeftPistol)),
+			1: LoadSurf(SelectPistol(LevelCode.RightPistol)),
+	}.get(CasePos, LoadSurf(SelectPistol(LevelCode.LeftPistol)))
 
 def SwitchShot(CaseShot: LevelCode):
 	return {
@@ -282,10 +242,10 @@ def SwitchShot(CaseShot: LevelCode):
 			LevelCode.RightPistol: pygame.transform.flip(LoadSurf(shot_path), True, False),
 	}.get(CaseShot, LoadSurf(shot_path))
 
-def SwitchDoor(level_code: LevelCode):
+def SwitchDoor():
 	return {
-			LevelCode.Door: LoadSurf(door_path),
-	}.get(level_code, LoadSurf(door_path))
+			0: LoadSurf(door_path),
+	}.get(0, LoadSurf(door_path))
 
 def SwitchHatchBombs(CaseLevel):
 	return {
@@ -563,6 +523,63 @@ def DrawTotal(surface, score: int, level: int, live: int, isFull: bool = False):
 		Old_Live = live
 	else:
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
+
+def BuildLevel(surface, group: list, level: int):
+	global screen1
+	global door_path
+	global surf_table
+	global rect_table
+	global door_path
+	
+	group.clear()
+	
+	clouds = SwitchClouds(level)
+	wall = SwitchWall(level)
+	hatchbombs = SwitchHatchBombs(level)
+	leftpistol = SwitchPistol(0)
+	rightpistol = SwitchPistol(1)
+	ladder = SwitchLadder(level)
+	door = LoadSurf(door_path)
+	
+	surface.blit(clouds, (0, 0))
+	x = y = 0
+	DoorInOut = True
+	with open(files_levels[level-1], 'r') as f:
+		data_level = f.readlines()
+	for row in data_level:
+		for col in row.replace('\n', '').replace(' ','7'):
+			code = LevelCode.GetCodeValue(int(col))
+			if code != LevelCode.Empty:
+				if code == LevelCode.Wall:
+					surface.blit(wall, (x, y))
+					group.append(Block(TypeBlock.Wall, (x, y)))
+				elif code == LevelCode.Door:
+					if DoorInOut:
+						DoorInOut = False
+						surface.blit(door, (x, y))
+						group.append(Block(TypeBlock.DoorOut, (x, y)))
+					else:
+						surface.blit(door, (x, y))
+						group.append(Block(TypeBlock.DoorIn, (x, y)))
+				elif code == LevelCode.HatchBombs:
+					surface.blit(hatchbombs, (x, y))
+					group.append(Block(TypeBlock.HatchBombs, (x, y)))
+				elif code == LevelCode.Ladder:
+					surface.blit(ladder, (x, y))
+					group.append(Block(TypeBlock.Ladder, (x, y)))
+				elif code == LevelCode.LeftPistol:
+					surface.blit(leftpistol, (x, y))
+					group.append(Block(TypeBlock.LeftPistol, (x, y)))
+				elif code == LevelCode.RightPistol:
+					surface.blit(rightpistol, (x, y))
+					group.append(Block(TypeBlock.RightPistol, (x, y)))
+			x+=size_blocks
+		y+=size_blocks
+		x=0
+	if level == 30:
+		# helicopter
+		pass
+	pygame.display.update()
 
 def Restart(surf):
 	global Old_Score

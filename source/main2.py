@@ -7,6 +7,12 @@ def main():
 	global screen1
 	global clock
 	
+	global surf_table
+	global rect_table
+	
+	# Groups
+	global blocks
+	
 	global logo	
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
@@ -17,7 +23,10 @@ def main():
 	
 	# Debug
 	SwitchInitImage(screen1)
-	
+	BuildLevel(surf_table, blocks, 1)
+	screen1.blit(surf_table, rect_table)
+	pygame.display.update()
+			
 	while RUN:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
