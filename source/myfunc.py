@@ -3,6 +3,7 @@
 from typing import Tuple
 from enum import Enum
 import random
+import builtins
 from variables import *
 
 class NoValue(Enum):
@@ -616,8 +617,6 @@ class Helicopter:
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
 
-helicopter = Helicopter()
-
 def BuildLevel(surface, group: list, level: int):
 	global screen1
 	global door_path
@@ -673,10 +672,10 @@ def BuildLevel(surface, group: list, level: int):
 		y+=size_blocks
 		x=0
 	if level == 30:
-		helicopter.reset()
 		global screen1
-		screen1.blit(surf_table, (0, 0))
-		screen1.blit(helicopter.image, helicopter.rect)
+		builtins.helicopter = Helicopter()
+		global helicopter
+		helicopter.reset()
 
 def Restart(surf):
 	global Old_Score

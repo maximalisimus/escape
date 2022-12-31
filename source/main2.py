@@ -27,12 +27,16 @@ def main():
 	### Debug
 	SwitchInitImage(screen1)
 	#Restart(screen1)
+	#global helicopter
 	onlevel = 1
 	BuildLevel(surf_table, blocks, onlevel)
 	DrawTotal(score_bg, 0, onlevel, 4, False)
 	screen1.blit(surf_table, rect_table)
 	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+	#if onlevel == 30:
+	#	helicopter.draw(screen1)
 	pygame.display.update()
+	#helicopter.isAnim = True
 	### Debug
 	
 	while RUN:
