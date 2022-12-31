@@ -107,6 +107,8 @@ score_bg = pathlib.Path('./images/score-bg.png').resolve()
 live_bg = pygame.image.load(pathlib.Path('./images/live-bg.png').resolve()).convert_alpha()
 died_bg = pygame.image.load(pathlib.Path('./images/died-bg.png').resolve()).convert_alpha()
 
+door_path = pathlib.Path('./images/door.png').resolve()
+
 bomb_path = pathlib.Path('./images/bomb.png').resolve()
 
 shot_path = pathlib.Path('./images/bullet.png').resolve()

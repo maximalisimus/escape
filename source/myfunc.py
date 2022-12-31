@@ -247,10 +247,10 @@ def SelectLadder(num):
 			1: pathlib.Path('./images/ladder-2.png').resolve(),
 	}.get(num, pathlib.Path('./images/ladder.png').resolve())
 
-def SelectPistol(pistol: TypeBlock):
+def SelectPistol(pistol: LevelCode):
 	return {
-			TypeBlock.LeftPistol: pathlib.Path('./images/left-pistol.png').resolve(),
-			TypeBlock.RightPistol: pathlib.Path('./images/right-pistol.png').resolve(),
+			LevelCode.LeftPistol: pathlib.Path('./images/left-pistol.png').resolve(),
+			LevelCode.RightPistol: pathlib.Path('./images/right-pistol.png').resolve(),
 	}.get(pistol, False)
 
 def SelectHero(num):
@@ -269,6 +269,17 @@ def SelectExplotion(num):
 			4: pathlib.Path('./images/exp-5.png').resolve(),
 			5: pathlib.Path('./images/exp-6.png').resolve(),
 	}.get(num, pathlib.Path('./images/exp-1.png').resolve())
+
+def SwitchShot(CasePos: LevelCode):
+	return {
+			LevelCode.LeftPistol: LoadSurf(SelectPistol(LevelCode.LeftPistol)),
+			LevelCode.RightPistol: LoadSurf(SelectPistol(LevelCode.RightPistol)),
+	}.get(CasePos, None)
+
+def SwitchDoor(level_code: LevelCode):
+	return {
+			LevelCode.Door: LoadSurf(door_path),
+	}.get(level_code, LoadSurf(door_path))
 
 def SwitchLCD(num: str):
 	return {
