@@ -627,7 +627,10 @@ def BuildLevel(surface, group: list, level: int, copter = None):
 	global rect_table
 	global door_path
 	
-	global helicopter
+	global surf_bonus_src
+	global surf_bonus
+	
+	surf_bonus = pygame.Surface.copy(surf_bonus_src)
 	
 	group.clear()
 	
@@ -690,3 +693,10 @@ def Restart(surf):
 	DrawTotal(surf, 0, 1, 4, True)
 	BuildLevel(surf_table, blocks, 1)
 	surf.blit(surf_table, rect_table)
+
+def CreateBonus(level: int):
+	global blocks
+	global bonus_blocks
+	global surf_bonus
+	global all_bonuses
+	pass

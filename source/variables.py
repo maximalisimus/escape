@@ -93,7 +93,7 @@ medicine = pygame.image.load(pathlib.Path('./images/medicine-chest.png').resolve
 mdeicine_score = 1
 medicine_name = 'medicine_chest'
 
-bonuses = {
+all_bonuses = {
 				0: {
 					'name': 'alarm',
 					'surf': pygame.image.load(pathlib.Path('./images/alarm.png').resolve()).convert_alpha(),
@@ -156,6 +156,9 @@ blade_up_path = pathlib.Path('./images/blade-up.png').resolve()
 surf_table = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
 rect_table = surf_table.get_rect(topleft=(0, 0))
 
+surf_bonus_src = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
+surf_bonus = pygame.Surface.copy(surf_bonus_src)
+
 surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]), pygame.SRCALPHA, 32).convert_alpha()
@@ -182,3 +185,5 @@ effects = {
 		}
 
 blocks = []
+
+bonus_blocks = []
