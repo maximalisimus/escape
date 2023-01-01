@@ -92,9 +92,10 @@ class TypeBlock(NoValue):
 
 class Block:
 	
-	def __init__(self, ontype: TypeBlock, RectXY: Tuple[int, int], name = None):
+	def __init__(self, ontype: TypeBlock, RectXY: Tuple[int, int], score = None, name = None):
 		self.ontype = ontype
 		self.rect = pygame.Rect((RectXY[0], RectXY[1], size_blocks, size_blocks))
+		self.score = score
 		self.name = name
 
 def CollideRectAB(obj_a_rect, obj_b_rect):
@@ -103,6 +104,8 @@ def CollideRectAB(obj_a_rect, obj_b_rect):
 	obj_a_rect.bottom > obj_b_rect.top and \
 	obj_a_rect.top < obj_b_rect.bottom:
 		return True
+	else:
+		return False
 
 def LoadSurf(paths):
 	return pygame.image.load(paths).convert_alpha()
@@ -630,7 +633,7 @@ def BuildLevel(surface, group: list, level: int, copter = None):
 	global surf_bonus_src
 	global surf_bonus
 	
-	surf_bonus = pygame.Surface.copy(surf_bonus_src)
+	surf_bonus = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
 	
 	group.clear()
 	
@@ -694,9 +697,47 @@ def Restart(surf):
 	BuildLevel(surf_table, blocks, 1)
 	surf.blit(surf_table, rect_table)
 
+def SearchSurf(block, onname):
+	for key, value in block.items():
+		if value['name'] == onname:
+			return value['surf']
+			break
+	return False
+
 def CreateBonus(level: int):
 	global blocks
 	global bonus_blocks
-	global surf_bonus
 	global all_bonuses
-	pass
+	global bonus_line
+	global row_table
+	global col_table
+	rand_bonus_num = random.randint(0, 6)
+	select_col = random.choice(bonus_line)
+	on_col = select_col - 1
+	y = on_col * size_blocks
+	collisions = PosCollision(level).get(select_col, False)
+	on_row = random.randint(1, col_table-2)
+	x = on_row * size_blocks
+	block = Block(TypeBlock.Bonus, (x, y), all_bonuses[rand_bonus_num]['score'], all_bonuses[rand_bonus_num]['name'])
+	hits = []
+	for item in blocks:
+		if CollideRectAB(item.rect, block.rect):
+			hits.append(item)
+	if collisions:
+		while ((on_row in range(collisions[0]-1, collisions[1])) or hits):
+			on_row = random.randint(1, col_table-2)
+			x = block.rect.x = on_row * size_blocks
+			hits.clear()
+			for item in blocks:
+				if CollideRectAB(item.rect, block.rect):
+					hits.append(item)
+	else:
+		while (hits):
+			on_row = random.randint(1, col_table-2)
+			x = block.rect.x = on_row * size_blocks
+			hits.clear()
+			for item in blocks:
+				if CollideRectAB(item.rect, block.rect):
+					hits.append(item)
+	blocks.append(block)
+	bonus_blocks.append(block)

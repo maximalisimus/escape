@@ -9,12 +9,15 @@ def main():
 	
 	global surf_table
 	global rect_table
+	global surf_bonus
+	global rect_bonus
 	
 	global coord_score_bg
 	global score_bg
 	
 	# Groups
 	global blocks
+	global bonus_blocks
 	
 	global logo	
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
@@ -34,12 +37,20 @@ def main():
 	else:
 		BuildLevel(surf_table, blocks, onlevel)
 	DrawTotal(score_bg, 0, onlevel, 4, False)
-	screen1.blit(surf_table, rect_table)
+	screen1.blit(surf_table, rect_table)	
 	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	if onlevel == 30:
 		helicopter.draw(screen1)
 		#helicopter.isAnim = True
 	pygame.display.update()
+	
+	#CreateBonus(onlevel)
+	#for i in range(5):
+	#	CreateBonus(onlevel)
+	#for item in bonus_blocks:
+	#	surf_bonus.blit(SearchSurf(all_bonuses, item.name), item.rect)
+	#screen1.blit(surf_bonus, rect_bonus)
+	#pygame.display.update()
 	### Debug
 	
 	while RUN:

@@ -156,8 +156,8 @@ blade_up_path = pathlib.Path('./images/blade-up.png').resolve()
 surf_table = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
 rect_table = surf_table.get_rect(topleft=(0, 0))
 
-surf_bonus_src = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
-surf_bonus = pygame.Surface.copy(surf_bonus_src)
+surf_bonus = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
+rect_bonus = surf_bonus.get_rect(topleft=(0, 0))
 
 surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
 surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
