@@ -92,11 +92,12 @@ class TypeBlock(NoValue):
 
 class Block:
 	
-	def __init__(self, ontype: TypeBlock, RectXY: Tuple[int, int], score = None, name = None):
+	def __init__(self, ontype: TypeBlock, RectXY: Tuple[int, int], score = None, name = None, isdraw = False):
 		self.ontype = ontype
 		self.rect = pygame.Rect((RectXY[0], RectXY[1], size_blocks, size_blocks))
 		self.score = score
 		self.name = name
+		self.isdraw = isdraw
 
 def CollideRectAB(obj_a_rect, obj_b_rect):
 	if obj_a_rect.right > obj_b_rect.left and \
@@ -633,7 +634,7 @@ def BuildLevel(surface, group: list, level: int, copter = None):
 	global surf_bonus_src
 	global surf_bonus
 	
-	surf_bonus = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
+	surf_bonus = pygame.Surface.copy(src_surf_bonus)
 	
 	group.clear()
 	
@@ -661,22 +662,22 @@ def BuildLevel(surface, group: list, level: int, copter = None):
 					if DoorInOut:
 						DoorInOut = False
 						surface.blit(door, (x, y))
-						group.append(Block(TypeBlock.DoorOut, (x, y)))
+						group.append(Block(TypeBlock.DoorOut, (x, y), isdraw = True))
 					else:
 						surface.blit(door, (x, y))
-						group.append(Block(TypeBlock.DoorIn, (x, y)))
+						group.append(Block(TypeBlock.DoorIn, (x, y), isdraw = True))
 				elif code == LevelCode.HatchBombs:
 					surface.blit(hatchbombs, (x, y))
-					group.append(Block(TypeBlock.HatchBombs, (x, y)))
+					group.append(Block(TypeBlock.HatchBombs, (x, y), isdraw = True))
 				elif code == LevelCode.Ladder:
 					surface.blit(ladder, (x, y))
-					group.append(Block(TypeBlock.Ladder, (x, y)))
+					group.append(Block(TypeBlock.Ladder, (x, y), isdraw = True))
 				elif code == LevelCode.LeftPistol:
 					surface.blit(leftpistol, (x, y))
-					group.append(Block(TypeBlock.LeftPistol, (x, y)))
+					group.append(Block(TypeBlock.LeftPistol, (x, y), isdraw = True))
 				elif code == LevelCode.RightPistol:
 					surface.blit(rightpistol, (x, y))
-					group.append(Block(TypeBlock.RightPistol, (x, y)))
+					group.append(Block(TypeBlock.RightPistol, (x, y), isdraw = True))
 			x+=size_blocks
 		y+=size_blocks
 		x=0
@@ -704,6 +705,16 @@ def SearchSurf(block, onname):
 			break
 	return False
 
+def DrawBonus(surface):
+	global bonus_blocks
+	for item in bonus_blocks:
+		if not item.isdraw:
+			surface.blit(SearchSurf(all_bonuses, item.name), item.rect)
+			item.isdraw = True
+
+def DrawDelBonus(surf_src, surf_dest, rectxy):
+	surf_src.blit(surf_dest, rectxy, rectxy)
+
 def CreateBonus(level: int):
 	global blocks
 	global bonus_blocks
@@ -711,6 +722,7 @@ def CreateBonus(level: int):
 	global bonus_line
 	global row_table
 	global col_table
+	global len_bonues
 	rand_bonus_num = random.randint(0, 6)
 	select_col = random.choice(bonus_line)
 	on_col = select_col - 1

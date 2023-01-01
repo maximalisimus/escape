@@ -47,6 +47,7 @@ def main():
 	#CreateBonus(onlevel)
 	#for i in range(5):
 	#	CreateBonus(onlevel)
+	#DrawBonus(surf_bonus)
 	#for item in bonus_blocks:
 	#	surf_bonus.blit(SearchSurf(all_bonuses, item.name), item.rect)
 	#screen1.blit(surf_bonus, rect_bonus)
