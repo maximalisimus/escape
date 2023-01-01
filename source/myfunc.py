@@ -3,7 +3,6 @@
 from typing import Tuple
 from enum import Enum
 import random
-import builtins
 from variables import *
 
 class NoValue(Enum):
@@ -93,9 +92,10 @@ class TypeBlock(NoValue):
 
 class Block:
 	
-	def __init__(self, ontype: TypeBlock, RectXY: Tuple[int, int]):
+	def __init__(self, ontype: TypeBlock, RectXY: Tuple[int, int], name = None):
 		self.ontype = ontype
 		self.rect = pygame.Rect((RectXY[0], RectXY[1], size_blocks, size_blocks))
+		self.name = name
 
 def CollideRectAB(obj_a_rect, obj_b_rect):
 	if obj_a_rect.right > obj_b_rect.left and \
@@ -620,7 +620,7 @@ class Helicopter:
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
 
-def BuildLevel(surface, group: list, level: int):
+def BuildLevel(surface, group: list, level: int, copter = None):
 	global screen1
 	global door_path
 	global surf_table
@@ -675,9 +675,8 @@ def BuildLevel(surface, group: list, level: int):
 		y+=size_blocks
 		x=0
 	if level == 30:
-		builtins.helicopter = Helicopter()
-		global helicopter
-		helicopter.reset()
+		if copter != None:
+			copter.reset()
 
 def Restart(surf):
 	global Old_Score
