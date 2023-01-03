@@ -787,7 +787,7 @@ def main():
 		#	print(pos)
 		
 		#if isGame:
-		#	DrawTotal(score_bg, score, level, live, True)
+		#	DrawTotal(score_bg, score, level, live, False)
 		#	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 		#	pygame.display.update()
 		
