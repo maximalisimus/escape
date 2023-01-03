@@ -190,7 +190,7 @@ all_bonuses = {
 					},
 				1: {
 					'name': 'burger',
-					'image': pygame.image.load(pathlib.Path('./images/burger.png').resolve()).convert_alpha(),
+					'image': pathlib.Path('./images/burger.png').resolve(),
 					'score': 50,
 					},
 				2: {
