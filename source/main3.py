@@ -1,9 +1,11 @@
-#import pygame
-#import pathlib
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import pygame
+import pathlib
 from typing import Tuple
 from enum import Enum
 import random
-from variables import *
 
 class NoValue(Enum):
 	''' Base Enum class elements '''
@@ -25,6 +27,7 @@ class LevelCode(NoValue):
 	LeftPistol = 6
 	RightPistol = 5
 	Empty = 7
+	Bonus = 8
 	
 	@classmethod
 	def GetCodeValue(cls, value):
@@ -67,14 +70,13 @@ class TypeBlock(NoValue):
 	HatchBombs = 5
 	LeftPistol = 6
 	RightPistol = 7
-	DoorOut = 8
-	DoorIn = 9
-	Door = 10
-	Explotion = 11
-	Clouds = 12
-	Helicopter = 13
-	Hero = 14
-	Unknown = 15
+	DoorIn = 8
+	DoorOut = 9
+	Explotion = 10
+	Clouds = 11
+	Helicopter = 12
+	Hero = 13
+	Unknown = 14
 	
 	@classmethod
 	def GetTypeBlocksValue(cls, value):
@@ -90,90 +92,190 @@ class TypeBlock(NoValue):
 				return x
 		return None
 
-class Block:
-	
-	def __init__(self, ontype: TypeBlock, RectXY: Tuple[int, int], score = None, name = None, isdraw = False):
-		self.ontype = ontype
-		self.rect = pygame.Rect((RectXY[0], RectXY[1], size_blocks, size_blocks))
-		self.score = score
-		self.name = name
-		self.isdraw = isdraw
+W, H = 596, 385
+FPS = 60
 
-def CollideRectAB(obj_a_rect, obj_b_rect):
-	if obj_a_rect.right > obj_b_rect.left and \
-	obj_a_rect.left < obj_b_rect.right and \
-	obj_a_rect.bottom > obj_b_rect.top and \
-	obj_a_rect.top < obj_b_rect.bottom:
-		return True
-	else:
-		return False
+pygame.mixer.pre_init(44100, -16, 1, 512)
+pygame.init()
+screen1 = pygame.display.set_mode((W, H))
+pygame.display.set_caption("Esc")
+pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath('logo.png').resolve())))
+
+clock = pygame.time.Clock()
+
+Old_Score = 0
+Old_Level = 1
+Old_Live = 4
+
+isStart = True
+isGame = False
+
+size_surf_score = (92,22)
+size_surf_level = (26, 22)
+size_surf_lives = (128,32)
+size_helicopter = (72, 48)
+
+size_blocks = 24
+
+# 16 row x 18 column (24 pixel x 24 pixel)
+row_table = 16
+col_table = 18
+size_table = (432, 384)
+
+coord_score = (26,40)
+coord_level = (60, 110)
+coord_live = (10, 160)
+
+coord_score_bg = (450, 0)
+coord_helicopter = (216, 48)
+coord_blade_side = (5, 15)
+coord_blade_up = (22, 12)
+
+pos_live_x = {
+				0: 0,
+				1: 0,
+				2: 32,
+				3: 64,
+				4: 96,
+			}
+pos_live_y = 0
+
+pos_score_x = {
+				0: 1,
+				1: 14,
+				2: 27,
+				3: 40,
+				4: 53,
+				5: 66,
+				6: 79,
+			}
+pos_score_y = 1
+
+pre_levels = map(lambda x: pathlib.Path('./levels/').joinpath(f"ESC_{x}.DAT").resolve(), range(1,31))
+files_levels = tuple(map(lambda x: str(x), filter(lambda y: y.exists(), pre_levels)))
+del pre_levels
+
+pos_clicked = {
+				1: {
+						0: (516, 222),
+						1: (538, 246),
+					},
+				2: {
+						0: (492, 246),
+						1: (516, 268),
+					},
+				3: {
+						0: (516, 246),
+						1: (538, 268),
+					},
+				4: {
+						0: (538, 246),
+						1: (562, 268),
+					},
+				5: {
+						0: (516, 268),
+						1: (538, 294),
+					},
+			}
+
+medicine_image = pathlib.Path('./images/medicine-chest.png').resolve()
+mdeicine_score = 1
+medicine_name = 'medicine_chest'
+
+all_bonuses = {
+				0: {
+					'name': 'alarm',
+					'image': pathlib.Path('./images/alarm.png').resolve(),
+					'score': 100,
+					},
+				1: {
+					'name': 'burger',
+					'image': pygame.image.load(pathlib.Path('./images/burger.png').resolve()).convert_alpha(),
+					'score': 50,
+					},
+				2: {
+					'name': 'clock',
+					'image': pathlib.Path('./images/clock.png').resolve(),
+					'score': 30,
+					},
+				3: {
+					'name': 'coffee',
+					'image': pathlib.Path('./images/coffee.png').resolve(),
+					'score': 20,
+					},
+				4: {
+					'name': 'cola',
+					'image': pathlib.Path('./images/cola.png').resolve(),
+					'score': 10,
+					},
+				5: {
+					'name': 'stop',
+					'image': pathlib.Path('./images/stop.png').resolve(),
+					'score': 1,
+					},
+				6: {
+					'name': 'thermos',
+					'image': pathlib.Path('./images/thermos.png').resolve(),
+					'score': 1,
+					},
+			}
+
+logo = pathlib.Path('./images/esc_t.png').resolve()
+
+background = pathlib.Path('./images/esc-bg.png').resolve()
+score_bg = pygame.image.load(pathlib.Path('./images/score-bg.png').resolve()).convert_alpha()
+live_bg = pygame.image.load(pathlib.Path('./images/live-bg.png').resolve()).convert_alpha()
+died_bg = pygame.image.load(pathlib.Path('./images/died-bg.png').resolve()).convert_alpha()
+
+door_path = pathlib.Path('./images/door.png').resolve()
+
+bomb_path = pathlib.Path('./images/bomb.png').resolve()
+bomb_name = 'bomb'
+
+shot_path = pathlib.Path('./images/bullet.png').resolve()
+shot_name = 'shot'
+
+heart_path = pathlib.Path('./images/heart.png').resolve()
+heart_score = 5
+heart_name = 'heart'
+
+blade_rear_path = pathlib.Path('./images/blade-rear.png').resolve()
+blade_up_path = pathlib.Path('./images/blade-up.png').resolve()
+
+surf_table = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
+rect_table = surf_table.get_rect(topleft=(0, 0))
+
+src_surf_bonus = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
+surf_bonus = pygame.Surface.copy(src_surf_bonus)
+rect_bonus = surf_bonus.get_rect(topleft=(0, 0))
+
+surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
+surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
+surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]), pygame.SRCALPHA, 32).convert_alpha()
+
+pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
+
+effects = {
+			'applause': pygame.mixer.Sound(str(pathlib.Path('./sounds/applause.WAV').resolve())),
+			'jump': pygame.mixer.Sound(str(pathlib.Path('./sounds/jump.WAV').resolve())),
+			'final': pygame.mixer.Sound(str(pathlib.Path('./sounds/final.WAV').resolve())),
+			'start': pygame.mixer.Sound(str(pathlib.Path('./sounds/start.WAV').resolve())),
+			'helicopter': pygame.mixer.Sound(str(pathlib.Path('./sounds/helicopter.WAV').resolve())),
+			'alarm': pygame.mixer.Sound(str(pathlib.Path('./sounds/alarm.WAV').resolve())),
+			'burger': pygame.mixer.Sound(str(pathlib.Path('./sounds/burger.WAV').resolve())),
+			'clock': pygame.mixer.Sound(str(pathlib.Path('./sounds/clock.WAV').resolve())),
+			'coffee': pygame.mixer.Sound(str(pathlib.Path('./sounds/coffee.WAV').resolve())),
+			'cola': pygame.mixer.Sound(str(pathlib.Path('./sounds/cola.WAV').resolve())),
+			'stop': pygame.mixer.Sound(str(pathlib.Path('./sounds/stop.WAV').resolve())),
+			'thermos': pygame.mixer.Sound(str(pathlib.Path('./sounds/thermos.WAV').resolve())),
+			'heart': pygame.mixer.Sound(str(pathlib.Path('./sounds/heart.WAV').resolve())),
+			'medicine_chest': pygame.mixer.Sound(str(pathlib.Path('./sounds/live.WAV').resolve())),
+			'bomb': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
+			'shot': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
+		}
 
 def LoadSurf(paths):
-	return pygame.image.load(paths).convert_alpha()
-
-def PosCollision(level: int):
-	return {
-			1: {
-					12: (6, 8),
-				},
-			2: {
-					6: (8, 13),
-				},
-			3: {
-					6: (7, 12),
-				},
-			4: {
-					12: (5, 10),
-				},
-			8: {
-					9: (7, 13),
-					12: (7, 15),
-				},
-			9: {
-					6: (5, 11),
-				},
-			11: {
-					12: (7, 9),
-				},
-			13: {
-					6: (7, 18),
-					9: (7, 18),
-					12: (7, 18),
-				},
-			15: {
-					3: (11, 13),
-					6: (5, 7),
-					9: (11, 13),
-					12: (7, 9),
-				},
-			16: {
-					3: (8, 10),
-				},
-			20: {
-					9: (7, 13),
-					12: (7, 15),
-				},
-			24: {
-					9: (6, 10),
-					12: (5, 11),
-				},
-			27: {
-					3: (11, 13),
-					6: (5, 7),
-					9: (11, 13),
-					12: (7, 9),
-				},
-			28: {
-					6: (5, 11),
-				},
-			29: {
-					9: (7, 13),
-					12: (7, 15),
-				},
-			30: {
-					3: (1, 17),
-				},
-	}.get(level, dict())
+	return pygame.image.load(str(paths)).convert_alpha()
 
 def SelectWall(num):
 	return {
@@ -430,8 +532,9 @@ def SwitchInitImage(surface):
 	isGame = True
 	isStart = False
 	surface.blit(LoadSurf(background), (0, 0))
-	surface.blit(LoadSurf(score_bg), (coord_score_bg[0], coord_score_bg[1]))
-	Restart(surface)
+	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+	#Restart(surface)
+	pygame.display.update()
 
 def print_level(level: int) -> str:
 	if level<10:
@@ -529,7 +632,6 @@ def DrawTotal(surface, score: int, level: int, live: int, isFull: bool = False):
 		Old_Live = live
 	else:
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
-	pygame.display.update()
 
 class Helicopter:
 	
@@ -623,132 +725,61 @@ class Helicopter:
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
 
-def BuildLevel(surface, group: list, level: int, copter = None):
+def main():
 	global screen1
-	global door_path
+	global clock
+	
 	global surf_table
 	global rect_table
-	global door_path
-	
-	global surf_bonus_src
 	global surf_bonus
+	global rect_bonus
 	
-	surf_bonus = pygame.Surface.copy(src_surf_bonus)
+	global logo	
+	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
+	screen1.blit(surf_start_bg, (0, 0))
+	pygame.display.update()
+	del surf_start_bg, logo
 	
-	group.clear()
+	RUN = True
 	
-	clouds = SwitchClouds(level)
-	wall = SwitchWall(level)
-	hatchbombs = SwitchHatchBombs(level)
-	leftpistol = SwitchPistol(0)
-	rightpistol = SwitchPistol(1)
-	ladder = SwitchLadder(level)
-	door = LoadSurf(door_path)
+	### Debug
 	
-	surface.blit(clouds, (0, 0))
-	x = y = 0
-	DoorInOut = True
-	with open(files_levels[level-1], 'r') as f:
-		data_level = f.readlines()
-	for row in data_level:
-		for col in row.replace('\n', '').replace(' ','7'):
-			code = LevelCode.GetCodeValue(int(col))
-			if code != LevelCode.Empty:
-				if code == LevelCode.Wall:
-					surface.blit(wall, (x, y))
-					group.append(Block(TypeBlock.Wall, (x, y)))
-				elif code == LevelCode.Door:
-					if DoorInOut:
-						DoorInOut = False
-						surface.blit(door, (x, y))
-						group.append(Block(TypeBlock.DoorOut, (x, y), isdraw = True))
-					else:
-						surface.blit(door, (x, y))
-						group.append(Block(TypeBlock.DoorIn, (x, y), isdraw = True))
-				elif code == LevelCode.HatchBombs:
-					surface.blit(hatchbombs, (x, y))
-					group.append(Block(TypeBlock.HatchBombs, (x, y), isdraw = True))
-				elif code == LevelCode.Ladder:
-					surface.blit(ladder, (x, y))
-					group.append(Block(TypeBlock.Ladder, (x, y), isdraw = True))
-				elif code == LevelCode.LeftPistol:
-					surface.blit(leftpistol, (x, y))
-					group.append(Block(TypeBlock.LeftPistol, (x, y), isdraw = True))
-				elif code == LevelCode.RightPistol:
-					surface.blit(rightpistol, (x, y))
-					group.append(Block(TypeBlock.RightPistol, (x, y), isdraw = True))
-			x+=size_blocks
-		y+=size_blocks
-		x=0
-	if level == 30:
-		if copter != None:
-			copter.reset()
+	global score_bg
+	global coord_score_bg
+	
+	SwitchInitImage(screen1)
+	DrawTotal(score_bg, 0, 1, 4, True)
+	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+	pygame.display.update()
+	
+	### Debug
+	
+	while RUN:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				RUN = False
+				exit()
+			elif event.type == pygame.KEYDOWN:
+				# event.key
+				pass
+			elif event.type == pygame.KEYUP:
+				# if event.key in []:
+				pass
+			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				if isStart:
+					SwitchInitImage(screen1)
+				elif isGame:
+					pass
+			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+				pass
+		
+		#keys = pygame.key.get_pressed()
+		#pressed = pygame.mouse.get_pressed()
+		#if pressed[0]:
+		#	pos = pygame.mouse.get_pos()
+		#	print(pos)
+				
+		clock.tick(FPS)
 
-def Restart(surf):
-	global Old_Score
-	global Old_Level
-	global Old_Live
-	global surf_table
-	global rect_table
-	Old_Score = 0
-	Old_Level = 1
-	Old_Live = 4
-	DrawTotal(surf, 0, 1, 4, True)
-	BuildLevel(surf_table, blocks, 1)
-	surf.blit(surf_table, rect_table)
-
-def SearchSurf(block, onname):
-	for key, value in block.items():
-		if value['name'] == onname:
-			return value['surf']
-			break
-	return False
-
-def DrawBonus(surface):
-	global bonus_blocks
-	for item in bonus_blocks:
-		if not item.isdraw:
-			surface.blit(SearchSurf(all_bonuses, item.name), item.rect)
-			item.isdraw = True
-
-def DrawDelBonus(surf_src, surf_dest, rectxy):
-	surf_src.blit(surf_dest, rectxy, rectxy)
-
-def CreateBonus(level: int):
-	global blocks
-	global bonus_blocks
-	global all_bonuses
-	global bonus_line
-	global row_table
-	global col_table
-	global len_bonues
-	rand_bonus_num = random.randint(0, 6)
-	select_col = random.choice(bonus_line)
-	on_col = select_col - 1
-	y = on_col * size_blocks
-	collisions = PosCollision(level).get(select_col, False)
-	on_row = random.randint(1, col_table-2)
-	x = on_row * size_blocks
-	block = Block(TypeBlock.Bonus, (x, y), all_bonuses[rand_bonus_num]['score'], all_bonuses[rand_bonus_num]['name'])
-	hits = []
-	for item in blocks:
-		if CollideRectAB(item.rect, block.rect):
-			hits.append(item)
-	if collisions:
-		while ((on_row in range(collisions[0]-1, collisions[1])) or hits):
-			on_row = random.randint(1, col_table-2)
-			x = block.rect.x = on_row * size_blocks
-			hits.clear()
-			for item in blocks:
-				if CollideRectAB(item.rect, block.rect):
-					hits.append(item)
-	else:
-		while (hits):
-			on_row = random.randint(1, col_table-2)
-			x = block.rect.x = on_row * size_blocks
-			hits.clear()
-			for item in blocks:
-				if CollideRectAB(item.rect, block.rect):
-					hits.append(item)
-	blocks.append(block)
-	bonus_blocks.append(block)
+if __name__ == '__main__':
+	main()
