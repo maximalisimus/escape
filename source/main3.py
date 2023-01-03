@@ -44,9 +44,9 @@ class LevelCode(NoValue):
 		return None
 
 class SelectHeroPos(NoValue):
-	CENTER = 1
-	LEFT = 2
-	RIGHT = 3
+	Center = 1
+	Left = 2
+	Right = 3
 	
 	@classmethod
 	def GetHeroPosValue(cls, value):
@@ -229,13 +229,14 @@ died_bg = pygame.image.load(pathlib.Path('./images/died-bg.png').resolve()).conv
 
 door_path = pathlib.Path('./images/door.png').resolve()
 
-bomb_path = pathlib.Path('./images/bomb.png').resolve()
+bomb_surf = pygame.image.load(pathlib.Path('./images/bomb.png').resolve()).convert_alpha()
 bomb_name = 'bomb'
 
-shot_path = pathlib.Path('./images/bullet.png').resolve()
+shot_surf_left = pygame.image.load(pathlib.Path('./images/bullet.png').resolve()).convert_alpha()
+shot_surf_right = pygame.transform.flip(shot_surf_left, True, False)
 shot_name = 'shot'
 
-heart_path = pathlib.Path('./images/heart.png').resolve()
+heart_surf = pygame.image.load(pathlib.Path('./images/heart.png').resolve()).convert_alpha()
 heart_score = 5
 heart_name = 'heart'
 
@@ -345,15 +346,15 @@ def SelectBombHeart(num):
 			0: {
 					'type': TypeBlock.Weapon,
 					'name': bomb_name,
-					'image': bomb_path,
+					'surf': bomb_surf,
 				},
 			1: {
 					'type': TypeBlock.Bonus,
 					'name': heart_name,
-					'image': heart_path,
+					'surf': heart_surf,
 					'score': heart_score,
 				},
-	}.get(num, {'type': TypeBlock.Weapon, 'name': bomb_name, 'image': bomb_path,})
+	}.get(num, {'type': TypeBlock.Weapon, 'name': bomb_name, 'surf': bomb_surf,})
 
 def SwitchBombHeart(CaseNum):
 	return {
@@ -361,17 +362,14 @@ def SwitchBombHeart(CaseNum):
 			1: SelectBombHeart(1),
 	}.get(CaseNum, SelectBombHeart(0))
 
-def SwitchPistol(CasePos):
-	return {
-			0: LoadSurf(SelectPistol(LevelCode.LeftPistol)),
-			1: LoadSurf(SelectPistol(LevelCode.RightPistol)),
-	}.get(CasePos, LoadSurf(SelectPistol(LevelCode.LeftPistol)))
+def SwitchPistol(CasePos: LevelCode):
+	return LoadSurf(SelectPistol(CasePos))
 
-def SwitchShot(CaseShot: LevelCode):
+def SwitchShot(CaseShot: TypeBlock):
 	return {
-			LevelCode.LeftPistol: LoadSurf(shot_path),
-			LevelCode.RightPistol: pygame.transform.flip(LoadSurf(shot_path), True, False),
-	}.get(CaseShot, LoadSurf(shot_path))
+			TypeBlock.LeftPistol: shot_surf_left,
+			TypeBlock.RightPistol: shot_surf_right,
+	}.get(CaseShot, shot_surf_left)
 
 def SwitchDoor():
 	return LoadSurf(door_path)
@@ -540,11 +538,11 @@ def SwitchLCD(CaseNum: str):
 			'9': LoadSurf(SelectLCD('9')),
 	}.get(CaseNum, LoadSurf(SelectLCD('0')))
 
-def SwitchHero(CasePos):
+def SwitchHero(CasePos: SelectHeroPos):
 	return {
-			0: LoadSurf(SelectHero(0)),
-			1: LoadSurf(SelectHero(1)),
-			2: LoadSurf(SelectHero(2)),
+			SelectHeroPos.Center: LoadSurf(SelectHero(0)),
+			SelectHeroPos.Left: LoadSurf(SelectHero(1)),
+			SelectHeroPos.Right: LoadSurf(SelectHero(2)),
 	}.get(CasePos, LoadSurf(SelectHero(0)))
 
 def print_level(level: int) -> str:
