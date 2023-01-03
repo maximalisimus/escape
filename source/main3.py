@@ -526,16 +526,6 @@ def SwitchHero(CasePos):
 			2: LoadSurf(SelectHero(2)),
 	}.get(CasePos, LoadSurf(SelectHero(0)))
 
-def SwitchInitImage(surface):
-	global isGame
-	global isStart
-	isGame = True
-	isStart = False
-	surface.blit(LoadSurf(background), (0, 0))
-	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
-	#Restart(surface)
-	pygame.display.update()
-
 def print_level(level: int) -> str:
 	if level<10:
 		return f"0{level}"
@@ -724,6 +714,16 @@ class Helicopter:
 
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
+
+def SwitchInitImage(surface):
+	global isGame
+	global isStart
+	isGame = True
+	isStart = False
+	surface.blit(LoadSurf(background), (0, 0))
+	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+	#Restart(surface)
+	pygame.display.update()
 
 def main():
 	global screen1
