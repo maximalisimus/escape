@@ -734,6 +734,12 @@ def main():
 	global surf_bonus
 	global rect_bonus
 	
+	global score_bg
+	global coord_score_bg
+	
+	global isStart
+	global isGame
+	
 	global logo	
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
@@ -744,11 +750,12 @@ def main():
 	
 	### Debug
 	
-	global score_bg
-	global coord_score_bg
+	score = 0
+	live = 4
+	level = 1
 	
 	SwitchInitImage(screen1)
-	DrawTotal(score_bg, 0, 1, 4, True)
+	DrawTotal(score_bg, score, level, live, True)
 	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	pygame.display.update()
 	
@@ -778,7 +785,12 @@ def main():
 		#if pressed[0]:
 		#	pos = pygame.mouse.get_pos()
 		#	print(pos)
-				
+		
+		#if isGame:
+		#	DrawTotal(score_bg, score, level, live, True)
+		#	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+		#	pygame.display.update()
+		
 		clock.tick(FPS)
 
 if __name__ == '__main__':
