@@ -340,6 +340,27 @@ def SelectExplotion(num):
 			5: pathlib.Path('./images/exp-6.png').resolve(),
 	}.get(num, pathlib.Path('./images/exp-1.png').resolve())
 
+def SelectBombHeart(num):
+	return {
+			0: {
+					'type': TypeBlock.Weapon,
+					'name': bomb_name,
+					'image': bomb_path,
+				},
+			1: {
+					'type': TypeBlock.Bonus,
+					'name': heart_name,
+					'image': heart_path,
+					'score': heart_score,
+				},
+	}.get(num, {'type': TypeBlock.Weapon, 'name': bomb_name, 'image': bomb_path,})
+
+def SwitchBombHeart(CaseNum):
+	return {
+			0: SelectBombHeart(0),
+			1: SelectBombHeart(1),
+	}.get(CaseNum, SelectBombHeart(0))
+
 def SwitchPistol(CasePos):
 	return {
 			0: LoadSurf(SelectPistol(LevelCode.LeftPistol)),
