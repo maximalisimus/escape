@@ -105,8 +105,9 @@ class TGroupPosition(dict):
 		return len(self) == 0
 	
 	def remove(self, PosI, PosJ = None):
-		if PosJ != None and PosJ in self[PosI].keys():
-			del self[PosI][PosJ]
+		if PosJ != None:
+			if ((type(self[PosI]) == dict) and (PosJ in self[PosI].keys())):
+				del self[PosI][PosJ]
 		else:
 			del self[PosI]
 	
