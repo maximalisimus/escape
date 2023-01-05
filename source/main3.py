@@ -100,9 +100,11 @@ class TGroupPosition(dict):
 			if not self.has_internal(sprite):
 				self[PosI][PosJ] = sprite
 			else:
-				self[PosI][PosJ] = None
+				if not self.get(PosI, dict()).get(PosJ, False):
+					self[PosI][PosJ] = None
 		else:
-			self[PosI][PosJ] = None
+			if not self.get(PosI, dict()).get(PosJ, False):
+				self[PosI][PosJ] = None
 	
 	def isemty(self):
 		return len(self) == 0
