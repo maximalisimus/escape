@@ -144,6 +144,12 @@ class TGroupPosition(dict):
 		else:
 			return OnSprites
 	
+	def sort(self):
+		self = dict(sorted(self.items(), key=lambda i: i[0]))
+		for row in self.items():
+			if type(self[row]) == dict:
+				self[row] = dict(sorted(row.items(),  key=lambda j: j[0]))
+	
 	def returnFourPos(self, PosIJ: tuple, isTuple: bool = False):
 		OnSprites = []
 		tmp = self.get(PosIJ[0], dict()).get(PosIJ[1], False)
