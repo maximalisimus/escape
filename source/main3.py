@@ -181,16 +181,16 @@ class TGroup(dict):
 					if isDisplayUpdate:
 						pygame.display.update()
 
-def CollideRectAB(obj_a_rect, obj_b_rect):
-	if obj_a_rect.right > obj_b_rect.left and \
-	obj_a_rect.left < obj_b_rect.right and \
-	obj_a_rect.bottom > obj_b_rect.top and \
-	obj_a_rect.top < obj_b_rect.bottom:
+def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
+	if objA.rect.right > objB.rect.left and \
+	objA.rect.left < objB.rect.right and \
+	objA.rect.bottom > objB.rect.top and \
+	objA.rect.top < objB.rect.bottom:
 		return True
 	else:
 		return False
 
-def CollideBlock(sprite, group: TGroup, SizeWH: Tuple[int, int], dokill: bool = False):
+def CollideGroup(sprite, group: TGroup, SizeWH: Tuple[int, int], dokill: bool = False):
 	ipos = sprite.rect.y // SizeWH[1]
 	jpos = sprite.rect.x // SizeWH[0]
 	pass
