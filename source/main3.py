@@ -106,7 +106,7 @@ class TGroup(dict):
 				else:
 					for sprite in args[0]:
 						try:
-							self.add(*sprite)
+							self.add(sprite,)
 						except (TypeError, AttributeError):
 							if hasattr(sprite, "_spritegroup"):
 								for spr in sprite.sprites():
@@ -133,16 +133,34 @@ class TGroup(dict):
 	def isemty(self):
 		return len(self) == 0
 	
+	def empty(self):
+		for sprite in self.sprites():
+			self.remove(sprite)
+			sprite.remove_internal(self)
+	
+	def searchkey(self, value):
+		for row in self.items():
+			if type(row[1]) == dict:
+				for col in row[1].items():
+					if value == col[1]:
+						return (row[0], col[0])
+			else:
+				return row[0]
+	
 	def remove(self, *args):
 		if len(args) > 0 and len(args) < 3:
 			if len(args) == 1:
 				if not hasattr(args[0], '__iter__'):
-					if args[0] in self.keys():
-						del self[args[0]]
+					if args[0] in self.sprites(True):
+						onkeys = self.searchkey(args[0])
+						if type(onkeys) == tuple:
+							self.remove(onkeys[0], onkeys[1])
+						else:
+							del self[onkeys]
 				else:
 					for sprite in args[0]:
 						try:
-							self.remove(*sprite)
+							self.remove(sprite,)
 						except (TypeError, AttributeError):
 							if hasattr(sprite, "_spritegroup"):
 								for spr in sprite.sprites():
@@ -229,7 +247,7 @@ class TGroup(dict):
 		else:
 			return False
 
-	def CollideGroup(self, sprite, SizeWH: Tuple[int, int], dokill: bool = False, collided=None):
+	def CollideSprite(self, sprite, SizeWH: Tuple[int, int], dokill: bool = False, collided=None):
 		ipos = sprite.rect.y // SizeWH[1]
 		jpos = sprite.rect.x // SizeWH[0]
 		pass
