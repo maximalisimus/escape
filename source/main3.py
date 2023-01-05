@@ -95,13 +95,11 @@ class TypeBlock(NoValue):
 class TGroupPosition(dict):
 	
 	def add(self, sprite, PosI, PosJ):
-		self[PosI] = dict()
+		if not PosI in self.keys():
+			self[PosI] = dict()
 		if isinstance(sprite, pygame.sprite.Sprite):
 			if not self.has_internal(sprite):
 				self[PosI][PosJ] = sprite
-			else:
-				if not self.get(PosI, dict()).get(PosJ, False):
-					self[PosI][PosJ] = None
 		else:
 			if not self.get(PosI, dict()).get(PosJ, False):
 				self[PosI][PosJ] = None
@@ -111,10 +109,12 @@ class TGroupPosition(dict):
 	
 	def remove(self, PosI, PosJ = None):
 		if PosJ != None:
-			if ((type(self[PosI]) == dict) and (PosJ in self[PosI].keys())):
-				del self[PosI][PosJ]
+			if PosI in self.keys():
+				if ((type(self[PosI]) == dict) and (PosJ in self[PosI].keys())):
+					del self[PosI][PosJ]
 		else:
-			del self[PosI]
+			if PosI in self.keys():
+				del self[PosI]
 	
 	def has_internal(self, sprite):
 		return sprite in self.sprites(True)
