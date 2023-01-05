@@ -103,6 +103,14 @@ pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath
 
 clock = pygame.time.Clock()
 
+size_blocks = 24
+
+def CreateEmtySurf(SizeX: int = size_blocks, SizeY: int = size_blocks):
+	return pygame.Surface((SizeX, SizeY), pygame.SRCALPHA, 32).convert_alpha()
+
+def LoadSurf(paths):
+	return pygame.image.load(str(paths)).convert_alpha()
+
 Old_Score = 0
 Old_Level = 1
 Old_Live = 4
@@ -114,8 +122,6 @@ size_surf_score = (92,22)
 size_surf_level = (26, 22)
 size_surf_lives = (128,32)
 size_helicopter = (72, 48)
-
-size_blocks = 24
 
 # 16 row x 18 column (24 pixel x 24 pixel)
 row_table = 16
@@ -223,36 +229,36 @@ all_bonuses = {
 logo = pathlib.Path('./images/esc_t.png').resolve()
 
 background = pathlib.Path('./images/esc-bg.png').resolve()
-score_bg = pygame.image.load(pathlib.Path('./images/score-bg.png').resolve()).convert_alpha()
-live_bg = pygame.image.load(pathlib.Path('./images/live-bg.png').resolve()).convert_alpha()
-died_bg = pygame.image.load(pathlib.Path('./images/died-bg.png').resolve()).convert_alpha()
+score_bg = LoadSurf(pathlib.Path('./images/score-bg.png').resolve())
+live_bg = LoadSurf(pathlib.Path('./images/live-bg.png').resolve())
+died_bg = LoadSurf(pathlib.Path('./images/died-bg.png').resolve())
 
 door_path = pathlib.Path('./images/door.png').resolve()
 
-bomb_surf = pygame.image.load(pathlib.Path('./images/bomb.png').resolve()).convert_alpha()
+bomb_surf = LoadSurf(pathlib.Path('./images/bomb.png').resolve())
 bomb_name = 'bomb'
 
-shot_surf_left = pygame.image.load(pathlib.Path('./images/bullet.png').resolve()).convert_alpha()
+shot_surf_left = LoadSurf(pathlib.Path('./images/bullet.png').resolve())
 shot_surf_right = pygame.transform.flip(shot_surf_left, True, False)
 shot_name = 'shot'
 
-heart_surf = pygame.image.load(pathlib.Path('./images/heart.png').resolve()).convert_alpha()
+heart_surf = LoadSurf(pathlib.Path('./images/heart.png').resolve())
 heart_score = 5
 heart_name = 'heart'
 
 blade_rear_path = pathlib.Path('./images/blade-rear.png').resolve()
 blade_up_path = pathlib.Path('./images/blade-up.png').resolve()
 
-surf_table = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
+surf_table = CreateEmtySurf(size_table[0], size_table[1])
 rect_table = surf_table.get_rect(topleft=(0, 0))
 
-src_surf_bonus = pygame.Surface((size_table[0], size_table[1]), pygame.SRCALPHA, 32).convert_alpha()
+src_surf_bonus = CreateEmtySurf(size_table[0], size_table[1])
 surf_bonus = pygame.Surface.copy(src_surf_bonus)
 rect_bonus = surf_bonus.get_rect(topleft=(0, 0))
 
-surf_score = pygame.Surface((size_surf_score[0], size_surf_score[1]), pygame.SRCALPHA, 32).convert_alpha()
-surf_level = pygame.Surface((size_surf_level[0], size_surf_level[1]), pygame.SRCALPHA, 32).convert_alpha()
-surf_lives = pygame.Surface((size_surf_lives[0], size_surf_lives[1]), pygame.SRCALPHA, 32).convert_alpha()
+surf_score = CreateEmtySurf(size_surf_score[0], size_surf_score[1])
+surf_level = CreateEmtySurf(size_surf_level[0], size_surf_level[1])
+surf_lives = CreateEmtySurf(size_surf_lives[0], size_surf_lives[1])
 
 pygame.mixer.music.load(str(pathlib.Path('./sounds/music.mp3').resolve()))
 
@@ -274,9 +280,6 @@ effects = {
 			'bomb': pygame.mixer.Sound(str(pathlib.Path('./sounds/bomb.WAV').resolve())),
 			'shot': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
 		}
-
-def LoadSurf(paths):
-	return pygame.image.load(str(paths)).convert_alpha()
 
 def SelectWall(num):
 	return {
@@ -741,8 +744,33 @@ def SwitchInitImage(surface):
 	isStart = False
 	surface.blit(LoadSurf(background), (0, 0))
 	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
-	#Restart(surface)
+	restart(surface)
 	pygame.display.update()
+
+def restart(screen):
+	global isGame
+	
+	global score_bg
+	global coord_score_bg
+	
+	isGame = True	
+	DrawTotal(score_bg, 0, 1, 4, True)
+	screen.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+	pygame.display.update()
+
+class Block(pygame.sprite.Sprite):
+	
+	def __init__(self, surf = CreateEmtySurf(), ontype: TypeBlock = TypeBlock.Unknown, \
+				CoordXY: Tuple[int, int] = (0, 0), group = None, \
+				score = None, sound = None, name = None):
+		pygame.sprite.Sprite.__init__(self)
+		pass
+	
+	def update(self, *args):
+		pass
+
+def BuildLevel(surf):
+	pass
 
 def main():
 	global screen1
@@ -774,8 +802,6 @@ def main():
 	level = 1
 	
 	SwitchInitImage(screen1)
-	DrawTotal(score_bg, score, level, live, True)
-	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	pygame.display.update()
 	
 	### Debug
