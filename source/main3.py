@@ -102,20 +102,15 @@ class TGroup(dict):
 				if not hasattr(args[0], '__iter__'):
 					if not self.has_internal(args[0]):
 						self[len(self)] = args[0]
-						sprite.add_internal(self)
+						if hasattr(args[0], 'add_internal'):
+							args[0].add_internal(self)
 				else:
 					for sprite in args[0]:
 						try:
 							self.add(sprite,)
 						except (TypeError, AttributeError):
-							if hasattr(sprite, "_spritegroup"):
-								for spr in sprite.sprites():
-									if not self.has_internal(spr):
-										self[len(self)] = spr
-										spr.add_internal(self)
-							elif not self.has_internal(sprite):
-								self[len(self)] = sprite
-								sprite.add_internal(self)
+							if not self.has_internal(sprite):
+								self.add(sprite)
 			elif len(args) == 2:
 				self[args[1]] = args[0]
 			elif len(args) == 3:
@@ -124,7 +119,7 @@ class TGroup(dict):
 				if type(self[args[1]]) == dict:
 					self[args[1]][args[2]] = args[0]
 	
-	def add_internal(self, sprite, layer=None):
+	def add_internal(self, sprite, layer = None):
 		self.add(sprite)
 	
 	def remove_internal(self, sprite):
@@ -136,7 +131,6 @@ class TGroup(dict):
 	def empty(self):
 		for sprite in self.sprites():
 			self.remove(sprite)
-			sprite.remove_internal(self)
 	
 	def searchkey(self, value):
 		for row in self.items():
@@ -146,6 +140,7 @@ class TGroup(dict):
 						return (row[0], col[0])
 			else:
 				return row[0]
+		return False
 	
 	def remove(self, *args):
 		if len(args) > 0 and len(args) < 3:
@@ -153,23 +148,22 @@ class TGroup(dict):
 				if not hasattr(args[0], '__iter__'):
 					if args[0] in self.sprites(True):
 						onkeys = self.searchkey(args[0])
-						if type(onkeys) == tuple:
-							self.remove(onkeys[0], onkeys[1])
-						else:
-							del self[onkeys]
+						if onkeys:
+							if type(onkeys) == tuple:
+								self.remove(onkeys[0], onkeys[1])
+								if hasattr(args[0], 'remove_internal'):
+									args[0].remove_internal(self)
+							else:
+								del self[onkeys]
+								if hasattr(args[0], 'remove_internal'):
+									args[0].remove_internal(self)
 				else:
 					for sprite in args[0]:
 						try:
 							self.remove(sprite,)
 						except (TypeError, AttributeError):
-							if hasattr(sprite, "_spritegroup"):
-								for spr in sprite.sprites():
-									if self.has_internal(spr):
-										self.remove_internal(spr)
-										spr.remove_internal(self)
-							elif self.has_internal(sprite):
-								self.remove_internal(sprite)
-								sprite.remove_internal(self)
+							if self.has_internal(sprite):
+								self.remove(sprite)
 			elif len(args) == 2:
 				if self.get(args[0], dict()).get(args[1], False):
 					del self[args[0]][args[1]]
@@ -191,7 +185,7 @@ class TGroup(dict):
 							return False
 				else:
 					if not self.has_internal(sprite):
-						return False
+						return False			
 		return True
 	
 	def sprites(self, isTuple: bool = False):
@@ -236,7 +230,22 @@ class TGroup(dict):
 					surf.blit(row.image, row.rect)
 					if isDisplayUpdate:
 						pygame.display.update()
-
+	
+	def kill(self):
+		for row in self.items():
+			if type(row[1]) == dict:
+				for col in row[1].items():
+					del self[row[0]][col[0]]
+					if hasattr(col[1], 'remove_internal'):
+						col[1].remove_internal(self)
+			else:
+				del self[row[0]]
+				if hasattr(row[1], 'remove_internal'):
+					row[1].remove_internal(self)
+	
+	def groups(self):
+		return self.sprites()
+	
 	@staticmethod
 	def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
 		if objA.rect.right > objB.rect.left and \
