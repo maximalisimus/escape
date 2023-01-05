@@ -731,6 +731,12 @@ def DrawTotal(surface, score: int, level: int, live: int, isFull: bool = False):
 	else:
 		surface.blit(surf_lives, (coord_live[0], coord_live[1]))
 
+def rotate_surf(surf, angle):
+	loc = surf.get_rect().center
+	rot_sprite = pygame.transform.rotate(surf, angle)
+	rot_sprite.get_rect().center = loc
+	return rot_sprite
+
 class Helicopter:
 	
 	def __init__(self):
@@ -788,9 +794,9 @@ class Helicopter:
 						self.blade_last_update = now
 						if self.isBlade:
 							self.image = pygame.Surface.copy(self.copters[self.frame])
-							self.blade_rear = self.rotate_surf(self.blade_rear, 90)
+							self.blade_rear = rotate_surf(self.blade_rear, 90)
 							self.image.blit(self.blade_rear, (coord_blade_side[0], coord_blade_side[1]))
-							self.blade_up = self.rotate_surf(self.blade_up, 180)
+							self.blade_up = rotate_surf(self.blade_up, 180)
 							self.blade_up = pygame.transform.flip(self.blade_up, False, True)
 							self.image.blit(self.blade_up, (coord_blade_up[0], coord_blade_up[1]))
 					if now - self.takeoff_last_update > self.takeoff_frame_rate:
@@ -813,12 +819,6 @@ class Helicopter:
 						else:
 							self.image = pygame.Surface.copy(self.copters[self.frame])
 							self.frame += 1
-
-	def rotate_surf(self, surf, angle):
-		loc = surf.get_rect().center
-		rot_sprite = pygame.transform.rotate(surf, angle)
-		rot_sprite.get_rect().center = loc
-		return rot_sprite
 
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
