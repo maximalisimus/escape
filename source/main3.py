@@ -169,7 +169,7 @@ class TGroupPosition(dict):
 		else:
 			return OnSprites
 	
-	def updates(self):
+	def updates(self, *args):
 		for row in self.values():
 			for col in row.values():
 				if hasattr(col, 'update'):
