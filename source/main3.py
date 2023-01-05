@@ -142,8 +142,9 @@ class TGroupPosition(dict):
 	def sprites(self, isTuple: bool = False):
 		OnSprites = []
 		for row in self.values():
-			for col in row.values():
-				OnSprites.append(col)
+			if type(row) == dict:
+				for col in row.values():
+					OnSprites.append(col)
 		if isTuple:
 			return tuple(OnSprites)
 		else:
