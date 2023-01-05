@@ -94,10 +94,28 @@ class TypeBlock(NoValue):
 
 class TGroup(dict):
 	
+	_spritegroup = True
+	
 	def add(self, *args):
-		if len(args) > 0 and len(args) < 4:
+		if len(args) > 0:
 			if len(args) == 1:
-				self[len(self)] = args[0]
+				if not hasattr(args[0], '__iter__'):
+					if not self.has_internal(args[0]):
+						self[len(self)] = args[0]
+						sprite.add_internal(self)
+				else:
+					for sprite in args[0]:
+						try:
+							self.add(*sprite)
+						except (TypeError, AttributeError):
+							if hasattr(sprite, "_spritegroup"):
+								for spr in sprite.sprites():
+									if not self.has_internal(spr):
+										self[len(self)] = spr
+										spr.add_internal(self)
+							elif not self.has_internal(sprite):
+								self[len(self)] = sprite
+								sprite.add_internal(self)
 			elif len(args) == 2:
 				self[args[1]] = args[0]
 			elif len(args) == 3:
@@ -106,14 +124,34 @@ class TGroup(dict):
 				if type(self[args[1]]) == dict:
 					self[args[1]][args[2]] = args[0]
 	
+	def add_internal(self, sprite, layer=None):
+		self.add(sprite)
+	
+	def remove_internal(self, sprite):
+		self.remove(sprite)
+	
 	def isemty(self):
 		return len(self) == 0
 	
 	def remove(self, *args):
 		if len(args) > 0 and len(args) < 3:
 			if len(args) == 1:
-				if args[0] in self.keys():
-					del self[args[0]]
+				if not hasattr(args[0], '__iter__'):
+					if args[0] in self.keys():
+						del self[args[0]]
+				else:
+					for sprite in args[0]:
+						try:
+							self.remove(*sprite)
+						except (TypeError, AttributeError):
+							if hasattr(sprite, "_spritegroup"):
+								for spr in sprite.sprites():
+									if self.has_internal(spr):
+										self.remove_internal(spr)
+										spr.remove_internal(self)
+							elif self.has_internal(sprite):
+								self.remove_internal(sprite)
+								sprite.remove_internal(self)
 			elif len(args) == 2:
 				if self.get(args[0], dict()).get(args[1], False):
 					del self[args[0]][args[1]]
@@ -157,12 +195,12 @@ class TGroup(dict):
 			if type(row[1]) == dict:
 				self[row[0]] = dict(sorted(row[1].items(),  key=lambda j: j[0]))
 	
-	def updates(self, *args):
+	def updates(self, *args, **kwargs):
 		for row in self.values():
 			if type(row) == dict:
 				for col in row.values():
 					if hasattr(col, 'update'):
-						col.update(*args)
+						col.update(*args, **kwargs)
 			else:
 				if hasattr(row, 'update'):
 					row.update(*args)
@@ -181,19 +219,20 @@ class TGroup(dict):
 					if isDisplayUpdate:
 						pygame.display.update()
 
-def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
-	if objA.rect.right > objB.rect.left and \
-	objA.rect.left < objB.rect.right and \
-	objA.rect.bottom > objB.rect.top and \
-	objA.rect.top < objB.rect.bottom:
-		return True
-	else:
-		return False
+	@staticmethod
+	def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
+		if objA.rect.right > objB.rect.left and \
+		objA.rect.left < objB.rect.right and \
+		objA.rect.bottom > objB.rect.top and \
+		objA.rect.top < objB.rect.bottom:
+			return True
+		else:
+			return False
 
-def CollideGroup(sprite, group: TGroup, SizeWH: Tuple[int, int], dokill: bool = False):
-	ipos = sprite.rect.y // SizeWH[1]
-	jpos = sprite.rect.x // SizeWH[0]
-	pass
+	def CollideGroup(self, sprite, SizeWH: Tuple[int, int], dokill: bool = False, collided=None):
+		ipos = sprite.rect.y // SizeWH[1]
+		jpos = sprite.rect.x // SizeWH[0]
+		pass
 
 W, H = 596, 385
 FPS = 60
