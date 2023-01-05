@@ -350,6 +350,7 @@ def SelectBombHeart(num):
 					'type': TypeBlock.Weapon,
 					'name': bomb_name,
 					'surf': bomb_surf,
+					'score': None,
 				},
 			1: {
 					'type': TypeBlock.Bonus,
@@ -783,6 +784,24 @@ class Block(pygame.sprite.Sprite):
 		self.name = name
 		if group != None:
 			self.add(group)
+	
+	def update(self, *args):
+		pass
+
+class Bomb(Block):
+	
+	def __init__(self, \
+				caseNum: int = 1, \
+				CoordXY: Tuple[int, int] = (0, 0), \
+				group = None, \
+				sound = None, \
+				SizeWH: Tuple[int, int] = (size_blocks, size_blocks), \
+				isEmptySurf: bool = False):
+		bh = SwitchBombHeart(caseNum)
+		super(Bomb, self).__init__(bh['type'], bh['surf'], CoordXY, group, bh['score'], sound, bh['name'], SizeWH, isEmptySurf)
+		self.last_update = pygame.time.get_ticks()
+		self.frame = 0
+		self.frame_rate = 60
 	
 	def update(self, *args):
 		pass
