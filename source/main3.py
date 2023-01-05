@@ -105,8 +105,8 @@ clock = pygame.time.Clock()
 
 size_blocks = 24
 
-def CreateEmtySurf(SizeX: int = size_blocks, SizeY: int = size_blocks):
-	return pygame.Surface((SizeX, SizeY), pygame.SRCALPHA, 32).convert_alpha()
+def CreateEmtySurf(SizeWidth: int = size_blocks, SizeHeight: int = size_blocks):
+	return pygame.Surface((SizeWidth, SizeHeight), pygame.SRCALPHA, 32).convert_alpha()
 
 def LoadSurf(paths):
 	return pygame.image.load(str(paths)).convert_alpha()
@@ -765,14 +765,19 @@ class Block(pygame.sprite.Sprite):
 				CoordXY: Tuple[int, int] = (0, 0), \
 				group = None, \
 				score = None, sound = None, name = None, \
-				SizeWH: Tuple[int, int] = (size_blocks, size_blocks)):
+				SizeWH: Tuple[int, int] = (size_blocks, size_blocks), \
+				isEmptySurf: bool = False):
 		pygame.sprite.Sprite.__init__(self)
 		self.type = OnType
-		self.image = surf
 		if surf != None:
+			self.image = surf
 			self.rect = self.image.get_rect(topleft=CoordXY)
 		else:
 			self.rect = pygame.Rect((CoordXY[0], CoordXY[1], SizeWH[0], SizeWH[1]))
+			if isEmptySurf:
+				self.image = CreateEmtySurf(SizeWH[0], SizeWH[1])
+			else:
+				self.image = surf
 		self.score = score
 		self.sound = sound
 		self.name = name
