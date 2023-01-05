@@ -252,20 +252,20 @@ class TGroup(dict):
 	def groups(self):
 		return self.sprites()
 	
-	@staticmethod
-	def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
-		if objA.rect.right > objB.rect.left and \
-		objA.rect.left < objB.rect.right and \
-		objA.rect.bottom > objB.rect.top and \
-		objA.rect.top < objB.rect.bottom:
-			return True
-		else:
-			return False
 
-	def CollideSprite(self, sprite, SizeWH: Tuple[int, int], dokill: bool = False, collided=None):
-		ipos = sprite.rect.y // SizeWH[1]
-		jpos = sprite.rect.x // SizeWH[0]
-		pass
+def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
+	if objA.rect.right > objB.rect.left and \
+	objA.rect.left < objB.rect.right and \
+	objA.rect.bottom > objB.rect.top and \
+	objA.rect.top < objB.rect.bottom:
+		return True
+	else:
+		return False
+
+def CollidePos(sprite, group, SizeWH: Tuple[int, int], dokill: bool = False, collided=None):
+	ipos = sprite.rect.y // SizeWH[1]
+	jpos = sprite.rect.x // SizeWH[0]
+	pass
 
 W, H = 596, 385
 FPS = 60
