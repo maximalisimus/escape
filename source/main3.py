@@ -788,7 +788,7 @@ class Block(pygame.sprite.Sprite):
 	def update(self, *args):
 		pass
 
-class Bomb(Block):
+class BombHeart(Block):
 	
 	def __init__(self, \
 				caseNum: int = 1, \
