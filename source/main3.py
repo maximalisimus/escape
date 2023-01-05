@@ -120,7 +120,13 @@ class TGroup(dict):
 					self[args[1]][args[2]] = args[0]
 	
 	def add_internal(self, sprite, layer = None):
-		self.add(sprite)
+		if hasattr(sprite, 'i') and hasattr(sprite, 'j'):
+			if sprite.i != None and sprite.j != None:
+				self.add(sprite, sprite.i, sprite.j)
+			else:
+				self.add(sprite)
+		else:
+			self.add(sprite)
 	
 	def remove_internal(self, sprite):
 		self.remove(sprite)
