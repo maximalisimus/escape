@@ -97,7 +97,10 @@ class TGroupPosition(dict):
 	def add(self, sprite, PosI, PosJ):
 		self[PosI] = dict()
 		if isinstance(sprite, pygame.sprite.Sprite):
-			self[PosI][PosJ] = sprite
+			if not self.has_internal(sprite):
+				self[PosI][PosJ] = sprite
+			else:
+				self[PosI][PosJ] = None
 		else:
 			self[PosI][PosJ] = None
 	
