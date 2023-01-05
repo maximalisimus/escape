@@ -92,6 +92,91 @@ class TypeBlock(NoValue):
 				return x
 		return None
 
+class TGroupPosition(dict):
+	
+	def add(self, sprite, PosI, PosJ):
+		self[PosI] = dict()
+		if isinstance(sprite, pygame.sprite.Sprite):
+			self[PosI][PosJ] = sprite
+		else:
+			self[PosI][PosJ] = None
+	
+	def isemty(self):
+		return len(self) == 0
+	
+	def remove(self, PosI, PosJ = None):
+		if PosJ != None and PosJ in self[PosI].keys():
+			del self[PosI][PosJ]
+		else:
+			del self[PosI]
+	
+	def has_internal(self, sprite):
+		return sprite in self.sprites(True)
+	
+	def has(*sprites) -> bool:
+		if not sprites:
+			return False
+		for sprite in sprites:
+			if isinstance(sprite, pygame.sprite.Sprite):
+				if not self.has_internal(sprite):
+					return False
+			else:
+				try:
+					if not self.has(*sprite):
+						return False
+				except (TypeError, AttributeError):
+					if hasattr(sprite, "_spritegroup"):
+						for spr in sprite.sprites():
+							if not self.has_internal(spr):
+								return False
+					else:
+						if not self.has_internal(sprite):
+							return False
+		return True
+	
+	def sprites(self, isTuple: bool = False):
+		OnSprites = []
+		for row in self.values():
+			for col in row.values():
+				OnSprites.append(col)
+		if isTuple:
+			return tuple(OnSprites)
+		else:
+			return OnSprites
+	
+	def returnFourPos(self, PosIJ: tuple, isTuple: bool = False):
+		OnSprites = []
+		tmp = self.get(PosIJ[0], dict()).get(PosIJ[1], False)
+		if tmp:
+			OnSprites.append(tmp)
+		tmp = self.get(PosIJ[0], dict()).get(PosIJ[1] + 1, False)
+		if tmp:
+			OnSprites.append(tmp)
+		tmp = self.get(PosIJ[0] + 1, dict()).get(PosIJ[1] + 1, False)
+		if tmp:
+			OnSprites.append(tmp)
+		tmp = self.get(PosIJ[0] + 1, dict()).get(PosIJ[1], False)
+		if tmp:
+			OnSprites.append(tmp)
+		if isTuple:
+			return tuple(OnSprites)
+		else:
+			return OnSprites
+	
+	def updates(self):
+		for row in self.values():
+			for col in row.values():
+				if hasattr(col, 'update'):
+					col.update(*args)
+	
+	def draw(self, surf, isDisplayUpdate: bool = False):
+		for row in self.values():
+			for col in row.values():
+				if hasattr(col, 'image') and hasattr(col, 'rect'):
+					surf.blit(col.image, col.rect)
+					if isDisplayUpdate:
+						pygame.display.update()
+
 W, H = 596, 385
 FPS = 60
 
