@@ -762,7 +762,8 @@ class Block(pygame.sprite.Sprite):
 	
 	def __init__(self, OnType: TypeBlock = TypeBlock.Unknown, \
 				surf = None, \
-				CoordXY: Tuple[int, int] = (0, 0), group = None, \
+				CoordXY: Tuple[int, int] = (0, 0), \
+				group = None, \
 				score = None, sound = None, name = None, \
 				SizeWH: Tuple[int, int] = (size_blocks, size_blocks)):
 		pygame.sprite.Sprite.__init__(self)
