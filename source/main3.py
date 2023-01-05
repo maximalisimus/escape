@@ -101,8 +101,10 @@ class TGroup(dict):
 			elif len(args) == 2:
 				self[args[1]] = args[0]
 			elif len(args) == 3:
-				self[args[1]] = dict()
-				self[args[1]][args[2]] = args[0]
+				if not args[1] in self.keys():
+					self[args[1]] = dict()
+				if type(self[args[1]]) == dict:
+					self[args[1]][args[2]] = args[0]
 	
 	def isemty(self):
 		return len(self) == 0
@@ -178,6 +180,20 @@ class TGroup(dict):
 					surf.blit(row.image, row.rect)
 					if isDisplayUpdate:
 						pygame.display.update()
+
+def CollideRectAB(obj_a_rect, obj_b_rect):
+	if obj_a_rect.right > obj_b_rect.left and \
+	obj_a_rect.left < obj_b_rect.right and \
+	obj_a_rect.bottom > obj_b_rect.top and \
+	obj_a_rect.top < obj_b_rect.bottom:
+		return True
+	else:
+		return False
+
+def CollideBlock(sprite, group: TGroup, SizeWH: Tuple[int, int], dokill: bool = False):
+	ipos = sprite.rect.y // SizeWH[1]
+	jpos = sprite.rect.x // SizeWH[0]
+	pass
 
 W, H = 596, 385
 FPS = 60
