@@ -92,28 +92,29 @@ class TypeBlock(NoValue):
 				return x
 		return None
 
-class TGroupPosition(dict):
+class TGroup(dict):
 	
-	def add(self, sprite, PosI, PosJ):
-		if not PosI in self.keys():
-			self[PosI] = dict()
-		if isinstance(sprite, pygame.sprite.Sprite):
-			if not self.has_internal(sprite):
-				self[PosI][PosJ] = sprite
-		else:
-			if not self.get(PosI, dict()).get(PosJ, False):
-				self[PosI][PosJ] = None
+	def add(self, *args):
+		if len(args) > 0 and len(args) < 4:
+			if len(args) == 1:
+				self[len(self)] = args[0]
+			elif len(args) == 2:
+				self[args[1]] = args[0]
+			elif len(args) == 3:
+				self[args[1]] = dict()
+				self[args[1]][args[2]] = args[0]
 	
 	def isemty(self):
 		return len(self) == 0
 	
-	def remove(self, keyPosI, keyPosJ = None):
-		if keyPosJ != None:
-			if self.get(keyPosI, dict()).get(keyPosJ, False):
-				del self[keyPosI][keyPosJ]
-		else:
-			if keyPosI in self.keys():
-				del self[keyPosI]
+	def remove(self, *args):
+		if len(args) > 0 and len(args) < 3:
+			if len(args) == 1:
+				if args[0] in self.keys():
+					del self[args[0]]
+			elif len(args) == 2:
+				if self.get(args[0], dict()).get(args[1], False):
+					del self[args[0]][args[1]]
 	
 	def has_internal(self, sprite):
 		return sprite in self.sprites(True)
@@ -122,21 +123,17 @@ class TGroupPosition(dict):
 		if not sprites:
 			return False
 		for sprite in sprites:
-			if isinstance(sprite, pygame.sprite.Sprite):
-				if not self.has_internal(sprite):
+			try:
+				if not self.has(*sprite):
 					return False
-			else:
-				try:
-					if not self.has(*sprite):
-						return False
-				except (TypeError, AttributeError):
-					if hasattr(sprite, "_spritegroup"):
-						for spr in sprite.sprites():
-							if not self.has_internal(spr):
-								return False
-					else:
-						if not self.has_internal(sprite):
+			except (TypeError, AttributeError):
+				if hasattr(sprite, "_spritegroup"):
+					for spr in sprite.sprites():
+						if not self.has_internal(spr):
 							return False
+				else:
+					if not self.has_internal(sprite):
+						return False
 		return True
 	
 	def sprites(self, isTuple: bool = False):
@@ -145,6 +142,8 @@ class TGroupPosition(dict):
 			if type(row) == dict:
 				for col in row.values():
 					OnSprites.append(col)
+			else:
+				OnSprites.append(row)
 		if isTuple:
 			return tuple(OnSprites)
 		else:
@@ -152,28 +151,9 @@ class TGroupPosition(dict):
 	
 	def sort(self):
 		self = dict(sorted(self.items(), key=lambda i: i[0]))
-		for row in thedict.items():
+		for row in self.items():
 			if type(row[1]) == dict:
 				self[row[0]] = dict(sorted(row[1].items(),  key=lambda j: j[0]))
-	
-	def returnFourPos(self, PosIJ: tuple, isTuple: bool = False):
-		OnSprites = []
-		tmp = self.get(PosIJ[0], dict()).get(PosIJ[1], False)
-		if tmp:
-			OnSprites.append(tmp)
-		tmp = self.get(PosIJ[0], dict()).get(PosIJ[1] + 1, False)
-		if tmp:
-			OnSprites.append(tmp)
-		tmp = self.get(PosIJ[0] + 1, dict()).get(PosIJ[1] + 1, False)
-		if tmp:
-			OnSprites.append(tmp)
-		tmp = self.get(PosIJ[0] + 1, dict()).get(PosIJ[1], False)
-		if tmp:
-			OnSprites.append(tmp)
-		if isTuple:
-			return tuple(OnSprites)
-		else:
-			return OnSprites
 	
 	def updates(self, *args):
 		for row in self.values():
@@ -181,6 +161,9 @@ class TGroupPosition(dict):
 				for col in row.values():
 					if hasattr(col, 'update'):
 						col.update(*args)
+			else:
+				if hasattr(row, 'update'):
+					row.update(*args)
 	
 	def draw(self, surf, isDisplayUpdate: bool = False):
 		for row in self.values():
@@ -190,6 +173,11 @@ class TGroupPosition(dict):
 						surf.blit(col.image, col.rect)
 						if isDisplayUpdate:
 							pygame.display.update()
+			else:
+				if hasattr(row, 'image') and hasattr(row, 'rect'):
+					surf.blit(row.image, row.rect)
+					if isDisplayUpdate:
+						pygame.display.update()
 
 W, H = 596, 385
 FPS = 60
