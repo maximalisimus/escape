@@ -760,11 +760,23 @@ def restart(screen):
 
 class Block(pygame.sprite.Sprite):
 	
-	def __init__(self, surf = CreateEmtySurf(), ontype: TypeBlock = TypeBlock.Unknown, \
+	def __init__(self, OnType: TypeBlock = TypeBlock.Unknown, \
+				surf = None, \
 				CoordXY: Tuple[int, int] = (0, 0), group = None, \
-				score = None, sound = None, name = None):
+				score = None, sound = None, name = None, \
+				SizeWH: Tuple[int, int] = (size_blocks, size_blocks)):
 		pygame.sprite.Sprite.__init__(self)
-		pass
+		self.type = OnType
+		self.image = surf
+		if surf != None:
+			self.rect = self.image.get_rect(topleft=CoordXY)
+		else:
+			self.rect = pygame.Rect((CoordXY[0], CoordXY[1], SizeWH[0], SizeWH[1]))
+		self.score = score
+		self.sound = sound
+		self.name = name
+		if group != None:
+			self.add(group)
 	
 	def update(self, *args):
 		pass
