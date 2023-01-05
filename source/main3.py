@@ -107,14 +107,13 @@ class TGroupPosition(dict):
 	def isemty(self):
 		return len(self) == 0
 	
-	def remove(self, PosI, PosJ = None):
-		if PosJ != None:
-			if PosI in self.keys():
-				if ((type(self[PosI]) == dict) and (PosJ in self[PosI].keys())):
-					del self[PosI][PosJ]
+	def remove(self, keyPosI, keyPosJ = None):
+		if keyPosJ != None:
+			if self.get(keyPosI, dict()).get(keyPosJ, False):
+				del self[keyPosI][keyPosJ]
 		else:
-			if PosI in self.keys():
-				del self[PosI]
+			if keyPosI in self.keys():
+				del self[keyPosI]
 	
 	def has_internal(self, sprite):
 		return sprite in self.sprites(True)
@@ -152,9 +151,9 @@ class TGroupPosition(dict):
 	
 	def sort(self):
 		self = dict(sorted(self.items(), key=lambda i: i[0]))
-		for row in self.items():
-			if type(self[row]) == dict:
-				self[row] = dict(sorted(row.items(),  key=lambda j: j[0]))
+		for row in thedict.items():
+			if type(row[1]) == dict:
+				self[row[0]] = dict(sorted(row[1].items(),  key=lambda j: j[0]))
 	
 	def returnFourPos(self, PosIJ: tuple, isTuple: bool = False):
 		OnSprites = []
@@ -177,17 +176,19 @@ class TGroupPosition(dict):
 	
 	def updates(self, *args):
 		for row in self.values():
-			for col in row.values():
-				if hasattr(col, 'update'):
-					col.update(*args)
+			if type(row) == dict:
+				for col in row.values():
+					if hasattr(col, 'update'):
+						col.update(*args)
 	
 	def draw(self, surf, isDisplayUpdate: bool = False):
 		for row in self.values():
-			for col in row.values():
-				if hasattr(col, 'image') and hasattr(col, 'rect'):
-					surf.blit(col.image, col.rect)
-					if isDisplayUpdate:
-						pygame.display.update()
+			if type(row) == dict:
+				for col in row.values():
+					if hasattr(col, 'image') and hasattr(col, 'rect'):
+						surf.blit(col.image, col.rect)
+						if isDisplayUpdate:
+							pygame.display.update()
 
 W, H = 596, 385
 FPS = 60
