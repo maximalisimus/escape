@@ -1008,6 +1008,7 @@ def main():
 	#bonus3 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[2]['image']), (72, 120, 0, 0), None, \
 	#				all_bonuses[2]['score'], effects[all_bonuses[2]['name']], all_bonuses[2]['name'])
 	#group1.add(bonus1)
+	##group1.add((bonus1, bonus2))
 	#group1.add(bonus2)
 	#group2.add(bonus3)
 	#group1.draw(screen1, True)
