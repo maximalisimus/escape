@@ -900,25 +900,17 @@ class Helicopter:
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
 
-def SwitchInitImage(surface):
+def Restart(surface):
 	global isGame
-	global isStart
-	isGame = True
-	isStart = False
-	surface.blit(LoadSurf(background), (0, 0))
-	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
-	restart(surface)
-	pygame.display.update()
-
-def restart(screen):
-	global isGame
-	
 	global score_bg
 	global coord_score_bg
 	
-	isGame = True	
+	isGame = True
+	surface.blit(LoadSurf(background), (0, 0))
+	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+	pygame.display.update()
 	DrawTotal(score_bg, 0, 1, 4, True)
-	screen.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	pygame.display.update()
 
 class Block(pygame.sprite.Sprite):
@@ -979,13 +971,6 @@ def scene1():
 	global screen1
 	global clock
 	
-	global surf_table
-	global rect_table
-	
-	global score_bg
-	global coord_score_bg
-	
-	global isStart
 	global isGame
 	
 	global logo	
@@ -993,16 +978,46 @@ def scene1():
 	screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
 	del surf_start_bg, logo
+		
+	running = True
+	while running:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				running = False
+				SwitchScene(None)
+			elif event.type == pygame.KEYDOWN:
+				# event.key
+				pass
+			elif event.type == pygame.KEYUP:
+				# if event.key in []:
+				pass
+			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				SwitchScene(scene2)
+				Restart(screen1)
+				running = False
+			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+				pass
+		
+		clock.tick(FPS)
+
+def scene2():
+	global screen1
+	global clock
 	
+	global surf_table
+	global rect_table
+	
+	global score_bg
+	global coord_score_bg
+	
+	global isGame
+		
 	### Debug
 	
 	score = 0
 	live = 4
 	level = 1
-	
-	SwitchInitImage(screen1)
-	pygame.display.update()
-	
+		
 	### Debug
 	
 	running = True
@@ -1018,9 +1033,7 @@ def scene1():
 				# if event.key in []:
 				pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				if isStart:
-					SwitchInitImage(screen1)
-				elif isGame:
+				if isGame:
 					pass
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
