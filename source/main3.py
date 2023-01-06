@@ -138,13 +138,7 @@ class TGroup(dict):
 		if not hasattr(onkeys, '__iter__'):
 			for row in self.keys():
 				if onkeys == row:
-					if type(self[row]) == dict:
-						for col in self[row].keys():
-							if onkeys == col:
-								return True
-						return False
-					else:
-						return True
+					return True
 			return False
 		else:
 			if len(onkeys) == 2:
