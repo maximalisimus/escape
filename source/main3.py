@@ -94,16 +94,18 @@ class TypeBlock(NoValue):
 
 class TGroup(dict):
 	
-	_spritegroup = True
-	
 	def add(self, *args):
 		if len(args) > 0:
 			if len(args) == 1:
 				if not hasattr(args[0], '__iter__'):
 					if not self.has_internal(args[0]):
-						self[len(self)] = args[0]
-						if hasattr(args[0], 'add_internal'):
-							args[0].add_internal(self)
+						if hasattr(args[0], 'i') and hasattr(args[0], 'j'):
+							if args[0].i != None and args[0].j != None:
+								self.add(args[0], args[0].i, args[0].j)
+							else:
+								self[len(self)] = args[0]
+						else:
+							self[len(self)] = args[0]
 				else:
 					for sprite in args[0]:
 						try:
@@ -119,24 +121,8 @@ class TGroup(dict):
 				if type(self[args[1]]) == dict:
 					self[args[1]][args[2]] = args[0]
 	
-	def add_internal(self, sprite, layer = None):
-		if hasattr(sprite, 'i') and hasattr(sprite, 'j'):
-			if sprite.i != None and sprite.j != None:
-				self.add(sprite, sprite.i, sprite.j)
-			else:
-				self.add(sprite)
-		else:
-			self.add(sprite)
-	
-	def remove_internal(self, sprite):
-		self.remove(sprite)
-	
 	def isemty(self):
 		return len(self) == 0
-	
-	def empty(self):
-		for sprite in self.sprites():
-			self.remove(sprite)
 	
 	def searchkey(self, value):
 		for row in self.items():
@@ -145,24 +131,21 @@ class TGroup(dict):
 					if value == col[1]:
 						return (row[0], col[0])
 			else:
-				return row[0]
+				if value == row[1]:
+					return row[0]
 		return False
 	
 	def remove(self, *args):
 		if len(args) > 0 and len(args) < 3:
 			if len(args) == 1:
 				if not hasattr(args[0], '__iter__'):
-					if args[0] in self.sprites(True):
+					if self.has_internal(args[0]):
 						onkeys = self.searchkey(args[0])
 						if onkeys:
 							if type(onkeys) == tuple:
 								self.remove(onkeys[0], onkeys[1])
-								if hasattr(args[0], 'remove_internal'):
-									args[0].remove_internal(self)
 							else:
 								del self[onkeys]
-								if hasattr(args[0], 'remove_internal'):
-									args[0].remove_internal(self)
 				else:
 					for sprite in args[0]:
 						try:
@@ -236,22 +219,6 @@ class TGroup(dict):
 					surf.blit(row.image, row.rect)
 					if isDisplayUpdate:
 						pygame.display.update()
-	
-	def kill(self):
-		for row in self.items():
-			if type(row[1]) == dict:
-				for col in row[1].items():
-					del self[row[0]][col[0]]
-					if hasattr(col[1], 'remove_internal'):
-						col[1].remove_internal(self)
-			else:
-				del self[row[0]]
-				if hasattr(row[1], 'remove_internal'):
-					row[1].remove_internal(self)
-	
-	def groups(self):
-		return self.sprites()
-	
 
 def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
 	if objA.rect.right > objB.rect.left and \
@@ -938,7 +905,7 @@ class Block(pygame.sprite.Sprite):
 	
 	def __init__(self, OnType: TypeBlock = TypeBlock.Unknown, \
 				surf = None, \
-				CoordXY: Tuple[int, int] = (0, 0), \
+				CoordXY: Tuple[int, ...] = (0, 0), \
 				group = None, \
 				score = None, sound = None, name = None, \
 				SizeWH: Tuple[int, int] = (size_blocks, size_blocks), \
@@ -947,13 +914,16 @@ class Block(pygame.sprite.Sprite):
 		self.type = OnType
 		if surf != None:
 			self.image = surf
-			self.rect = self.image.get_rect(topleft=CoordXY)
+			self.rect = self.image.get_rect(topleft=(CoordXY[0], CoordXY[1]))
 		else:
 			self.rect = pygame.Rect((CoordXY[0], CoordXY[1], SizeWH[0], SizeWH[1]))
 			if isEmptySurf:
 				self.image = CreateEmtySurf(SizeWH[0], SizeWH[1])
 			else:
 				self.image = surf
+		if len(CoordXY) == 4:
+			self.i = CoordXY[2]
+			self.j = CoordXY[3]
 		self.score = score
 		self.sound = sound
 		self.name = name
@@ -967,7 +937,7 @@ class BombHeart(Block):
 	
 	def __init__(self, \
 				caseNum: int = 1, \
-				CoordXY: Tuple[int, int] = (0, 0), \
+				CoordXY: Tuple[int, ...] = (0, 0), \
 				group = None, \
 				sound = None, \
 				SizeWH: Tuple[int, int] = (size_blocks, size_blocks), \
@@ -1015,7 +985,7 @@ def main():
 	
 	SwitchInitImage(screen1)
 	pygame.display.update()
-	
+		
 	### Debug
 	
 	while RUN:
