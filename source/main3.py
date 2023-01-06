@@ -108,11 +108,8 @@ class TGroup(dict):
 							self[len(self)] = args[0]
 				else:
 					for sprite in args[0]:
-						try:
-							self.add(sprite,)
-						except (TypeError, AttributeError):
-							if not self.has_internal(sprite):
-								self.add(sprite)
+						if not self.has_internal(sprite):
+							self.add(sprite)
 			elif len(args) == 2:
 				self[args[1]] = args[0]
 			elif len(args) == 3:
@@ -124,7 +121,7 @@ class TGroup(dict):
 	def isemty(self):
 		return len(self) == 0
 	
-	def searchkey(self, value):
+	def searchvalue(self, value):
 		for row in self.items():
 			if type(row[1]) == dict:
 				for col in row[1].items():
@@ -135,12 +132,21 @@ class TGroup(dict):
 					return row[0]
 		return False
 	
+	def searchkey(self, onkeys):
+		if not onkeys:
+			return False
+		if not hasattr(onkeys, '__iter__'):
+			pass
+		else:
+			for key in onkeys:
+				pass
+	
 	def remove(self, *args):
 		if len(args) > 0 and len(args) < 3:
 			if len(args) == 1:
 				if not hasattr(args[0], '__iter__'):
 					if self.has_internal(args[0]):
-						onkeys = self.searchkey(args[0])
+						onkeys = self.searchvalue(args[0])
 						if onkeys:
 							if type(onkeys) == tuple:
 								self.remove(onkeys[0], onkeys[1])
@@ -148,11 +154,8 @@ class TGroup(dict):
 								del self[onkeys]
 				else:
 					for sprite in args[0]:
-						try:
-							self.remove(sprite,)
-						except (TypeError, AttributeError):
-							if self.has_internal(sprite):
-								self.remove(sprite)
+						if self.has_internal(sprite):
+							self.remove(sprite)
 			elif len(args) == 2:
 				if self.get(args[0], dict()).get(args[1], False):
 					del self[args[0]][args[1]]
@@ -160,22 +163,25 @@ class TGroup(dict):
 	def has_internal(self, sprite):
 		return sprite in self.sprites(True)
 	
-	def has(*sprites) -> bool:
+	def has(self, sprites) -> bool:
 		if not sprites:
 			return False
-		for sprite in sprites:
-			try:
-				if not self.has(*sprite):
-					return False
-			except (TypeError, AttributeError):
-				if hasattr(sprite, "_spritegroup"):
-					for spr in sprite.sprites():
-						if not self.has_internal(spr):
-							return False
-				else:
-					if not self.has_internal(sprite):
-						return False			
-		return True
+		if not hasattr(sprites, '__iter__'):
+			return self.has_internal(sprites)
+		else:
+			tmp = []
+			for sprite in sprites:
+				tmp.append(self.has_internal(sprite))
+			return tuple(tmp)
+	
+	def haspos(self, keys):
+		if not keys:
+			return False
+		if not hasattr(keys, '__iter__'):
+			pass
+		else:
+			for key in keys:
+				pass
 	
 	def sprites(self, isTuple: bool = False):
 		OnSprites = []
@@ -986,7 +992,27 @@ def main():
 	
 	SwitchInitImage(screen1)
 	pygame.display.update()
-		
+	
+	#group1 = TGroup()
+	#group2 = TGroup()
+	#bonus1 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[0]['image']), (24, 120), None, \
+	#				all_bonuses[0]['score'], effects[all_bonuses[0]['name']], all_bonuses[0]['name'])
+	#bonus2 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[1]['image']), (48, 120), None, \
+	#				all_bonuses[1]['score'], effects[all_bonuses[1]['name']], all_bonuses[1]['name'])
+	#bonus3 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[2]['image']), (72, 120, 3, 5), None, \
+	#				all_bonuses[2]['score'], effects[all_bonuses[2]['name']], all_bonuses[2]['name'])
+	#group1.add(bonus1)
+	#group1.add(bonus2)
+	#group2.add(bonus3)
+	#group1.draw(screen1, True)
+	#group2.draw(screen1, True)
+	#print(group1.has(bonus1), group1.has((bonus2, bonus3),), group2.has(bonus3))
+	#print(group1)
+	#print(group2)
+	#group1.remove(bonus2)
+	#print(group1)
+	#print(group2)
+	
 	### Debug
 	
 	while RUN:
