@@ -132,14 +132,31 @@ class TGroup(dict):
 					return row[0]
 		return False
 	
-	def searchkey(self, onkeys):
+	def searchkey(self, *onkeys) -> bool:
 		if not onkeys:
 			return False
 		if not hasattr(onkeys, '__iter__'):
-			pass
+			for row in self.keys():
+				if onkeys == row:
+					if type(self[row]) == dict:
+						for col in self[row].keys():
+							if onkeys == col:
+								return True
+						return False
+					else:
+						return True
+			return False
 		else:
-			for key in onkeys:
-				pass
+			if len(onkeys) == 2:
+				for row in self.keys():
+					if row == onkeys[0]:
+						if type(self[row]) == dict:
+							for col in self[row].keys():
+								if onkeys == col:
+									return True
+							return False
+						else:
+							return True
 	
 	def remove(self, *args):
 		if len(args) > 0 and len(args) < 3:
@@ -163,7 +180,7 @@ class TGroup(dict):
 	def has_internal(self, sprite):
 		return sprite in self.sprites(True)
 	
-	def has(self, sprites) -> bool:
+	def has(self, *sprites) -> bool:
 		if not sprites:
 			return False
 		if not hasattr(sprites, '__iter__'):
