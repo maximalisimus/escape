@@ -121,6 +121,10 @@ class TGroup(dict):
 	def isemty(self):
 		return len(self) == 0
 	
+	def empty(self):
+		for sprite in self.sprites():
+			self.remove(sprite)
+	
 	def searchvalue(self, value):
 		for row in self.items():
 			if type(row[1]) == dict:
@@ -346,44 +350,44 @@ pos_clicked = {
 					},
 			}
 
-medicine_image = pathlib.Path('./images/medicine-chest.png').resolve()
+medicine_image = LoadSurf(pathlib.Path('./images/medicine-chest.png').resolve())
 mdeicine_score = 1
 medicine_name = 'medicine_chest'
 
 all_bonuses = {
 				0: {
 					'name': 'alarm',
-					'image': pathlib.Path('./images/alarm.png').resolve(),
+					'surf': LoadSurf(pathlib.Path('./images/alarm.png').resolve()),
 					'score': 100,
 					},
 				1: {
 					'name': 'burger',
-					'image': pathlib.Path('./images/burger.png').resolve(),
+					'surf': LoadSurf(pathlib.Path('./images/burger.png').resolve()),
 					'score': 50,
 					},
 				2: {
 					'name': 'clock',
-					'image': pathlib.Path('./images/clock.png').resolve(),
+					'surf': LoadSurf(pathlib.Path('./images/clock.png').resolve()),
 					'score': 30,
 					},
 				3: {
 					'name': 'coffee',
-					'image': pathlib.Path('./images/coffee.png').resolve(),
+					'surf': LoadSurf(pathlib.Path('./images/coffee.png').resolve()),
 					'score': 20,
 					},
 				4: {
 					'name': 'cola',
-					'image': pathlib.Path('./images/cola.png').resolve(),
+					'surf': LoadSurf(pathlib.Path('./images/cola.png').resolve()),
 					'score': 10,
 					},
 				5: {
 					'name': 'stop',
-					'image': pathlib.Path('./images/stop.png').resolve(),
+					'surf': LoadSurf(pathlib.Path('./images/stop.png').resolve()),
 					'score': 1,
 					},
 				6: {
 					'name': 'thermos',
-					'image': pathlib.Path('./images/thermos.png').resolve(),
+					'surf': LoadSurf(pathlib.Path('./images/thermos.png').resolve()),
 					'score': 1,
 					},
 			}
@@ -1018,7 +1022,16 @@ def scene2():
 	score = 0
 	live = 4
 	level = 1
-		
+	
+	#group1 = TGroup()
+	#group2 = TGroup()
+	#bonus1 = Block(TypeBlock.Bonus, all_bonuses[0]['surf'], (24,24), None, \
+	#				all_bonuses[0]['score'], effects[all_bonuses[0]['name']], \
+	#				all_bonuses[0]['name'])
+	#group1.add(bonus1)
+	#group1.draw(screen1, True)
+	#print(group1)
+	
 	### Debug
 	
 	running = True
