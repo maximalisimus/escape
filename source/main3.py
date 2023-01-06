@@ -132,16 +132,15 @@ class TGroup(dict):
 					return row[0]
 		return False
 	
-	def searchkey(self, onkeys) -> bool:
+	def searchkey(self, *onkeys) -> bool:
 		if not onkeys:
 			return False
-		if not hasattr(onkeys, '__iter__'):
+		if len(onkeys) == 1:
 			for row in self.keys():
-				if str(row) == str(onkeys):
+				if str(row) == str(onkeys[0]):
 					return True
 			return False
-		else:
-			if len(onkeys) == 2:
+		elif len(onkeys) == 2:
 				for row in self.keys():
 					if str(row) == str(onkeys[0]):
 						if type(self[row]) == dict:
@@ -174,21 +173,21 @@ class TGroup(dict):
 	def has_internal(self, sprite):
 		return sprite in self.sprites(True)
 	
-	def has(self, sprites) -> bool:
+	def has(self, *sprites) -> bool:
 		if not sprites:
 			return False
-		if not hasattr(sprites, '__iter__'):
-			return self.has_internal(sprites)
+		if len(sprites) == 1:
+			return self.has_internal(sprites[0])
 		else:
 			tmp = []
 			for sprite in sprites:
 				tmp.append(self.has_internal(sprite))
 			return tuple(tmp)
 	
-	def haspos(self, keys):
+	def haspos(self, *keys):
 		if not keys:
 			return False
-		return self.searchkey(keys)
+		return self.searchkey(*keys)
 	
 	def sprites(self, isTuple: bool = False):
 		OnSprites = []
@@ -1013,11 +1012,11 @@ def main():
 	#group2.add(bonus3)
 	#group1.draw(screen1, True)
 	#group2.draw(screen1, True)
-	#print(group1.has(bonus1), group1.has((bonus2, bonus3)), group2.has(bonus3))
+	#print(group1.has(bonus1), group1.has(bonus2, bonus3), group2.has(bonus3))
 	#print(group1)
 	#print(group2)
 	#print(group1.haspos(1), group1.haspos(2), group1.haspos(3))
-	#print(group2.haspos((0,0)), group2.haspos((3,5)))
+	#print(group2.haspos(0,0), group2.haspos(3,5))
 	#group1.remove(bonus2)
 	#print(group1)
 	#print(group2)
