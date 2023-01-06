@@ -950,19 +950,25 @@ class BombHeart(Block):
 	def update(self, *args):
 		pass
 
-def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
-	if objA.rect.right > objB.rect.left and \
-	objA.rect.left < objB.rect.right and \
-	objA.rect.bottom > objB.rect.top and \
-	objA.rect.top < objB.rect.bottom:
-		return True
-	else:
-		return False
-
 def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided=None):
 	ipos = sprite.rect.y // sprite.SizeWH[1]
 	jpos = sprite.rect.x // sprite.SizeWH[0]
-	pass
+	out_blocks = []
+	in_blocks = set(group.get(ipos, dict()).get(jpos, False), \
+					group.get(ipos, dict()).get(jpos+1, False), \
+					group.get(ipos+1, dict()).get(jpos, False), \
+					group.get(ipos+1, dict()).get(jpos+1, False))
+	in_blocks.discard('')
+	for group_sprite in in_blocks:
+		if collided is not None:
+			if collided(sprite, group_sprite):
+				out_blocks.append(group_sprite)
+		else:
+			if pygame.sprite.collide_rect(sprite, group_sprite):
+				out_blocks.append(group_sprite)
+		if dokill:
+			group.remove(group_block)
+	return out_blocks
 
 def BuildLevel(surf):
 	pass
