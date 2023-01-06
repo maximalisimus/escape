@@ -220,20 +220,6 @@ class TGroup(dict):
 					if isDisplayUpdate:
 						pygame.display.update()
 
-def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
-	if objA.rect.right > objB.rect.left and \
-	objA.rect.left < objB.rect.right and \
-	objA.rect.bottom > objB.rect.top and \
-	objA.rect.top < objB.rect.bottom:
-		return True
-	else:
-		return False
-
-def CollideGroupPos(sprite, group: TGroup, SizeWH: Tuple[int, int], dokill: bool = False, collided=None):
-	ipos = sprite.rect.y // SizeWH[1]
-	jpos = sprite.rect.x // SizeWH[0]
-	pass
-
 W, H = 596, 385
 FPS = 60
 
@@ -924,6 +910,7 @@ class Block(pygame.sprite.Sprite):
 		if len(CoordXY) == 4:
 			self.i = CoordXY[2]
 			self.j = CoordXY[3]
+		self.SizeWH = SizeWH
 		self.score = score
 		self.sound = sound
 		self.name = name
@@ -950,6 +937,20 @@ class BombHeart(Block):
 	
 	def update(self, *args):
 		pass
+
+def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
+	if objA.rect.right > objB.rect.left and \
+	objA.rect.left < objB.rect.right and \
+	objA.rect.bottom > objB.rect.top and \
+	objA.rect.top < objB.rect.bottom:
+		return True
+	else:
+		return False
+
+def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided=None):
+	ipos = sprite.rect.y // sprite.SizeWH[1]
+	jpos = sprite.rect.x // sprite.SizeWH[0]
+	pass
 
 def BuildLevel(surf):
 	pass
