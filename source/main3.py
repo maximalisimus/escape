@@ -103,9 +103,9 @@ class TGroup(dict):
 							if args[0].i != None and args[0].j != None:
 								self.add(args[0], args[0].i, args[0].j)
 							else:
-								self[len(self)] = args[0]
+								self[len(self)+1] = args[0]
 						else:
-							self[len(self)] = args[0]
+							self[len(self)+1] = args[0]
 				else:
 					for sprite in args[0]:
 						if not self.has_internal(sprite):
@@ -132,25 +132,25 @@ class TGroup(dict):
 					return row[0]
 		return False
 	
-	def searchkey(self, *onkeys) -> bool:
+	def searchkey(self, onkeys) -> bool:
 		if not onkeys:
 			return False
 		if not hasattr(onkeys, '__iter__'):
 			for row in self.keys():
-				if onkeys == row:
+				if str(row) == str(onkeys):
 					return True
 			return False
 		else:
 			if len(onkeys) == 2:
 				for row in self.keys():
-					if row == onkeys[0]:
+					if str(row) == str(onkeys[0]):
 						if type(self[row]) == dict:
 							for col in self[row].keys():
-								if onkeys == col:
+								if str(onkeys[1]) == str(col):
 									return True
-							return False
 						else:
 							return True
+				return False
 	
 	def remove(self, *args):
 		if len(args) > 0 and len(args) < 3:
@@ -174,7 +174,7 @@ class TGroup(dict):
 	def has_internal(self, sprite):
 		return sprite in self.sprites(True)
 	
-	def has(self, *sprites) -> bool:
+	def has(self, sprites) -> bool:
 		if not sprites:
 			return False
 		if not hasattr(sprites, '__iter__'):
@@ -188,11 +188,7 @@ class TGroup(dict):
 	def haspos(self, keys):
 		if not keys:
 			return False
-		if not hasattr(keys, '__iter__'):
-			pass
-		else:
-			for key in keys:
-				pass
+		return self.searchkey(keys)
 	
 	def sprites(self, isTuple: bool = False):
 		OnSprites = []
@@ -1010,16 +1006,18 @@ def main():
 	#				all_bonuses[0]['score'], effects[all_bonuses[0]['name']], all_bonuses[0]['name'])
 	#bonus2 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[1]['image']), (48, 120), None, \
 	#				all_bonuses[1]['score'], effects[all_bonuses[1]['name']], all_bonuses[1]['name'])
-	#bonus3 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[2]['image']), (72, 120, 3, 5), None, \
+	#bonus3 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[2]['image']), (72, 120, 0, 0), None, \
 	#				all_bonuses[2]['score'], effects[all_bonuses[2]['name']], all_bonuses[2]['name'])
 	#group1.add(bonus1)
 	#group1.add(bonus2)
 	#group2.add(bonus3)
 	#group1.draw(screen1, True)
 	#group2.draw(screen1, True)
-	#print(group1.has(bonus1), group1.has((bonus2, bonus3),), group2.has(bonus3))
+	#print(group1.has(bonus1), group1.has((bonus2, bonus3)), group2.has(bonus3))
 	#print(group1)
 	#print(group2)
+	#print(group1.haspos(1), group1.haspos(2), group1.haspos(3))
+	#print(group2.haspos((0,0)), group2.haspos((3,5)))
 	#group1.remove(bonus2)
 	#print(group1)
 	#print(group2)
