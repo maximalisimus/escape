@@ -390,7 +390,7 @@ all_bonuses = {
 
 logo = pathlib.Path('./images/esc_t.png').resolve()
 
-background = pathlib.Path('./images/esc-bg.png').resolve()
+background = LoadSurf(pathlib.Path('./images/esc-bg.png').resolve())
 score_bg = LoadSurf(pathlib.Path('./images/score-bg.png').resolve())
 live_bg = LoadSurf(pathlib.Path('./images/live-bg.png').resolve())
 died_bg = LoadSurf(pathlib.Path('./images/died-bg.png').resolve())
@@ -906,9 +906,6 @@ def Restart(surface):
 	global coord_score_bg
 	
 	isGame = True
-	surface.blit(LoadSurf(background), (0, 0))
-	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
-	pygame.display.update()
 	DrawTotal(score_bg, 0, 1, 4, True)
 	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	pygame.display.update()
@@ -1011,7 +1008,11 @@ def scene2():
 	global coord_score_bg
 	
 	global isGame
-		
+	
+	screen1.blit(background, (0, 0))
+	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+	pygame.display.update()
+	
 	### Debug
 	
 	score = 0
