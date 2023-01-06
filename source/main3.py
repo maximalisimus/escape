@@ -414,10 +414,6 @@ blade_up_path = pathlib.Path('./images/blade-up.png').resolve()
 surf_table = CreateEmtySurf(size_table[0], size_table[1])
 rect_table = surf_table.get_rect(topleft=(0, 0))
 
-src_surf_bonus = CreateEmtySurf(size_table[0], size_table[1])
-surf_bonus = pygame.Surface.copy(src_surf_bonus)
-rect_bonus = surf_bonus.get_rect(topleft=(0, 0))
-
 surf_score = CreateEmtySurf(size_surf_score[0], size_surf_score[1])
 surf_level = CreateEmtySurf(size_surf_level[0], size_surf_level[1])
 surf_lives = CreateEmtySurf(size_surf_lives[0], size_surf_lives[1])
@@ -985,8 +981,6 @@ def scene1():
 	
 	global surf_table
 	global rect_table
-	global surf_bonus
-	global rect_bonus
 	
 	global score_bg
 	global coord_score_bg
