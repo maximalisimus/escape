@@ -229,7 +229,7 @@ def CollideRectAB(objA: pygame.Rect, objB: pygame.Rect):
 	else:
 		return False
 
-def CollideGroupPos(sprite, group, SizeWH: Tuple[int, int], dokill: bool = False, collided=None):
+def CollideGroupPos(sprite, group: TGroup, SizeWH: Tuple[int, int], dokill: bool = False, collided=None):
 	ipos = sprite.rect.y // SizeWH[1]
 	jpos = sprite.rect.x // SizeWH[0]
 	pass
