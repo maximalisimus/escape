@@ -261,6 +261,8 @@ screen1 = pygame.display.set_mode((W, H))
 pygame.display.set_caption("Esc")
 pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath('logo.png').resolve())))
 
+current_scene = None
+
 clock = pygame.time.Clock()
 
 size_blocks = 24
@@ -709,6 +711,10 @@ def SwitchHero(CasePos: SelectHeroPos):
 			SelectHeroPos.Right: LoadSurf(SelectHero(2)),
 	}.get(CasePos, LoadSurf(SelectHero(0)))
 
+def SwitchScene(scene):
+	global current_scene
+	current_scene = scene
+
 def print_level(level: int) -> str:
 	if level<10:
 		return f"0{level}"
@@ -973,7 +979,7 @@ class BombHeart(Block):
 def BuildLevel(surf):
 	pass
 
-def main():
+def scene1():
 	global screen1
 	global clock
 	
@@ -994,8 +1000,6 @@ def main():
 	pygame.display.update()
 	del surf_start_bg, logo
 	
-	RUN = True
-	
 	### Debug
 	
 	score = 0
@@ -1005,36 +1009,14 @@ def main():
 	SwitchInitImage(screen1)
 	pygame.display.update()
 	
-	#group1 = TGroup()
-	#group2 = TGroup()
-	#bonus1 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[0]['image']), (24, 120), None, \
-	#				all_bonuses[0]['score'], effects[all_bonuses[0]['name']], all_bonuses[0]['name'])
-	#bonus2 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[1]['image']), (48, 120), None, \
-	#				all_bonuses[1]['score'], effects[all_bonuses[1]['name']], all_bonuses[1]['name'])
-	#bonus3 = Block(TypeBlock.Bonus, LoadSurf(all_bonuses[2]['image']), (72, 120, 0, 0), None, \
-	#				all_bonuses[2]['score'], effects[all_bonuses[2]['name']], all_bonuses[2]['name'])
-	#group1.add(bonus1)
-	##group1.add((bonus1, bonus2))
-	#group1.add(bonus2)
-	#group2.add(bonus3)
-	#group1.draw(screen1, True)
-	#group2.draw(screen1, True)
-	#print(group1.has(bonus1), group1.has(bonus2, bonus3), group2.has(bonus3))
-	#print(group1)
-	#print(group2)
-	#print(group1.haspos(1), group1.haspos(2), group1.haspos(3))
-	#print(group2.haspos(0,0), group2.haspos(3,5))
-	#group1.remove(bonus2)
-	#print(group1)
-	#print(group2)
-	
 	### Debug
 	
-	while RUN:
+	running = True
+	while running:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				RUN = False
-				exit()
+				running = False
+				SwitchScene(None)
 			elif event.type == pygame.KEYDOWN:
 				# event.key
 				pass
@@ -1061,6 +1043,11 @@ def main():
 		#	pygame.display.update()
 		
 		clock.tick(FPS)
+
+def main():
+	SwitchScene(scene1)
+	while current_scene is not None:
+		current_scene()
 
 if __name__ == '__main__':
 	main()
