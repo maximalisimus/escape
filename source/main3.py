@@ -232,7 +232,7 @@ class TGroup(dict):
 					if isDisplayUpdate:
 						pygame.display.update()
 
-def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided=None):
+def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided = None):
 	ipos = sprite.rect.y // sprite.SizeWH[1]
 	jpos = sprite.rect.x // sprite.SizeWH[0]
 	out_blocks = []
@@ -250,7 +250,7 @@ def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided=None):
 				out_blocks.append(group_sprite)
 		if dokill:
 			group.remove(group_block)
-	return out_blocks
+	return tuple(out_blocks)
 
 W, H = 596, 385
 FPS = 60
