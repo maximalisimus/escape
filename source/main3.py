@@ -1023,15 +1023,6 @@ def scene2():
 	live = 4
 	level = 1
 	
-	#group1 = TGroup()
-	#group2 = TGroup()
-	#bonus1 = Block(TypeBlock.Bonus, all_bonuses[0]['surf'], (24,24), None, \
-	#				all_bonuses[0]['score'], effects[all_bonuses[0]['name']], \
-	#				all_bonuses[0]['name'])
-	#group1.add(bonus1)
-	#group1.draw(screen1, True)
-	#print(group1)
-	
 	### Debug
 	
 	running = True
