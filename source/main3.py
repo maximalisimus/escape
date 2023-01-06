@@ -240,7 +240,7 @@ def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided = None
 					group.get(ipos, dict()).get(jpos+1, False), \
 					group.get(ipos+1, dict()).get(jpos, False), \
 					group.get(ipos+1, dict()).get(jpos+1, False))
-	in_blocks.discard('')
+	in_blocks.discard(False)
 	for group_sprite in in_blocks:
 		if collided is not None:
 			if collided(sprite, group_sprite):
