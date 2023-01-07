@@ -7,6 +7,113 @@ from typing import Tuple
 from enum import Enum
 import random
 
+class TDict:
+	
+	__slots__ = '__dict__'
+	
+	def __init__(self, *args):
+		self.__dict__ = dict(*args)
+	
+	def __setitem__(self, key, item):
+		self.__dict__[key] = item
+
+	def __getitem__(self, key):
+		return self.__dict__[key]
+
+	def __repr__(self):
+		return f"{self.__class__}"
+
+	def __len__(self):
+		return len(self.__dict__)
+
+	def __delitem__(self, key):
+		del self.__dict__[key]
+
+	def clear(self):
+		return self.__dict__.clear()
+
+	def copy(self):
+		return self.__dict__.copy()
+
+	def has_key(self, k):
+		return k in self.__dict__
+
+	def update(self, *args, **kwargs):
+		return self.__dict__.update(*args, **kwargs)
+
+	def keys(self):
+		return self.__dict__.keys()
+
+	def values(self):
+		return self.__dict__.values()
+
+	def items(self):
+		return self.__dict__.items()
+
+	def pop(self, *args):
+		return self.__dict__.pop(*args)
+
+	def setdefault(self, k, d = None):
+		return self.__dict__.setdefault(k, d)
+
+	def fromkeys(self, iterable, value = None):
+		if hasattr(iterable, '__iter__'):
+			if not hasattr(value, '__iter__'):
+				for item in iterable:
+					self.__dict__[item] = value
+			else:
+				if len(value) >= len(iterable):
+					for count in range(len(iterable)):
+						self.__dict__[iterable[count]] = value[count]
+				elif len(value) < len(iterable):
+					for count in range(len(value)):
+						self.__dict__[iterable[count]] = value[count]
+		return self
+	
+	def sort(self):
+		self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0]))
+		return self
+	
+	def popitem(self):
+		return self.__dict__.popitem()
+
+	def __or__(self, other):
+		if not isinstance(other, TDict):
+			return NotImplemented
+		new = TDict(self)
+		new.update(other)
+		return new
+
+	def __ror__(self, other):
+		if not isinstance(other, TDict):
+			return NotImplemented
+		new = TDict(other)
+		new.update(self)
+		return new
+
+	def __ior__(self, other):
+		TDict.update(self, other)
+		return self
+	
+	def __reversed__(self):
+		self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse=True))
+		return self
+
+	def __str__(self):
+		return self.__dict__.__str__()
+
+	def __cmp__(self, dict_):
+		return self.__cmp__(self.__dict__, dict_)
+
+	def __contains__(self, item):
+		return item in self.__dict__
+
+	def __iter__(self):
+		return iter(self.__dict__)
+
+	def __unicode__(self):
+		return unicode(repr(self.__dict__))
+
 class NoValue(Enum):
 	''' Base Enum class elements '''
 
