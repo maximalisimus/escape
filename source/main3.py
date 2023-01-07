@@ -94,6 +94,9 @@ class TypeBlock(NoValue):
 
 class TGroup(dict):
 	
+	def __init__(self, *args, **kwargs):
+		super(TGroup, self).__init__(*args, **kwargs)
+	
 	def add(self, *args):
 		if len(args) > 0:
 			if len(args) == 1:
@@ -161,7 +164,7 @@ class TGroup(dict):
 				if not hasattr(args[0], '__iter__'):
 					if self.has_internal(args[0]):
 						onkeys = self.searchvalue(args[0])
-						if onkeys:
+						if onkeys != False:
 							if type(onkeys) == tuple:
 								self.remove(onkeys[0], onkeys[1])
 							else:
@@ -191,7 +194,10 @@ class TGroup(dict):
 	def haspos(self, *keys):
 		if not keys:
 			return False
-		return self.searchkey(*keys)
+		if len(keys) == 1:
+			return self.searchkey(keys[0])
+		else:
+			return self.searchkey(*keys)
 	
 	def sprites(self, isTuple: bool = False):
 		OnSprites = []
@@ -1022,7 +1028,7 @@ def scene2():
 	score = 0
 	live = 4
 	level = 1
-	
+		
 	### Debug
 	
 	running = True
