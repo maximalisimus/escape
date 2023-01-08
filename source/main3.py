@@ -78,7 +78,13 @@ class TDict(object):
 		if len(set(map(type, self.keys()))) == 1  and len(set(map(type, self.values()))) == 1:
 			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse = revers)) if iskey else \
 							dict(sorted(self.__dict__.items(), key=lambda i: i[1], reverse = revers))
-		else:
+		elif len(set(map(type, self.keys()))) == 1 and len(set(map(type, self.values()))) > 1:
+			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse = revers)) if iskey else \
+							dict(sorted(self.__dict__.items(), key=lambda i: str(i[1]), reverse = revers))
+		elif len(set(map(type, self.keys()))) > 1  and len(set(map(type, self.values()))) == 1:
+			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: str(i[0]), reverse = revers)) if iskey else \
+							dict(sorted(self.__dict__.items(), key=lambda i: i[1], reverse = revers))
+		elif len(set(map(type, self.keys()))) > 1  and len(set(map(type, self.values()))) > 1:
 			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: str(i[0]), reverse = revers)) if iskey else \
 							dict(sorted(self.__dict__.items(), key=lambda i: str(i[1]), reverse = revers))
 		return self
@@ -107,6 +113,8 @@ class TDict(object):
 	def __reversed__(self):
 		if len(set(map(type, self.keys()))) == 1:
 			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse=True))
+		else:
+			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: str(i[0]), reverse=True))
 		return self
 
 	def __str__(self):
