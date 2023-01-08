@@ -74,21 +74,65 @@ class TDict(object):
 						self.__dict__[iterable[count]] = value[count]
 		return self
 	
-	def sort(self, iskey: bool = True, revers: bool = False):
-		if all(set(map(lambda x: not hasattr(x,'__iter__'), self.values()))):
-			if len(set(map(type, self.keys()))) == 1  and len(set(map(type, self.values()))) == 1:
-				self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse = revers)) if iskey else \
-								dict(sorted(self.__dict__.items(), key=lambda i: i[1], reverse = revers))
+	def __sortOD(self, od, iskey: bool = True, revers: bool = False):
+		res = TDict()
+		if not TDict in set(map(type, od.values())):
+			if iskey:
+				if len(set(map(type,od.keys()))) == 1:
+					for k, v in sorted(od.items(), key=lambda i: i[0], reverse = revers):
+						if hasattr(v,'__iter__') and type(v) != str:
+							tp = type(v)
+							res[k] = tp(sorted(v, reverse = revers))
+						else:
+							res[k] = v
+				else:
+					for k, v in sorted(od.items(), key=lambda i: str(i[0]), reverse = revers):
+						if hasattr(v,'__iter__') and type(v) != str:
+							tp = type(v)
+							res[k] = tp(sorted(v, reverse = revers))
+						else:
+							res[k] = v
 			else:
-				self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: str(i[0]), reverse = revers)) if iskey else \
-								dict(sorted(self.__dict__.items(), key=lambda i: str(i[1]), reverse = revers))
+				if len(set(map(type,od.values()))) == 1:
+					for k, v in sorted(od.items(), key=lambda i: i[1], reverse = revers):
+						if hasattr(v,'__iter__') and type(v) != str:
+							tp = type(v)
+							res[k] = tp(sorted(v, reverse = revers))
+						else:
+							res[k] = v
+				else:
+					for k, v in sorted(od.items(), key=lambda i: str(i[1]), reverse = revers):
+						if hasattr(v,'__iter__') and type(v) != str:
+							tp = type(v)
+							res[k] = tp(sorted(v, reverse = revers))
+						else:
+							res[k] = v
 		else:
-			if len(set(map(type, self.keys()))) == 1:
-				 self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse = revers)) if iskey else \
-								dict(sorted(self.__dict__.items(), key=lambda i: i[1], reverse = revers))
+			if len(set(map(type,od.keys()))) == 1:
+				for k, v in sorted(od.items(), reverse = revers):
+					if isinstance(v, TDict):
+						res[k] = self.__sortOD(v)
+					else:
+						if hasattr(v,'__iter__') and type(v) != str:
+							tp = type(v)
+							res[k] = tp(sorted(v, reverse = revers))
+						else:
+							res[k] = v
 			else:
-				self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: str(i[0]), reverse = revers)) if iskey else \
-								dict(sorted(self.__dict__.items(), key=lambda i: i[1], reverse = revers))
+				for k, v in sorted(od.items(), key=lambda i: str(i[0]), reverse = revers):
+					if isinstance(v, TDict):
+						res[k] = self.__sortOD(v)
+					else:
+						if hasattr(v,'__iter__') and type(v) != str:
+							tp = type(v)
+							res[k] = tp(sorted(v, reverse = revers))
+						else:
+							res[k] = v
+		return res
+	
+	def sort(self, iskey: bool = True, revers: bool = False):
+		tmp = self.__sortOD(self.__dict__.copy(), iskey, revers)
+		self.__dict__ = tmp.copy()
 		return self
 	
 	def popitem(self):
