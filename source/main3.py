@@ -15,14 +15,6 @@ class TDict(object):
 		super(TDict, self).__init__()
 		self.__dict__ = dict(*args)
 	
-	@property
-	def __name__(self):
-		return self.__class__.__name__
-	
-	@property
-	def name(self):
-		return self.__class__.__name__
-	
 	def __setitem__(self, key, item):
 		self.__dict__[key] = item
 
@@ -82,8 +74,9 @@ class TDict(object):
 						self.__dict__[iterable[count]] = value[count]
 		return self
 	
-	def sort(self, revers: bool = False):
-		self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse = revers))
+	def sort(self, iskey: bool = True, revers: bool = False):
+		self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse = revers)) if iskey else \
+						dict(sorted(self.__dict__.items(), key=lambda i: i[1], reverse = revers))
 		return self
 	
 	def popitem(self):
