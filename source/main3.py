@@ -75,8 +75,9 @@ class TDict(object):
 		return self
 	
 	def sort(self, iskey: bool = True, revers: bool = False):
-		self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse = revers)) if iskey else \
-						dict(sorted(self.__dict__.items(), key=lambda i: i[1], reverse = revers))
+		if len(set(map(type, self.keys()))) == 1  and len(set(map(type, self.values()))) == 1:
+			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse = revers)) if iskey else \
+							dict(sorted(self.__dict__.items(), key=lambda i: i[1], reverse = revers))
 		return self
 	
 	def popitem(self):
@@ -101,7 +102,8 @@ class TDict(object):
 		return self
 	
 	def __reversed__(self):
-		self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse=True))
+		if len(set(map(type, self.keys()))) == 1:
+			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse=True))
 		return self
 
 	def __str__(self):
