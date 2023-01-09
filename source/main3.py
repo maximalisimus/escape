@@ -25,7 +25,7 @@ class TDict(object):
 		return self.__g.get(k, v)
 
 	def __repr__(self):
-		return f"{self.__class__}"
+		return self.__g.__str__()
 
 	def __len__(self):
 		return len(self.__g)
