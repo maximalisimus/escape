@@ -13,65 +13,65 @@ class TDict(object):
 	
 	def __init__(self, *args):
 		super(TDict, self).__init__()
-		self.__dict__ = dict(*args)
+		self.__g = dict(*args)
 	
 	def __setitem__(self, key, item):
-		self.__dict__[key] = item
+		self.__g[key] = item
 
 	def __getitem__(self, key):
-		return self.__dict__[key]
+		return self.__g[key]
 
 	def __repr__(self):
 		return f"{self.__class__}"
 
 	def __len__(self):
-		return len(self.__dict__)
+		return len(self.__g)
 
 	def __delitem__(self, key):
-		del self.__dict__[key]
+		del self.__g[key]
 
 	def clear(self):
-		return self.__dict__.clear()
+		return self.__g.clear()
 
 	def copy(self):
-		return self.__dict__.copy()
+		return self.__g.copy()
 
 	def has_key(self, k):
 		return k in self.__dict__
 
 	def has_value(self, v):
-		return v in self.__dict__.values()
+		return v in self.__g.values()
 
 	def update(self, *args, **kwargs):
-		return self.__dict__.update(*args, **kwargs)
+		return self.__g.update(*args, **kwargs)
 
 	def keys(self):
-		return self.__dict__.keys()
+		return self.__g.keys()
 
 	def values(self):
-		return self.__dict__.values()
+		return self.__g.values()
 
 	def items(self):
-		return self.__dict__.items()
+		return self.__g.items()
 
 	def pop(self, *args):
-		return self.__dict__.pop(*args)
+		return self.__g.pop(*args)
 
 	def setdefault(self, k, d = None):
-		return self.__dict__.setdefault(k, d)
+		return self.__g.setdefault(k, d)
 
 	def fromkeys(self, iterable, value = None):
 		if hasattr(iterable, '__iter__'):
 			if not hasattr(value, '__iter__'):
 				for item in iterable:
-					self.__dict__[item] = value
+					self.__g[item] = value
 			else:
 				if len(value) >= len(iterable):
 					for count in range(len(iterable)):
-						self.__dict__[iterable[count]] = value[count]
+						self.__g[iterable[count]] = value[count]
 				elif len(value) < len(iterable):
 					for count in range(len(value)):
-						self.__dict__[iterable[count]] = value[count]
+						self.__g[iterable[count]] = value[count]
 		return self
 	
 	def __sortOD(self, od, iskey: bool = True, revers: bool = False):
@@ -113,12 +113,12 @@ class TDict(object):
 		return res
 	
 	def sort(self, iskey: bool = True, revers: bool = False):
-		tmp = self.__sortOD(self.__dict__.copy(), iskey, revers)
-		self.__dict__ = tmp.copy()
+		tmp = self.__sortOD(self.__g.copy(), iskey, revers)
+		self.__g = tmp.copy()
 		return self
 	
 	def popitem(self):
-		return self.__dict__.popitem()
+		return self.__g.popitem()
 
 	def __or__(self, other):
 		if not isinstance(other, TDict):
@@ -140,28 +140,28 @@ class TDict(object):
 	
 	def __reversed__(self):
 		if len(set(map(type, self.keys()))) == 1:
-			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: i[0], reverse=True))
+			self.__g = dict(sorted(self.__g.items(), key=lambda i: i[0], reverse=True))
 		else:
-			self.__dict__ = dict(sorted(self.__dict__.items(), key=lambda i: str(i[0]), reverse=True))
+			self.__g = dict(sorted(self.__g.items(), key=lambda i: str(i[0]), reverse=True))
 		return self
 
 	def __str__(self):
-		return self.__dict__.__str__()
+		return self.__g.__str__()
 
 	def __cmp__(self, dict_):
-		return self.__cmp__(self.__dict__, dict_)
+		return self.__cmp__(self.__g, dict_)
 
 	def __contains__(self, item):
-		return item in self.__dict__
+		return item in self.__g
 
 	def __iter__(self):
-		return iter(self.__dict__)
+		return iter(self.__g)
 
 	def __unicode__(self):
-		return unicode(repr(self.__dict__))
+		return unicode(repr(self.__g))
 	
 	def is_emty(self):
-		return len(self.__dict__) == 0
+		return len(self.__g) == 0
 	
 	def has_values(self, *v):
 		if not v:
