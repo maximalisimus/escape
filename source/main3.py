@@ -62,7 +62,10 @@ class TDict(object):
 
 	def fromkeys(self, iterable, value = None):
 		if hasattr(iterable, '__iter__'):
-			if not hasattr(value, '__iter__'):
+			if not hasattr(value, '__iter__') and type(value) != str:
+				for item in iterable:
+					self.__g[item] = value
+			elif type(value) == str:
 				for item in iterable:
 					self.__g[item] = value
 			else:
@@ -71,7 +74,7 @@ class TDict(object):
 						self.__g[iterable[count]] = value[count]
 				elif len(value) < len(iterable):
 					for count in range(len(value)):
-						self.__g[iterable[count]] = value[count]
+						self.__g[iterable[count]] = value[count]			
 		return self
 	
 	def __sortOD(self, od, iskey: bool = True, revers: bool = False):
