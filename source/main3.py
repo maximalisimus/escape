@@ -75,59 +75,41 @@ class TDict(object):
 		return self
 	
 	def __sortOD(self, od, iskey: bool = True, revers: bool = False):
+		def CheckToSTR(on_dict, on_key, on_value, reverse_value):
+			if hasattr(on_value,'__iter__') and type(on_value) != str:
+				tp = type(on_value)
+				on_dict[on_key] = tp(sorted(on_value, reverse = reverse_value))
+			else:
+				on_dict[on_key] = v		
 		res = TDict()
 		if not TDict in set(map(type, od.values())):
 			if iskey:
 				if len(set(map(type,od.keys()))) == 1:
 					for k, v in sorted(od.items(), key=lambda i: i[0], reverse = revers):
-						if hasattr(v,'__iter__') and type(v) != str:
-							tp = type(v)
-							res[k] = tp(sorted(v, reverse = revers))
-						else:
-							res[k] = v
+						CheckToSTR(res, k, v, revers)
 				else:
 					for k, v in sorted(od.items(), key=lambda i: str(i[0]), reverse = revers):
-						if hasattr(v,'__iter__') and type(v) != str:
-							tp = type(v)
-							res[k] = tp(sorted(v, reverse = revers))
-						else:
-							res[k] = v
+						CheckToSTR(res, k, v, revers)
 			else:
 				if len(set(map(type,od.values()))) == 1:
 					for k, v in sorted(od.items(), key=lambda i: i[1], reverse = revers):
-						if hasattr(v,'__iter__') and type(v) != str:
-							tp = type(v)
-							res[k] = tp(sorted(v, reverse = revers))
-						else:
-							res[k] = v
+						CheckToSTR(res, k, v, revers)
 				else:
 					for k, v in sorted(od.items(), key=lambda i: str(i[1]), reverse = revers):
-						if hasattr(v,'__iter__') and type(v) != str:
-							tp = type(v)
-							res[k] = tp(sorted(v, reverse = revers))
-						else:
-							res[k] = v
+						CheckToSTR(res, k, v, revers)
 		else:
 			if len(set(map(type,od.keys()))) == 1:
 				for k, v in sorted(od.items(), reverse = revers):
 					if isinstance(v, TDict):
 						res[k] = self.__sortOD(v)
 					else:
-						if hasattr(v,'__iter__') and type(v) != str:
-							tp = type(v)
-							res[k] = tp(sorted(v, reverse = revers))
-						else:
-							res[k] = v
+						CheckToSTR(res, k, v, revers)
 			else:
 				for k, v in sorted(od.items(), key=lambda i: str(i[0]), reverse = revers):
 					if isinstance(v, TDict):
 						res[k] = self.__sortOD(v)
 					else:
-						if hasattr(v,'__iter__') and type(v) != str:
-							tp = type(v)
-							res[k] = tp(sorted(v, reverse = revers))
-						else:
-							res[k] = v
+						CheckToSTR(res, k, v, revers)
 		return res
 	
 	def sort(self, iskey: bool = True, revers: bool = False):
