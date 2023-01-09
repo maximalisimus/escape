@@ -21,6 +21,9 @@ class TDict(object):
 	def __getitem__(self, key):
 		return self.__g[key]
 
+	def get(self, k, v):
+		return self.__g.get(k, v)
+
 	def __repr__(self):
 		return f"{self.__class__}"
 
@@ -272,10 +275,10 @@ class TypeBlock(NoValue):
 				return x
 		return None
 
-class TGroup(dict):
+class TGroup(TDict):
 	
-	def __init__(self, *args, **kwargs):
-		super(TGroup, self).__init__(*args, **kwargs)
+	def __init__(self, *args):
+		super(TGroup, self).__init__(*args)
 	
 	def add(self, *args):
 		if len(args) > 0:
@@ -296,21 +299,14 @@ class TGroup(dict):
 			elif len(args) == 2:
 				self[args[1]] = args[0]
 			elif len(args) == 3:
-				if not args[1] in self.keys():
-					self[args[1]] = dict()
-				if type(self[args[1]]) == dict:
+				if not self.has_key(args[1]):
+					self[args[1]] = TDict()
+				if type(self[args[1]]) == TDict:
 					self[args[1]][args[2]] = args[0]
-	
-	def isemty(self):
-		return len(self) == 0
-	
-	def empty(self):
-		for sprite in self.sprites():
-			self.remove(sprite)
 	
 	def searchvalue(self, value):
 		for row in self.items():
-			if type(row[1]) == dict:
+			if type(row[1]) == TDict:
 				for col in row[1].items():
 					if value == col[1]:
 						return (row[0], col[0])
@@ -323,19 +319,14 @@ class TGroup(dict):
 		if not onkeys:
 			return False
 		if len(onkeys) == 1:
-			for row in self.keys():
-				if str(row) == str(onkeys[0]):
-					return True
-			return False
+			if self.get(onkeys[0], False):
+				return True
+			else:
+				return False
 		elif len(onkeys) == 2:
-				for row in self.keys():
-					if str(row) == str(onkeys[0]):
-						if type(self[row]) == dict:
-							for col in self[row].keys():
-								if str(onkeys[1]) == str(col):
-									return True
-						else:
-							return True
+			if self.get(onkeys[0], TDict()).get(onkeys[1], False):
+				return True
+			else:
 				return False
 	
 	def remove(self, *args):
@@ -354,7 +345,7 @@ class TGroup(dict):
 						if self.has_internal(sprite):
 							self.remove(sprite)
 			elif len(args) == 2:
-				if self.get(args[0], dict()).get(args[1], False):
+				if self.get(args[0], TDict()).get(args[1], False):
 					del self[args[0]][args[1]]
 	
 	def has_internal(self, sprite):
@@ -378,29 +369,23 @@ class TGroup(dict):
 			return self.searchkey(keys[0])
 		else:
 			return self.searchkey(*keys)
-	
+
 	def sprites(self, isTuple: bool = False):
-		OnSprites = []
+		res = []
 		for row in self.values():
-			if type(row) == dict:
+			if type(row) == TDict:
 				for col in row.values():
-					OnSprites.append(col)
+					res.append(col)
 			else:
-				OnSprites.append(row)
+				res.append(row)
 		if isTuple:
-			return tuple(OnSprites)
+			return tuple(res)
 		else:
-			return OnSprites
-	
-	def sort(self):
-		self = dict(sorted(self.items(), key=lambda i: i[0]))
-		for row in self.items():
-			if type(row[1]) == dict:
-				self[row[0]] = dict(sorted(row[1].items(),  key=lambda j: j[0]))
+			return res
 	
 	def updates(self, *args, **kwargs):
 		for row in self.values():
-			if type(row) == dict:
+			if type(row) == TDict:
 				for col in row.values():
 					if hasattr(col, 'update'):
 						col.update(*args, **kwargs)
@@ -410,7 +395,7 @@ class TGroup(dict):
 	
 	def draw(self, surf, isDisplayUpdate: bool = False):
 		for row in self.values():
-			if type(row) == dict:
+			if type(row) == TDict:
 				for col in row.values():
 					if hasattr(col, 'image') and hasattr(col, 'rect'):
 						surf.blit(col.image, col.rect)
@@ -1208,10 +1193,36 @@ def scene2():
 	score = 0
 	live = 4
 	level = 1
-		
+	
+	group1 = TGroup()
+	group2 = TGroup()
+	block1 = Block(TypeBlock.Bonus, all_bonuses[0]['surf'], (24,120), None, \
+					all_bonuses[0]['score'], effects[all_bonuses[0]['name']], all_bonuses[0]['name'])
+	block2 = Block(TypeBlock.Bonus, all_bonuses[1]['surf'], (48,120), None, \
+					all_bonuses[1]['score'], effects[all_bonuses[1]['name']], all_bonuses[1]['name'])
+	block3 = Block(TypeBlock.Bonus, all_bonuses[2]['surf'], (72,120, 3, 5), None, \
+					all_bonuses[2]['score'], effects[all_bonuses[2]['name']], all_bonuses[2]['name'])
+	group1.add(block1)
+	group1.add(block2)
+	group2.add(block3)
+	group1.draw(screen1, True)
+	group2.draw(screen1, True)
+	print(group1)
+	print(group2)
+	print('has:', group1.has(block1), group1.has(block1, block2), group2.has(block3))
+	print('haspos:', group1.haspos(1), group1.haspos(2), group1.haspos(3))
+	print('haspos:', group2.haspos(0,0), group2.haspos(3,5))
+	group1.remove(block2)
+	group2.remove(block3)
+	print(group1)
+	print(group2)
+	print('haspos:', group1.haspos(1), group1.haspos(2), group1.haspos(3))
+	print('haspos:', group2.haspos(0,0), group2.haspos(3,5))
+	
 	### Debug
 	
-	running = True
+	running = False
+	SwitchScene(None)
 	while running:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
