@@ -80,7 +80,7 @@ class TDict(object):
 				tp = type(on_value)
 				on_dict[on_key] = tp(sorted(on_value, reverse = reverse_value))
 			else:
-				on_dict[on_key] = v		
+				on_dict[on_key] = on_value	
 		res = TDict()
 		if not TDict in set(map(type, od.values())):
 			if iskey:
