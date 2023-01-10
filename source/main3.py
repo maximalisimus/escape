@@ -401,11 +401,13 @@ def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided = None
 		if collided is not None:
 			if collided(sprite, group_sprite):
 				out_blocks.append(group_sprite)
+				if dokill:
+					group.remove(group_block)
 		else:
 			if pygame.sprite.collide_rect(sprite, group_sprite):
 				out_blocks.append(group_sprite)
-		if dokill:
-			group.remove(group_block)
+				if dokill:
+					group.remove(group_block)
 	return tuple(out_blocks)
 
 W, H = 596, 385
