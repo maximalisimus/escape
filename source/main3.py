@@ -1193,36 +1193,11 @@ def scene2():
 	score = 0
 	live = 4
 	level = 1
-	
-	group1 = TGroup()
-	group2 = TGroup()
-	block1 = Block(TypeBlock.Bonus, all_bonuses[0]['surf'], (24,120), None, \
-					all_bonuses[0]['score'], effects[all_bonuses[0]['name']], all_bonuses[0]['name'])
-	block2 = Block(TypeBlock.Bonus, all_bonuses[1]['surf'], (48,120), None, \
-					all_bonuses[1]['score'], effects[all_bonuses[1]['name']], all_bonuses[1]['name'])
-	block3 = Block(TypeBlock.Bonus, all_bonuses[2]['surf'], (72,120, 3, 5), None, \
-					all_bonuses[2]['score'], effects[all_bonuses[2]['name']], all_bonuses[2]['name'])
-	group1.add(block1)
-	group1.add(block2)
-	group2.add(block3)
-	group1.draw(screen1, True)
-	group2.draw(screen1, True)
-	print(group1)
-	print(group2)
-	print('has:', group1.has(block1), group1.has(block1, block2), group2.has(block3))
-	print('haspos:', group1.haspos(1), group1.haspos(2), group1.haspos(3))
-	print('haspos:', group2.haspos(0,0), group2.haspos(3,5))
-	group1.remove(block2)
-	group2.remove(block3)
-	print(group1)
-	print(group2)
-	print('haspos:', group1.haspos(1), group1.haspos(2), group1.haspos(3))
-	print('haspos:', group2.haspos(0,0), group2.haspos(3,5))
-	
+		
 	### Debug
 	
-	running = False
-	SwitchScene(None)
+	running = True
+	#SwitchScene(None)
 	while running:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
