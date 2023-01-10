@@ -21,11 +21,11 @@ class TDict(object):
 		self.__g[key] = item
 
 	def __getitem__(self, key):
-		return self.__g[key]
-
+		return self.__g[key] if self.has_key(key) else None
+	
 	def get(self, k, v = None):
 		return self.__g.get(k, v)
-
+	
 	def __repr__(self):
 		return self.__g.__str__()
 
@@ -40,12 +40,6 @@ class TDict(object):
 
 	def copy(self):
 		return self.__g.copy()
-
-	def has_key(self, k):
-		return k in self.__dict__
-
-	def has_value(self, v):
-		return v in self.__g.values()
 
 	def update(self, *args, **kwargs):
 		return self.__g.update(*args, **kwargs)
@@ -159,9 +153,6 @@ class TDict(object):
 	def __cmp__(self, dict_):
 		return self.__cmp__(self.__g, dict_)
 
-	def __contains__(self, item):
-		return item in self.__g
-
 	def __iter__(self):
 		return iter(self.__g)
 
@@ -170,6 +161,15 @@ class TDict(object):
 	
 	def is_emty(self):
 		return len(self.__g) == 0
+	
+	def __contains__(self, item):
+		return item in self.__g
+	
+	def has_key(self, k):
+		return k in self.__g
+
+	def has_value(self, v):
+		return v in self.__g.values()
 
 class NoValue(Enum):
 	''' Base Enum class elements '''
