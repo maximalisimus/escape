@@ -21,7 +21,7 @@ class TDict(object):
 	def __getitem__(self, key):
 		return self.__g[key]
 
-	def get(self, k, v):
+	def get(self, k, v = None):
 		return self.__g.get(k, v)
 
 	def __repr__(self):
