@@ -16,6 +16,8 @@ class TDict(object):
 		self.__g = dict(*args)
 	
 	def __setitem__(self, key, item):
+		if not type(key) in (float, int, str, tuple, frozenset, bool, None):
+			raise TypeError('Please, enter the \'key\' in (float, int, str, tuple, bool or frozenset)!')
 		self.__g[key] = item
 
 	def __getitem__(self, key):
@@ -168,27 +170,6 @@ class TDict(object):
 	
 	def is_emty(self):
 		return len(self.__g) == 0
-	
-	def has_values(self, *v):
-		if not v:
-			return False
-		if len(v) == 1:
-			return self.has_value(v[0])
-		else:
-			values = []
-			for item in v:
-				values.append(self.has_value(item))
-			return values
-	
-	def has_keys(self, *k):
-		if not k:
-			return False
-		if len(k) == 1:
-			return self.has_key(k[0])
-		else:
-			keys = []
-			for key in k:
-				keys.append(self.has_key(key))
 
 class NoValue(Enum):
 	''' Base Enum class elements '''
