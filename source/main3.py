@@ -1165,8 +1165,8 @@ def scene1():
 				pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				SwitchScene(scene2)
-				Restart(screen1)
 				running = False
+				Restart(screen1)
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
 		
