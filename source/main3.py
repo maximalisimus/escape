@@ -1133,7 +1133,7 @@ def scene1():
 	screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
 	del surf_start_bg, logo
-		
+	
 	running = True
 	while running:
 		for event in pygame.event.get():
@@ -1166,6 +1166,7 @@ def scene2():
 	global coord_score_bg
 	
 	global isGame
+	global background
 	
 	screen1.blit(background, (0, 0))
 	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
