@@ -1059,14 +1059,6 @@ class Helicopter:
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
 
-def Restart():
-	global isGame
-	global score_bg
-	
-	isGame = True
-	DrawTotal(score_bg, 0, 1, 4, True)
-	pygame.display.update()
-
 class Block(pygame.sprite.Sprite):
 	
 	def __init__(self, OnType: TypeBlock = TypeBlock.Unknown, \
@@ -1120,6 +1112,18 @@ class BombHeart(Block):
 
 def BuildLevel(surf):
 	pass
+
+def Restart():
+	global isGame
+	global score_bg
+	
+	isGame = True
+	DrawTotal(score_bg, 0, 1, 4, True)
+	pygame.display.update()
+
+if isStart:
+	isStart = False
+	Restart()
 
 def scene1():
 	global screen1
@@ -1209,10 +1213,6 @@ def scene2():
 		clock.tick(FPS)
 
 def main():
-	global isStart
-	if isStart:
-		isStart = False
-		Restart()
 	SwitchScene(scene1)
 	while current_scene is not None:
 		current_scene()
