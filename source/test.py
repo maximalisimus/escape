@@ -185,8 +185,8 @@ def main():
 	with open(pathlib.Path('./score.json').resolve(),'r') as f:
 		score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
 	print(score_dict)
-	Old_Score = 341
-	Old_Level = 4
+	Old_Score = 0
+	Old_Level = 1
 	user_name = 'VanDame'
 	if Old_Level > 1 and Old_Score > 100:
 		score_dict[Old_Score] = user_name
