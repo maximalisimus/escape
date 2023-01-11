@@ -182,7 +182,7 @@ def main():
 	#with open(pathlib.Path('./score.json').resolve(),'w') as f:
 	#	json.dump(score_dict.copy(), f, indent=2)
 	#score_dict = TDict()
-	with open(pathlib.Path('./score.json').resolve(),'r') as f:
+	with open(pathlib.Path('./config/score.json').resolve(),'r') as f:
 		score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
 	print(score_dict)
 	Old_Score = 0

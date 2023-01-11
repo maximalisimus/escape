@@ -1175,7 +1175,7 @@ def ScoreScene():
 	screen1.blit(ok_up_surf, score_ok_rect)
 	pygame.display.update()
 	
-	score_file = pathlib.Path('./score.json').resolve()
+	score_file = pathlib.Path('./config/score.json').resolve()
 	score_dict = TDict()
 	if score_file.exists():
 		with open(score_file,'r') as f:
