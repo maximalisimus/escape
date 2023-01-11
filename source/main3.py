@@ -1058,14 +1058,12 @@ class Helicopter:
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
 
-def Restart(surface):
+def Restart():
 	global isGame
 	global score_bg
-	global coord_score_bg
 	
 	isGame = True
 	DrawTotal(score_bg, 0, 1, 4, True)
-	surface.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	pygame.display.update()
 
 class Block(pygame.sprite.Sprite):
@@ -1126,8 +1124,6 @@ def scene1():
 	global screen1
 	global clock
 	
-	global isGame
-	
 	global logo	
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
@@ -1140,19 +1136,17 @@ def scene1():
 			if event.type == pygame.QUIT:
 				running = False
 				SwitchScene(None)
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_F2:
+					SwitchScene(scene2)
+					running = False
+					break
+					break
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				SwitchScene(scene2)
 				running = False
-				Restart(screen1)
 				break
 				break
-		
-		keys = pygame.key.get_pressed()
-		if keys[pygame.K_F2]:
-			SwitchScene(scene2)
-			running = False
-			Restart(screen1)
-			break
 		
 		clock.tick(FPS)
 
@@ -1214,6 +1208,10 @@ def scene2():
 		clock.tick(FPS)
 
 def main():
+	global isStart
+	if isStart:
+		isStart = False
+		Restart()
 	SwitchScene(scene1)
 	while current_scene is not None:
 		current_scene()
