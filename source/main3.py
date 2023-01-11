@@ -1140,18 +1140,19 @@ def scene1():
 			if event.type == pygame.QUIT:
 				running = False
 				SwitchScene(None)
-			elif event.type == pygame.KEYDOWN:
-				# event.key
-				pass
-			elif event.type == pygame.KEYUP:
-				# if event.key in []:
-				pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				SwitchScene(scene2)
 				running = False
 				Restart(screen1)
-			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-				pass
+				break
+				break
+		
+		keys = pygame.key.get_pressed()
+		if keys[pygame.K_F2]:
+			SwitchScene(scene2)
+			running = False
+			Restart(screen1)
+			break
 		
 		clock.tick(FPS)
 
