@@ -1167,12 +1167,19 @@ def StartScene():
 
 def ScoreScene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
-	global ismusic, issound
+	global ismusic, issound, Old_Score, Old_Level
 	
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
 	pygame.display.update()
+	
+	score_file = pathlib.Path('./score.json').resolve()
+	score_dict = TDict()
+	if score_file.exists():
+		with open(score_file,'r') as f:
+			score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
+		
 	
 	running = True
 	while running:
