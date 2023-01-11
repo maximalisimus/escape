@@ -437,6 +437,7 @@ Old_Live = 4
 
 isStart = True
 isGame = False
+isFine = False
 
 size_surf_score = (92,22)
 size_surf_level = (26, 22)
