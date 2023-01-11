@@ -412,12 +412,10 @@ def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided = None
 
 W, H = 596, 385
 FPS = 60
-SW, SH = 485, 354
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 screen1 = pygame.display.set_mode((W, H))
-score_screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Escape")
 pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath('logo.png').resolve())))
 
@@ -440,6 +438,8 @@ Old_Live = 4
 isStart = True
 isGame = False
 isFine = False
+ismusic = False
+issound = True
 
 size_surf_score = (92,22)
 size_surf_level = (26, 22)
@@ -548,6 +548,17 @@ all_bonuses = {
 					'score': 1,
 					},
 			}
+
+ok_up_surf = LoadSurf(pathlib.Path('./images/ok-up.png').resolve())
+ok_down_surf = LoadSurf(pathlib.Path('./images/ok-down.png').resolve())
+btn_rect = ok_up_surf.get_rect(topleft=(0, 0))
+ok_font = pygame.font.SysFont('arial', 18)
+ok_text = ok_font.render('Ok', 1, (0, 0, 0))
+ok_pos = ok_text.get_rect(center=((btn_rect[2]//2) - 2, (btn_rect[3]//2) - 1))
+ok_up_surf.blit(ok_text, ok_pos)
+ok_down_surf.blit(ok_text, ok_pos)
+score_ok_rect = ok_up_surf.get_rect(topleft=(W - btn_rect[2] - 15, H - btn_rect[3] - 15))
+del btn_rect, ok_font, ok_text, ok_pos
 
 logo = pathlib.Path('./images/esc_t.png').resolve()
 
@@ -1155,10 +1166,12 @@ def StartScene():
 		clock.tick(FPS)
 
 def ScoreScene():
-	global score_screen, clock, SW, SH
+	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
+	global ismusic, issound
 	
 	pygame.display.set_caption("Лучшие игроки")
-	pygame.draw.rect(score_screen, (212, 208, 200), (0, 0, SW, SH))
+	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
+	screen1.blit(ok_up_surf, score_ok_rect)
 	pygame.display.update()
 	
 	running = True
@@ -1168,9 +1181,39 @@ def ScoreScene():
 				running = False
 				SwitchScene(None)
 			elif event.type == pygame.KEYDOWN:
-				pass
+				if event.key == pygame.K_F2:
+					Restart()
+					isGame = True
+					SwitchScene(GameScene)
+					running = False
+				elif event.key == pygame.K_F3:
+					# isGame = False
+					pass
+				elif event.key == pygame.K_F4:
+					running = False
+					SwitchScene(None)
+				elif event.key == pygame.K_F5:
+					# SwitchScene(ScoreScene)
+					# running = False
+					pass
+				elif event.key == pygame.K_F6:
+					ismusic = not ismusic
+				elif event.key == pygame.K_F7:
+					issound = not issound
+				elif event.key == pygame.K_F8:
+					# About scene
+					pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				pass
+				if score_ok_rect.collidepoint(event.pos):
+					screen1.blit(ok_down_surf, score_ok_rect)
+					pygame.display.update()
+			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+				if score_ok_rect.collidepoint(event.pos):
+					screen1.blit(ok_up_surf, score_ok_rect)
+					pygame.display.update()
+					isGame = True
+					SwitchScene(GameScene)
+					running = False
 		
 		clock.tick(FPS)
 
