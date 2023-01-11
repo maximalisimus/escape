@@ -412,11 +412,13 @@ def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided = None
 
 W, H = 596, 385
 FPS = 60
+SW, SH = 485, 354
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 screen1 = pygame.display.set_mode((W, H))
-pygame.display.set_caption("Esc")
+score_screen = pygame.display.set_mode((SW, SH))
+pygame.display.set_caption("Escape")
 pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath('logo.png').resolve())))
 
 current_scene = None
@@ -1125,11 +1127,8 @@ if isStart:
 	isStart = False
 	Restart()
 
-def scene1():
-	global screen1
-	global clock
-	
-	global logo	
+def StartScene():
+	global screen1, clock, logo	
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
@@ -1143,30 +1142,42 @@ def scene1():
 				SwitchScene(None)
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_F2:
-					SwitchScene(scene2)
+					SwitchScene(GameScene)
 					running = False
 					break
 					break
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				SwitchScene(scene2)
+				SwitchScene(GameScene)
 				running = False
 				break
 				break
 		
 		clock.tick(FPS)
 
-def scene2():
-	global screen1
-	global clock
+def ScoreScene():
+	global score_screen, clock, SW, SH
 	
-	global surf_table
-	global rect_table
+	pygame.display.set_caption("Лучшие игроки")
+	pygame.draw.rect(score_screen, (212, 208, 200), (0, 0, SW, SH))
+	pygame.display.update()
 	
-	global score_bg
-	global coord_score_bg
+	running = True
+	while running:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				running = False
+				SwitchScene(None)
+			elif event.type == pygame.KEYDOWN:
+				pass
+			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				pass
+		
+		clock.tick(FPS)
+
+def GameScene():
+	global screen1, clock, surf_table, rect_table, score_bg, coord_score_bg, isGame, background
 	
-	global isGame
-	global background
+	pygame.display.set_caption("Escape")
 	
 	screen1.blit(background, (0, 0))
 	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
@@ -1213,7 +1224,8 @@ def scene2():
 		clock.tick(FPS)
 
 def main():
-	SwitchScene(scene1)
+	#SwitchScene(StartScene)
+	SwitchScene(ScoreScene)
 	while current_scene is not None:
 		current_scene()
 
