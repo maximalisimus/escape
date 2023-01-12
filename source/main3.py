@@ -1186,7 +1186,8 @@ def ScoreScene():
 		with open(score_file,'r') as f:
 			score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
 	else:
-		score_dict = TDict(tuple(map(lambda x: (x, ''), range(10, 110, 10))))	
+		score_dict = TDict(tuple(map(lambda x: (x, ''), range(10, 110, 10))))
+		score_dict.sort(True, True)
 	
 	if Old_Level > 1 and Old_Score > 100:
 		score_dict[Old_Score] = user_name
@@ -1196,7 +1197,27 @@ def ScoreScene():
 		with open(score_file,'w') as f:
 			json.dump(score_dict(), f, indent=2)
 	
-	
+	text_font = pygame.font.SysFont('arial', 20)
+	x = y = 10
+	count = 1
+	text = text_font.render('№. Name', 1, (0, 0, 0))
+	text_rect = text.get_rect(topleft=(x, y))
+	screen1.blit(text, text_rect)
+	text = text_font.render('Score', 1, (0, 0, 0))
+	text_rect = text.get_rect(topleft=(x+300, y))
+	screen1.blit(text, text_rect)
+	pygame.display.update()
+	y+=30
+	for key, value in score_dict.items():
+		text = text_font.render(f"{count}. {value}", 1, (0, 0, 0))
+		text_rect = text.get_rect(topleft=(x, y))
+		screen1.blit(text, text_rect)
+		text = text_font.render(f"{key}", 1, (0, 0, 0))
+		text_rect = text.get_rect(topleft=(x+300, y))
+		screen1.blit(text, text_rect)
+		y+=30
+		count+=1
+		pygame.display.update()
 	
 	running = True
 	while running:
@@ -1219,13 +1240,18 @@ def ScoreScene():
 				elif event.key == pygame.K_F5:
 					# SwitchScene(ScoreScene)
 					# running = False
-					pass
+					isGame = True
+					SwitchScene(GameScene)
+					running = False
 				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
 					# About scene
+					pass
+				elif event.key == pygame.K_F9:
+					# Menu scene
 					pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				if score_ok_rect.collidepoint(event.pos):
