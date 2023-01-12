@@ -1291,18 +1291,17 @@ def enter_name_scene():
 	header_font = pygame.font.SysFont('arial', 20)
 	header_text = header_font.render('Введите ваше имя:', 1, (0, 0, 0))
 	
+	text_area_rect = pygame.Rect((32, 67, W-64, 36))
+	text_surf = header_font.render(user_name, 1, (0, 0, 0))
+	text_rect = text_surf.get_rect(topleft = (34, 69))
+	cursor = pygame.Rect(text_rect.topright, (3, text_rect.height))
+	
 	pygame.draw.rect(screen1, (98, 98, 98), (15, 15, W-30, 110), width=2)
 	screen1.blit(header_text, (35,30))
 	pygame.draw.rect(screen1, (158, 158, 158), (30, 65, W-60, 40), width=2)
-	pygame.draw.rect(screen1, (255, 255, 255), (32, 67, W-64, 36))
+	pygame.draw.rect(screen1, (255, 255, 255), text_area_rect)
 	pygame.display.update()
-	
-	#text_font = pygame.font.SysFont('arial', 20)
-	#text = text_font.render('№. Name', 1, (0, 0, 0))
-	
-	pygame.display.update()
-	
-	
+		
 	is_ok = False
 	ok_last_update = pygame.time.get_ticks()
 	ok_frame_rate = 60
@@ -1328,7 +1327,9 @@ def enter_name_scene():
 				running = False
 				SwitchScene(None)
 			elif event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_F6:
+				if event.key == pygame.K_BACKSPACE:
+					pass
+				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
 					if ismusic:
 						pygame.mixer.music.play(-1)
