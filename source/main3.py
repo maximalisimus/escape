@@ -1173,8 +1173,8 @@ def StartScene():
 
 def ScoreScene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
-	global ismusic, issound, user_name
-	# global Old_Score, Old_Level
+	global ismusic, issound
+	# global Old_Score, Old_Level, user_name
 	
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
