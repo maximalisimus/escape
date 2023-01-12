@@ -1247,8 +1247,7 @@ def ScoreScene():
 					SwitchScene(GameScene)
 					running = False
 				elif event.key == pygame.K_F3:
-					# isGame = False
-					pass
+					isGame = False
 				elif event.key == pygame.K_F4:
 					running = False
 					SwitchScene(None)
@@ -1265,9 +1264,6 @@ def ScoreScene():
 				elif event.key == pygame.K_F8:
 					SwitchScene(about_scene)
 					running = False
-				elif event.key == pygame.K_F9:
-					# Menu scene
-					pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				if score_ok_rect.collidepoint(event.pos):
 					screen1.blit(ok_down_surf, score_ok_rect)
@@ -1290,13 +1286,17 @@ def about_scene():
 	pygame.display.set_caption("О программе")
 	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
+	screen1.blit(live_bg, (30, 30))
 	pygame.display.update()
 	
-	text_font = pygame.font.SysFont('arial', 20)
-	# text = text_font.render('№. Name', 1, (0, 0, 0))
-	# text_rect = text.get_rect(topleft=(x, y))
-	# screen1.blit(text, text_rect)
-	
+	text_font = pygame.font.SysFont('arial', 18)
+	screen1.blit(text_font.render('Побег.', 1, (0, 0, 0)), (80, 30))
+	screen1.blit(text_font.render('Программирование: Антон Буцев.', 1, (0, 0, 0)), (10, 70))
+	screen1.blit(text_font.render('Графика: Евгений Харкевич,', 1, (0, 0, 0)), (10, 100))
+	screen1.blit(text_font.render('Дмитрий Петровичев', 1, (0, 0, 0)), (75, 130))
+	screen1.blit(text_font.render('Музыка и звука: Александр Чистяков.', 1, (0, 0, 0)), (10, 160))
+	screen1.blit(text_font.render('Copyright (c) 1995 Nikita, Ltd.', 1, (0, 0, 0)), (10, 210))
+	screen1.blit(text_font.render('Все права защищены.', 1, (0, 0, 0)), (30, 240))
 	pygame.display.update()
 	
 	is_ok = False
@@ -1323,8 +1323,7 @@ def about_scene():
 					SwitchScene(GameScene)
 					running = False
 				elif event.key == pygame.K_F3:
-					# isGame = False
-					pass
+					isGame = False
 				elif event.key == pygame.K_F4:
 					running = False
 					SwitchScene(None)
@@ -1341,9 +1340,6 @@ def about_scene():
 					isGame = True
 					SwitchScene(GameScene)
 					running = False
-				elif event.key == pygame.K_F9:
-					# Menu scene
-					pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				if score_ok_rect.collidepoint(event.pos):
 					screen1.blit(ok_down_surf, score_ok_rect)
@@ -1431,8 +1427,8 @@ def GameScene():
 		clock.tick(FPS)
 
 def main():
-	#SwitchScene(StartScene)
-	SwitchScene(about_scene)
+	SwitchScene(StartScene)
+	#SwitchScene(about_scene)
 	while current_scene is not None:
 		current_scene()
 
