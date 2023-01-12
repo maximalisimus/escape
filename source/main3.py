@@ -1222,8 +1222,19 @@ def ScoreScene():
 		count+=1
 		pygame.display.update()
 	
+	is_ok = False
+	ok_last_update = pygame.time.get_ticks()
+	ok_frame_rate = 60
+	
 	running = True
 	while running:
+		if is_ok:
+			ok_update = pygame.time.get_ticks()
+			if ok_update - ok_last_update > ok_frame_rate:
+				ok_last_update = ok_update
+				isGame = True
+				SwitchScene(GameScene)
+				running = False
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				running = False
@@ -1264,9 +1275,10 @@ def ScoreScene():
 				if score_ok_rect.collidepoint(event.pos):
 					screen1.blit(ok_up_surf, score_ok_rect)
 					pygame.display.update()
-					isGame = True
-					SwitchScene(GameScene)
-					running = False
+					is_ok = True
+				else:
+					screen1.blit(ok_up_surf, score_ok_rect)
+					pygame.display.update()
 		
 		clock.tick(FPS)
 
