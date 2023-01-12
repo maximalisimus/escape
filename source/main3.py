@@ -617,6 +617,23 @@ effects = {
 			'shot': pygame.mixer.Sound(str(pathlib.Path('./sounds/shot.WAV').resolve())),
 		}
 
+score_file = pathlib.Path('./config/score.json').resolve()
+
+def ReadScoreFile():
+	global score_file
+	score_dict = TDict()
+	if score_file.exists():
+		with open(score_file,'r') as f:
+			score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
+	else:
+		score_tuple = ((1958, ''), (1054, ''), (633, ''), (577, ''), (519, ''), \
+					(475, ''), (424, ''), (406, ''), (337, ''), (382, ''))
+		score_dict = TDict(score_tuple)
+		score_dict.sort(True, True)
+	return score_dict
+
+dict_score = ReadScoreFile()
+
 def SelectWall(num):
 	return {
 			0: pathlib.Path('./images/tile-1.png').resolve(),
@@ -1177,45 +1194,18 @@ def StartScene():
 
 def ScoreScene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
+	global dict_score
 	
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
 	pygame.display.update()
 	
-	score_file = pathlib.Path('./config/score.json').resolve()
-	score_dict = TDict()
-	if score_file.exists():
-		with open(score_file,'r') as f:
-			score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
-	else:
-		#score_dict = TDict(tuple(map(lambda x: (x, ''), range(10, 110, 10))))
-		score_tuple = ((1958, ''), (1054, ''), (633, ''), (577, ''), (519, ''), \
-					(475, ''), (424, ''), (406, ''), (337, ''), (382, ''))
-		score_dict = TDict(score_tuple)
-		score_dict.sort(True, True)
-	
-	#if Old_Level > 1 and Old_Score > 100:
-	#	score_dict[Old_Score] = user_name
-	#	score_dict.sort(True, True)
-	#	while len(score_dict) > 10:
-	#		score_dict.popitem()
-	#	with open(score_file,'w') as f:
-	#		json.dump(score_dict(), f, indent=2)
-	
 	text_font = pygame.font.SysFont('arial', 20)
 	x = y = 10
 	count = 1
-	text = text_font.render('№. Name', 1, (0, 0, 0))
-	text_rect = text.get_rect(topleft=(x, y))
-	screen1.blit(text, text_rect)
-	text = text_font.render('Score', 1, (0, 0, 0))
-	text_rect = text.get_rect(topleft=(x+300, y))
-	screen1.blit(text, text_rect)
-	pygame.display.update()
-	y+=30
-	for key, value in score_dict.items():
-		text = text_font.render(f"{count}. {value}", 1, (0, 0, 0))
+	for key, value in dict_score.items():
+		text = text_font.render(f"{count}.     {value}", 1, (0, 0, 0))
 		text_rect = text.get_rect(topleft=(x, y))
 		screen1.blit(text, text_rect)
 		text = text_font.render(f"{key}", 1, (0, 0, 0))
@@ -1287,24 +1277,12 @@ def ScoreScene():
 
 def enter_name_scene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
-	global Old_Level, Old_Score, user_name
+	global Old_Score, user_name, dict_score, score_file
 	
-	pygame.display.set_caption("Лучшие игроки")
+	pygame.display.set_caption("")
 	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
 	pygame.display.update()
-	
-	score_file = pathlib.Path('./config/score.json').resolve()
-	score_dict = TDict()
-	if score_file.exists():
-		with open(score_file,'r') as f:
-			score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
-	else:
-		#score_dict = TDict(tuple(map(lambda x: (x, ''), range(10, 110, 10))))
-		score_tuple = ((1958, ''), (1054, ''), (633, ''), (577, ''), (519, ''), \
-					(475, ''), (424, ''), (406, ''), (337, ''), (382, ''))
-		score_dict = TDict(score_tuple)
-		score_dict.sort(True, True)
 	
 	#text_font = pygame.font.SysFont('arial', 20)
 	#text = text_font.render('№. Name', 1, (0, 0, 0))
@@ -1322,13 +1300,13 @@ def enter_name_scene():
 			ok_update = pygame.time.get_ticks()
 			if ok_update - ok_last_update > ok_frame_rate:
 				ok_last_update = ok_update
-				if Old_Level > 1 and Old_Score > 100:
-					score_dict[Old_Score] = user_name
-					score_dict.sort(True, True)
-					while len(score_dict) > 10:
-						score_dict.popitem()
+				if Old_Score > tuple(dict_score.keys())[-1]:
+					dict_score[Old_Score] = user_name
+					dict_score.sort(True, True)
+					while len(dict_score) > 10:
+						dict_score.popitem()
 					with open(score_file,'w') as f:
-						json.dump(score_dict(), f, indent=2)
+						json.dump(dict_score(), f, indent=2)
 				isGame = True
 				SwitchScene(GameScene)
 				running = False
@@ -1445,7 +1423,7 @@ def about_scene():
 
 def GameScene():
 	global screen1, clock, surf_table, rect_table, score_bg, coord_score_bg, isGame, background
-	global ismusic, issound
+	global ismusic, issound, dict_score
 	
 	pygame.display.set_caption("Escape")
 	
@@ -1513,11 +1491,15 @@ def GameScene():
 		#	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 		#	pygame.display.update()
 		
+		#if Old_Score > dict_score[tuple(dict_score.keys())[-1]]:
+		# Enter Name scene
+		# Else Score Scene
+		
 		clock.tick(FPS)
 
 def main():
-	SwitchScene(StartScene)
-	#SwitchScene(about_scene)
+	#SwitchScene(StartScene)
+	SwitchScene(enter_name_scene)
 	while current_scene is not None:
 		current_scene()
 
