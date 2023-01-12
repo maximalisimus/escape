@@ -24,6 +24,9 @@ class TDict(object):
 	def __getitem__(self, key):
 		return self.__g[key] if self.has_key(key) else None
 	
+	def __call__(self):
+		return self.__g
+	
 	def get(self, k, v = None):
 		return self.__g.get(k, v)
 	
@@ -435,6 +438,8 @@ def LoadSurf(paths):
 Old_Score = 0
 Old_Level = 1
 Old_Live = 4
+
+user_name = ''
 
 isStart = True
 isGame = False
@@ -1168,7 +1173,7 @@ def StartScene():
 
 def ScoreScene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
-	global ismusic, issound, Old_Score, Old_Level
+	global ismusic, issound, Old_Score, Old_Level, user_name
 	
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
@@ -1180,7 +1185,18 @@ def ScoreScene():
 	if score_file.exists():
 		with open(score_file,'r') as f:
 			score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
-		
+	else:
+		score_dict = TDict(tuple(map(lambda x: (x, ''), range(10, 110, 10))))	
+	
+	if Old_Level > 1 and Old_Score > 100:
+		score_dict[Old_Score] = user_name
+		score_dict.sort(True, True)
+		while len(score_dict) > 10:
+			score_dict.popitem()
+		with open(score_file,'w') as f:
+			json.dump(score_dict(), f, indent=2)
+	
+	
 	
 	running = True
 	while running:

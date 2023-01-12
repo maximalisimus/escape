@@ -180,22 +180,26 @@ class TDict(metaclass=Meta):
 		return v in self.__dict__.values()
 
 def main():
-	score_tuple = ((1958, ''), (1054, 'mikl'), (633, ''), (577, ''), (519, ''),\
-					(475, ''), (424, 'user'), (406, ''), (337, ''), (382, ''))
-	score_dict = TDict(score_tuple)
-	print(type(score_dict), score_dict)
-	score_encode = json.dumps(score_dict())
-	score_decode = json.loads(score_encode)
+	#score_tuple = ((1958, ''), (1054, 'mikl'), (633, ''), (577, ''), (519, ''),\
+	#				(475, ''), (424, 'user'), (406, ''), (337, ''), (382, ''))
+	#score_dict = TDict(score_tuple)
+	#print(type(score_dict), score_dict)
+	#score_encode = json.dumps(score_dict())
+	#score_decode = json.loads(score_encode)
 	#print(score_encode)
 	#print(score_decode)
-	new_score = TDict(tuple((int(k), v) for k,v in tuple(json.loads(score_encode).items())))
-	print(type(new_score), new_score)
+	#new_score = TDict(tuple((int(k), v) for k,v in tuple(json.loads(score_encode).items())))
+	#print(type(new_score), new_score)
 	#with open(pathlib.Path('./score.json').resolve(),'w') as f:
 	#	json.dump(score_dict(), f, indent=2)
-	#score_dict = TDict()
-	#with open(pathlib.Path('./config/score.json').resolve(),'r') as f:
-	#	score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
-	#print(score_dict)
+	score_dict = TDict()
+	score_file = pathlib.Path('./config/score2.json').resolve()
+	if score_file.exists():
+		with open(score_file,'r') as f:
+			score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
+	else:
+		score_dict = TDict(tuple(map(lambda x: (x, ''), range(10, 110, 10))))
+	print(score_dict)
 	#Old_Score = 0
 	#Old_Level = 1
 	#user_name = 'VanDame'
