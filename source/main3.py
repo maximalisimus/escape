@@ -7,6 +7,7 @@ from typing import Tuple
 from enum import Enum
 import random
 import json
+import time
 
 class TDict(object):
 	
@@ -1197,7 +1198,7 @@ def ScoreScene():
 	global dict_score
 	
 	pygame.display.set_caption("Лучшие игроки")
-	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
+	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
 	pygame.display.update()
 	
@@ -1212,8 +1213,8 @@ def ScoreScene():
 		else:
 			text_rect = text.get_rect(topleft=(x-10, y))
 		screen1.blit(text, text_rect)
-		text = text_font.render(f"{key}", 1, (0, 0, 0))
-		text_rect = text.get_rect(topleft=(x+300, y))
+		text = text_font.render(f"{key}", 1, (0, 0, 0))		
+		text_rect = text.get_rect(topleft=(x+400, y))
 		screen1.blit(text, text_rect)
 		y+=30
 		count+=1
@@ -1291,17 +1292,17 @@ def enter_name_scene():
 	header_font = pygame.font.SysFont('arial', 20)
 	header_text = header_font.render('Введите ваше имя:', 1, (0, 0, 0))
 	
-	text_area_rect = pygame.Rect((32, 67, W-64, 36))
+	text_area_rect = pygame.Rect((32, 67, W-64, 28))
 	text_surf = header_font.render(user_name, 1, (0, 0, 0))
 	text_rect = text_surf.get_rect(topleft = (34, 69))
 	cursor = pygame.Rect(text_rect.topright, (3, text_rect.height))
 	
-	pygame.draw.rect(screen1, (98, 98, 98), (15, 15, W-30, 110), width=2)
+	pygame.draw.rect(screen1, (98, 98, 98), (15, 15, W-30, 102), width=2)
 	screen1.blit(header_text, (35,30))
-	pygame.draw.rect(screen1, (158, 158, 158), (30, 65, W-60, 40), width=2)
+	pygame.draw.rect(screen1, (158, 158, 158), (30, 65, W-60, 32), width=2)
 	pygame.draw.rect(screen1, (255, 255, 255), text_area_rect)
 	pygame.display.update()
-		
+	
 	is_ok = False
 	ok_last_update = pygame.time.get_ticks()
 	ok_frame_rate = 60
@@ -1328,8 +1329,16 @@ def enter_name_scene():
 				SwitchScene(None)
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_BACKSPACE:
-					pass
-				elif event.key == pygame.K_F6:
+					if len(user_name) > 0:
+						user_name = user_name[:-1]
+					else:
+						user_name += event.unicode
+				else:	
+					user_name += event.unicode
+				text_surf = header_font.render(user_name, 1, (0, 0, 0))
+				text_rect = text_surf.get_rect(topleft = (34, 69))
+				cursor.topleft = text_rect.topright
+				if event.key == pygame.K_F6:
 					ismusic = not ismusic
 					if ismusic:
 						pygame.mixer.music.play(-1)
@@ -1340,6 +1349,8 @@ def enter_name_scene():
 				elif event.key == pygame.K_F8:
 					SwitchScene(about_scene)
 					running = False
+				elif event.key == pygame.K_RETURN:
+					is_ok = True
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				if score_ok_rect.collidepoint(event.pos):
 					screen1.blit(ok_down_surf, score_ok_rect)
@@ -1353,6 +1364,12 @@ def enter_name_scene():
 					screen1.blit(ok_up_surf, score_ok_rect)
 					pygame.display.update()
 		
+		pygame.draw.rect(screen1, (255, 255, 255), text_area_rect)
+		screen1.blit(text_surf, text_rect)
+		if time.time() % 1 > 0.5:
+			pygame.draw.rect(screen1, (0, 0, 0), cursor)
+		pygame.display.update()
+		
 		clock.tick(FPS)
 
 def about_scene():
@@ -1360,7 +1377,7 @@ def about_scene():
 	global ismusic, issound, live_bg
 	
 	pygame.display.set_caption("О программе")
-	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
+	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
 	screen1.blit(live_bg, (27, 30))
 	pygame.display.update()
@@ -1368,11 +1385,11 @@ def about_scene():
 	text_font = pygame.font.SysFont('arial', 18)
 	screen1.blit(text_font.render('Побег.', 1, (0, 0, 0)), (77, 30))
 	screen1.blit(text_font.render('Программирование: Антон Буцев.', 1, (0, 0, 0)), (20, 75))
-	screen1.blit(text_font.render('Графика: Евгений Харкевич,', 1, (0, 0, 0)), (20, 95))
-	screen1.blit(text_font.render('Дмитрий Петровичев', 1, (0, 0, 0)), (85, 115))
-	screen1.blit(text_font.render('Музыка и звуки: Александр Чистяков.', 1, (0, 0, 0)), (20, 135))
-	screen1.blit(text_font.render('Copyright (c) 1995 Nikita, Ltd.', 1, (0, 0, 0)), (20, 185))
-	screen1.blit(text_font.render('Все права защищены.', 1, (0, 0, 0)), (40, 205))
+	screen1.blit(text_font.render('Графика: Евгений Харкевич,', 1, (0, 0, 0)), (20, 100))
+	screen1.blit(text_font.render('Дмитрий Петровичев', 1, (0, 0, 0)), (85, 125))
+	screen1.blit(text_font.render('Музыка и звуки: Александр Чистяков.', 1, (0, 0, 0)), (20, 150))
+	screen1.blit(text_font.render('Copyright (c) 1995 Nikita, Ltd.', 1, (0, 0, 0)), (20, 195))
+	screen1.blit(text_font.render('Все права защищены.', 1, (0, 0, 0)), (43, 220))
 	pygame.display.update()
 	
 	is_ok = False
@@ -1512,8 +1529,8 @@ def GameScene():
 		clock.tick(FPS)
 
 def main():
-	#SwitchScene(StartScene)
-	SwitchScene(enter_name_scene)
+	SwitchScene(StartScene)
+	#SwitchScene(enter_name_scene)
 	while current_scene is not None:
 		current_scene()
 
