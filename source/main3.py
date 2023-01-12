@@ -1360,7 +1360,7 @@ def about_scene():
 	screen1.blit(text_font.render('Программирование: Антон Буцев.', 1, (0, 0, 0)), (20, 75))
 	screen1.blit(text_font.render('Графика: Евгений Харкевич,', 1, (0, 0, 0)), (20, 95))
 	screen1.blit(text_font.render('Дмитрий Петровичев', 1, (0, 0, 0)), (85, 115))
-	screen1.blit(text_font.render('Музыка и звука: Александр Чистяков.', 1, (0, 0, 0)), (20, 135))
+	screen1.blit(text_font.render('Музыка и звуки: Александр Чистяков.', 1, (0, 0, 0)), (20, 135))
 	screen1.blit(text_font.render('Copyright (c) 1995 Nikita, Ltd.', 1, (0, 0, 0)), (20, 185))
 	screen1.blit(text_font.render('Все права защищены.', 1, (0, 0, 0)), (40, 205))
 	pygame.display.update()
