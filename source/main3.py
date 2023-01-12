@@ -564,7 +564,8 @@ ok_text = ok_font.render('Ok', 1, (0, 0, 0))
 ok_pos = ok_text.get_rect(center=((btn_rect[2]//2) - 2, (btn_rect[3]//2) - 1))
 ok_up_surf.blit(ok_text, ok_pos)
 ok_down_surf.blit(ok_text, ok_pos)
-score_ok_rect = ok_up_surf.get_rect(topleft=(W - btn_rect[2] - 15, H - btn_rect[3] - 15))
+# score_ok_rect = ok_up_surf.get_rect(topleft=(W - btn_rect[2] - 15, H - btn_rect[3] - 15))
+score_ok_rect = ok_up_surf.get_rect(topleft=(15, H - btn_rect[3] - 15))
 del btn_rect, ok_font, ok_text, ok_pos
 
 logo = pathlib.Path('./images/esc_t.png').resolve()
@@ -1195,7 +1196,7 @@ def StartScene():
 
 def ScoreScene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
-	global dict_score
+	global dict_score, ismusic, issound
 	
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
@@ -1283,6 +1284,7 @@ def ScoreScene():
 def enter_name_scene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
 	global Old_Score, user_name, dict_score, score_file
+	global ismusic, issound
 	
 	pygame.display.set_caption("")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
@@ -1292,14 +1294,14 @@ def enter_name_scene():
 	header_font = pygame.font.SysFont('arial', 20)
 	header_text = header_font.render('Введите ваше имя:', 1, (0, 0, 0))
 	
-	text_area_rect = pygame.Rect((32, 67, W-64, 28))
+	text_area_rect = pygame.Rect((32, 67, W-64, 32))
 	text_surf = header_font.render(user_name, 1, (0, 0, 0))
 	text_rect = text_surf.get_rect(topleft = (34, 69))
-	cursor = pygame.Rect(text_rect.topright, (3, text_rect.height))
+	cursor = pygame.Rect(text_rect.topright, (2, text_rect.height))
 	
-	pygame.draw.rect(screen1, (98, 98, 98), (15, 15, W-30, 102), width=2)
+	pygame.draw.rect(screen1, (98, 98, 98), (15, 15, W-30, 112), width=2)
 	screen1.blit(header_text, (35,30))
-	pygame.draw.rect(screen1, (158, 158, 158), (30, 65, W-60, 32), width=2)
+	pygame.draw.rect(screen1, (158, 158, 158), (30, 65, W-60, 36), width=2)
 	pygame.draw.rect(screen1, (255, 255, 255), text_area_rect)
 	pygame.display.update()
 	
@@ -1377,8 +1379,10 @@ def about_scene():
 	global ismusic, issound, live_bg
 	
 	pygame.display.set_caption("О программе")
-	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
-	screen1.blit(ok_up_surf, score_ok_rect)
+	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))
+	btn_rect = ok_up_surf.get_rect(topleft=(0, 0))
+	ok_score_rect = ok_up_surf.get_rect(topleft=(W - btn_rect[2] - 15, H - btn_rect[3] - 15))
+	screen1.blit(ok_up_surf, ok_score_rect)
 	screen1.blit(live_bg, (27, 30))
 	pygame.display.update()
 	
