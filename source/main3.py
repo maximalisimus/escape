@@ -1284,8 +1284,17 @@ def enter_name_scene():
 	global Old_Score, user_name, dict_score, score_file
 	
 	pygame.display.set_caption("")
-	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
+	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
+	pygame.display.update()
+	
+	header_font = pygame.font.SysFont('arial', 20)
+	header_text = header_font.render('Введите ваше имя:', 1, (0, 0, 0))
+	
+	pygame.draw.rect(screen1, (98, 98, 98), (15, 15, W-30, 110), width=2)
+	screen1.blit(header_text, (35,30))
+	pygame.draw.rect(screen1, (158, 158, 158), (30, 65, W-60, 40), width=2)
+	pygame.draw.rect(screen1, (255, 255, 255), (32, 67, W-64, 36))
 	pygame.display.update()
 	
 	#text_font = pygame.font.SysFont('arial', 20)
