@@ -1263,8 +1263,84 @@ def ScoreScene():
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
-					# About scene
+					SwitchScene(about_scene)
+					running = False
+				elif event.key == pygame.K_F9:
+					# Menu scene
 					pass
+			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				if score_ok_rect.collidepoint(event.pos):
+					screen1.blit(ok_down_surf, score_ok_rect)
+					pygame.display.update()
+			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+				if score_ok_rect.collidepoint(event.pos):
+					screen1.blit(ok_up_surf, score_ok_rect)
+					pygame.display.update()
+					is_ok = True
+				else:
+					screen1.blit(ok_up_surf, score_ok_rect)
+					pygame.display.update()
+		
+		clock.tick(FPS)
+
+def about_scene():
+	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
+	global ismusic, issound, live_bg
+	
+	pygame.display.set_caption("О программе")
+	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
+	screen1.blit(ok_up_surf, score_ok_rect)
+	pygame.display.update()
+	
+	text_font = pygame.font.SysFont('arial', 20)
+	# text = text_font.render('№. Name', 1, (0, 0, 0))
+	# text_rect = text.get_rect(topleft=(x, y))
+	# screen1.blit(text, text_rect)
+	
+	pygame.display.update()
+	
+	is_ok = False
+	ok_last_update = pygame.time.get_ticks()
+	ok_frame_rate = 60
+	
+	running = True
+	while running:
+		if is_ok:
+			ok_update = pygame.time.get_ticks()
+			if ok_update - ok_last_update > ok_frame_rate:
+				ok_last_update = ok_update
+				isGame = True
+				SwitchScene(GameScene)
+				running = False
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				running = False
+				SwitchScene(None)
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_F2:
+					Restart()
+					isGame = True
+					SwitchScene(GameScene)
+					running = False
+				elif event.key == pygame.K_F3:
+					# isGame = False
+					pass
+				elif event.key == pygame.K_F4:
+					running = False
+					SwitchScene(None)
+				elif event.key == pygame.K_F5:
+					SwitchScene(ScoreScene)
+					running = False
+					isGame = True
+				elif event.key == pygame.K_F6:
+					ismusic = not ismusic
+				elif event.key == pygame.K_F7:
+					issound = not issound
+				elif event.key == pygame.K_F8:
+					# About scene
+					isGame = True
+					SwitchScene(GameScene)
+					running = False
 				elif event.key == pygame.K_F9:
 					# Menu scene
 					pass
@@ -1285,6 +1361,7 @@ def ScoreScene():
 
 def GameScene():
 	global screen1, clock, surf_table, rect_table, score_bg, coord_score_bg, isGame, background
+	global ismusic, issound
 	
 	pygame.display.set_caption("Escape")
 	
@@ -1308,8 +1385,29 @@ def GameScene():
 				running = False
 				SwitchScene(None)
 			elif event.type == pygame.KEYDOWN:
-				# event.key
-				pass
+				if event.key == pygame.K_F2:
+					Restart()
+					isGame = True
+				elif event.key == pygame.K_F3:
+					isGame = not isGame
+				elif event.key == pygame.K_F4:
+					running = False
+					SwitchScene(None)
+				elif event.key == pygame.K_F5:
+					SwitchScene(ScoreScene)
+					running = False
+					isGame = True
+				elif event.key == pygame.K_F6:
+					ismusic = not ismusic
+				elif event.key == pygame.K_F7:
+					issound = not issound
+				elif event.key == pygame.K_F8:
+					isGame = False
+					SwitchScene(about_scene)
+					running = False
+				elif event.key == pygame.K_F9:
+					# Menu scene
+					pass
 			elif event.type == pygame.KEYUP:
 				# if event.key in []:
 				pass
@@ -1334,7 +1432,7 @@ def GameScene():
 
 def main():
 	#SwitchScene(StartScene)
-	SwitchScene(ScoreScene)
+	SwitchScene(about_scene)
 	while current_scene is not None:
 		current_scene()
 
