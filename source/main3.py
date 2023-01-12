@@ -1186,7 +1186,10 @@ def ScoreScene():
 		with open(score_file,'r') as f:
 			score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
 	else:
-		score_dict = TDict(tuple(map(lambda x: (x, ''), range(10, 110, 10))))
+		#score_dict = TDict(tuple(map(lambda x: (x, ''), range(10, 110, 10))))
+		score_tuple = ((1958, ''), (1054, ''), (633, ''), (577, ''), (519, ''), \
+					(475, ''), (424, ''), (406, ''), (337, ''), (382, ''))
+		score_dict = TDict(score_tuple)
 		score_dict.sort(True, True)
 	
 	if Old_Level > 1 and Old_Score > 100:
