@@ -1401,9 +1401,6 @@ def GameScene():
 					isGame = False
 					SwitchScene(about_scene)
 					running = False
-				elif event.key == pygame.K_F9:
-					# Menu scene
-					pass
 			elif event.type == pygame.KEYUP:
 				# if event.key in []:
 				pass
