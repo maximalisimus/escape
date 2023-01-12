@@ -1173,7 +1173,8 @@ def StartScene():
 
 def ScoreScene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
-	global ismusic, issound, Old_Score, Old_Level, user_name
+	global ismusic, issound, user_name
+	# global Old_Score, Old_Level
 	
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
@@ -1192,13 +1193,13 @@ def ScoreScene():
 		score_dict = TDict(score_tuple)
 		score_dict.sort(True, True)
 	
-	if Old_Level > 1 and Old_Score > 100:
-		score_dict[Old_Score] = user_name
-		score_dict.sort(True, True)
-		while len(score_dict) > 10:
-			score_dict.popitem()
-		with open(score_file,'w') as f:
-			json.dump(score_dict(), f, indent=2)
+	#if Old_Level > 1 and Old_Score > 100:
+	#	score_dict[Old_Score] = user_name
+	#	score_dict.sort(True, True)
+	#	while len(score_dict) > 10:
+	#		score_dict.popitem()
+	#	with open(score_file,'w') as f:
+	#		json.dump(score_dict(), f, indent=2)
 	
 	text_font = pygame.font.SysFont('arial', 20)
 	x = y = 10
