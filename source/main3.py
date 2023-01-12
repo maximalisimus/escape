@@ -1202,11 +1202,15 @@ def ScoreScene():
 	pygame.display.update()
 	
 	text_font = pygame.font.SysFont('arial', 20)
-	x = y = 10
+	x = y = 20
 	count = 1
+	len_count = len(dict_score)
 	for key, value in dict_score.items():
 		text = text_font.render(f"{count}.     {value}", 1, (0, 0, 0))
-		text_rect = text.get_rect(topleft=(x, y))
+		if count != len_count:
+			text_rect = text.get_rect(topleft=(x, y))
+		else:
+			text_rect = text.get_rect(topleft=(x-10, y))
 		screen1.blit(text, text_rect)
 		text = text_font.render(f"{key}", 1, (0, 0, 0))
 		text_rect = text.get_rect(topleft=(x+300, y))
