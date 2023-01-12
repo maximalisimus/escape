@@ -1145,7 +1145,7 @@ if isStart:
 	Restart()
 
 def StartScene():
-	global screen1, clock, logo	
+	global screen1, clock, logo, ismusic, issound
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
@@ -1161,11 +1161,15 @@ def StartScene():
 				if event.key == pygame.K_F2:
 					SwitchScene(GameScene)
 					running = False
+					if issound:
+						effects['start'].play()
 					break
 					break
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				SwitchScene(GameScene)
 				running = False
+				if issound:
+					effects['start'].play()
 				break
 				break
 		
@@ -1173,8 +1177,6 @@ def StartScene():
 
 def ScoreScene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
-	global ismusic, issound
-	# global Old_Score, Old_Level, user_name
 	
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
@@ -1259,6 +1261,88 @@ def ScoreScene():
 					running = False
 				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
+					if ismusic:
+						pygame.mixer.music.play(-1)
+					else:
+						pygame.mixer.music.stop()
+				elif event.key == pygame.K_F7:
+					issound = not issound
+				elif event.key == pygame.K_F8:
+					SwitchScene(about_scene)
+					running = False
+			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				if score_ok_rect.collidepoint(event.pos):
+					screen1.blit(ok_down_surf, score_ok_rect)
+					pygame.display.update()
+			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+				if score_ok_rect.collidepoint(event.pos):
+					screen1.blit(ok_up_surf, score_ok_rect)
+					pygame.display.update()
+					is_ok = True
+				else:
+					screen1.blit(ok_up_surf, score_ok_rect)
+					pygame.display.update()
+		
+		clock.tick(FPS)
+
+def enter_name_scene():
+	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
+	global Old_Level, Old_Score, user_name
+	
+	pygame.display.set_caption("Лучшие игроки")
+	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
+	screen1.blit(ok_up_surf, score_ok_rect)
+	pygame.display.update()
+	
+	score_file = pathlib.Path('./config/score.json').resolve()
+	score_dict = TDict()
+	if score_file.exists():
+		with open(score_file,'r') as f:
+			score_dict = TDict(tuple((int(k), v) for k,v in tuple(json.load(f).items())))
+	else:
+		#score_dict = TDict(tuple(map(lambda x: (x, ''), range(10, 110, 10))))
+		score_tuple = ((1958, ''), (1054, ''), (633, ''), (577, ''), (519, ''), \
+					(475, ''), (424, ''), (406, ''), (337, ''), (382, ''))
+		score_dict = TDict(score_tuple)
+		score_dict.sort(True, True)
+	
+	#text_font = pygame.font.SysFont('arial', 20)
+	#text = text_font.render('№. Name', 1, (0, 0, 0))
+	
+	pygame.display.update()
+	
+	
+	is_ok = False
+	ok_last_update = pygame.time.get_ticks()
+	ok_frame_rate = 60
+	
+	running = True
+	while running:
+		if is_ok:
+			ok_update = pygame.time.get_ticks()
+			if ok_update - ok_last_update > ok_frame_rate:
+				ok_last_update = ok_update
+				if Old_Level > 1 and Old_Score > 100:
+					score_dict[Old_Score] = user_name
+					score_dict.sort(True, True)
+					while len(score_dict) > 10:
+						score_dict.popitem()
+					with open(score_file,'w') as f:
+						json.dump(score_dict(), f, indent=2)
+				isGame = True
+				SwitchScene(GameScene)
+				running = False
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				running = False
+				SwitchScene(None)
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_F6:
+					ismusic = not ismusic
+					if ismusic:
+						pygame.mixer.music.play(-1)
+					else:
+						pygame.mixer.music.stop()
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
@@ -1286,17 +1370,17 @@ def about_scene():
 	pygame.display.set_caption("О программе")
 	pygame.draw.rect(screen1, (212, 208, 200), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
-	screen1.blit(live_bg, (17, 30))
+	screen1.blit(live_bg, (27, 30))
 	pygame.display.update()
 	
 	text_font = pygame.font.SysFont('arial', 18)
-	screen1.blit(text_font.render('Побег.', 1, (0, 0, 0)), (67, 30))
-	screen1.blit(text_font.render('Программирование: Антон Буцев.', 1, (0, 0, 0)), (10, 75))
-	screen1.blit(text_font.render('Графика: Евгений Харкевич,', 1, (0, 0, 0)), (10, 95))
-	screen1.blit(text_font.render('Дмитрий Петровичев', 1, (0, 0, 0)), (75, 115))
-	screen1.blit(text_font.render('Музыка и звука: Александр Чистяков.', 1, (0, 0, 0)), (10, 135))
-	screen1.blit(text_font.render('Copyright (c) 1995 Nikita, Ltd.', 1, (0, 0, 0)), (10, 195))
-	screen1.blit(text_font.render('Все права защищены.', 1, (0, 0, 0)), (30, 215))
+	screen1.blit(text_font.render('Побег.', 1, (0, 0, 0)), (77, 30))
+	screen1.blit(text_font.render('Программирование: Антон Буцев.', 1, (0, 0, 0)), (20, 75))
+	screen1.blit(text_font.render('Графика: Евгений Харкевич,', 1, (0, 0, 0)), (20, 95))
+	screen1.blit(text_font.render('Дмитрий Петровичев', 1, (0, 0, 0)), (85, 115))
+	screen1.blit(text_font.render('Музыка и звука: Александр Чистяков.', 1, (0, 0, 0)), (20, 135))
+	screen1.blit(text_font.render('Copyright (c) 1995 Nikita, Ltd.', 1, (0, 0, 0)), (20, 185))
+	screen1.blit(text_font.render('Все права защищены.', 1, (0, 0, 0)), (40, 205))
 	pygame.display.update()
 	
 	is_ok = False
@@ -1333,6 +1417,10 @@ def about_scene():
 					isGame = True
 				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
+					if ismusic:
+						pygame.mixer.music.play(-1)
+					else:
+						pygame.mixer.music.stop()
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
@@ -1395,6 +1483,10 @@ def GameScene():
 					isGame = True
 				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
+					if ismusic:
+						pygame.mixer.music.play(-1)
+					else:
+						pygame.mixer.music.stop()
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
