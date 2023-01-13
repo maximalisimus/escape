@@ -1169,7 +1169,7 @@ if isStart:
 	Restart()
 
 def StartScene():
-	global screen1, clock, logo, ismusic, issound, STOPPED_PLAYING, ismusicfine, ismusicstart
+	global screen1, clock, logo, ismusic, issound
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
@@ -1181,8 +1181,6 @@ def StartScene():
 			if event.type == pygame.QUIT:
 				running = False
 				SwitchScene(None)
-			elif event.type == STOPPED_PLAYING:
-				ismusicfine = True
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_F2:
 					SwitchScene(GameScene)
