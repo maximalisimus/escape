@@ -1554,7 +1554,7 @@ def GameScene():
 	level = 1
 	
 	menu_str1 = CreateEmtySurf(w, 25)
-	pygame.draw.rect(menu_str1, (255, 255, 255), menu_str1.get_rect())
+	pygame.draw.rect(menu_str1, (240, 240, 240), menu_str1.get_rect())
 	menu_font = pygame.font.SysFont('arial', 14)
 	menu1 = menu_font.render('Игра', 1, (0, 0, 0))
 	menu_rect1 = menu1.get_rect(topleft = (10, 5))
