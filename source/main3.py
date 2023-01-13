@@ -1191,6 +1191,10 @@ def StartScene():
 						effects['start'].play()
 					break
 					break
+				elif event.key == pygame.K_F6:
+					ismusic = not ismusic
+				elif event.key == pygame.K_F7:
+					issound = not issound
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 				SwitchScene(GameScene)
 				running = False
