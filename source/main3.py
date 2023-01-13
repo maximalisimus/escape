@@ -446,7 +446,12 @@ isStart = True
 isGame = False
 isFine = False
 ismusic = False
+ismusicfine = False
+ismusicstart = False
 issound = True
+
+STOPPED_PLAYING = pygame.USEREVENT + 1
+pygame.mixer.music.set_endevent(STOPPED_PLAYING)
 
 size_surf_score = (92,22)
 size_surf_level = (26, 22)
@@ -1164,7 +1169,7 @@ if isStart:
 	Restart()
 
 def StartScene():
-	global screen1, clock, logo, ismusic, issound
+	global screen1, clock, logo, ismusic, issound, STOPPED_PLAYING, ismusicfine, ismusicstart
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
 	pygame.display.update()
@@ -1176,6 +1181,8 @@ def StartScene():
 			if event.type == pygame.QUIT:
 				running = False
 				SwitchScene(None)
+			elif event.type == STOPPED_PLAYING:
+				ismusicfine = True
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_F2:
 					SwitchScene(GameScene)
@@ -1196,7 +1203,7 @@ def StartScene():
 
 def ScoreScene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
-	global dict_score, ismusic, issound
+	global dict_score, ismusic, issound, STOPPED_PLAYING, ismusicfine, ismusicstart
 	
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
@@ -1238,6 +1245,8 @@ def ScoreScene():
 			if event.type == pygame.QUIT:
 				running = False
 				SwitchScene(None)
+			elif event.type == STOPPED_PLAYING:
+				ismusicfine = True
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_F2:
 					Restart()
@@ -1257,10 +1266,20 @@ def ScoreScene():
 					running = False
 				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
-					if ismusic:
-						pygame.mixer.music.play(-1)
+					if not ismusicstart:
+						ismusicstart = True
+						pygame.mixer.music.play()
 					else:
-						pygame.mixer.music.stop()
+						if ismusic:
+							if ismusicfine:
+								pygame.mixer.music.rewind()
+								ismusicfine = False
+							else:
+								if pygame.mixer.music.get_pos() != 0 and not pygame.mixer.music.get_busy():
+									pygame.mixer.music.unpause()
+						else:
+							if pygame.mixer.music.get_busy():
+								pygame.mixer.music.pause()
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
@@ -1284,7 +1303,7 @@ def ScoreScene():
 def enter_name_scene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
 	global Old_Score, user_name, dict_score, score_file
-	global ismusic, issound
+	global ismusic, issound, STOPPED_PLAYING, ismusicfine, ismusicstart
 	
 	pygame.display.set_caption("")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
@@ -1327,6 +1346,8 @@ def enter_name_scene():
 			if event.type == pygame.QUIT:
 				running = False
 				SwitchScene(None)
+			elif event.type == STOPPED_PLAYING:
+				ismusicfine = True
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_BACKSPACE:
 					if len(user_name) > 0:
@@ -1340,10 +1361,20 @@ def enter_name_scene():
 				cursor.topleft = text_rect.topright
 				if event.key == pygame.K_F6:
 					ismusic = not ismusic
-					if ismusic:
-						pygame.mixer.music.play(-1)
+					if not ismusicstart:
+						ismusicstart = True
+						pygame.mixer.music.play()
 					else:
-						pygame.mixer.music.stop()
+						if ismusic:
+							if ismusicfine:
+								pygame.mixer.music.rewind()
+								ismusicfine = False
+							else:
+								if pygame.mixer.music.get_pos() != 0 and not pygame.mixer.music.get_busy():
+									pygame.mixer.music.unpause()
+						else:
+							if pygame.mixer.music.get_busy():
+								pygame.mixer.music.pause()
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
@@ -1374,7 +1405,7 @@ def enter_name_scene():
 
 def about_scene():
 	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
-	global ismusic, issound, live_bg
+	global ismusic, issound, live_bg, STOPPED_PLAYING, ismusicfine, ismusicstart
 	
 	pygame.display.set_caption("О программе")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))
@@ -1411,6 +1442,8 @@ def about_scene():
 			if event.type == pygame.QUIT:
 				running = False
 				SwitchScene(None)
+			elif event.type == STOPPED_PLAYING:
+				ismusicfine = True
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_F2:
 					Restart()
@@ -1428,10 +1461,20 @@ def about_scene():
 					isGame = True
 				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
-					if ismusic:
-						pygame.mixer.music.play(-1)
+					if not ismusicstart:
+						ismusicstart = True
+						pygame.mixer.music.play()
 					else:
-						pygame.mixer.music.stop()
+						if ismusic:
+							if ismusicfine:
+								pygame.mixer.music.rewind()
+								ismusicfine = False
+							else:
+								if pygame.mixer.music.get_pos() != 0 and not pygame.mixer.music.get_busy():
+									pygame.mixer.music.unpause()
+						else:
+							if pygame.mixer.music.get_busy():
+								pygame.mixer.music.pause()
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
@@ -1456,7 +1499,7 @@ def about_scene():
 
 def GameScene():
 	global screen1, clock, surf_table, rect_table, score_bg, coord_score_bg, isGame, background
-	global ismusic, issound, dict_score
+	global ismusic, issound, dict_score, STOPPED_PLAYING, ismusicfine, ismusicstart
 	
 	pygame.display.set_caption("Escape")
 	
@@ -1479,6 +1522,8 @@ def GameScene():
 			if event.type == pygame.QUIT:
 				running = False
 				SwitchScene(None)
+			elif event.type == STOPPED_PLAYING:
+				ismusicfine = True
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_F2:
 					Restart()
@@ -1494,10 +1539,20 @@ def GameScene():
 					isGame = True
 				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
-					if ismusic:
-						pygame.mixer.music.play(-1)
+					if not ismusicstart:
+						ismusicstart = True
+						pygame.mixer.music.play()
 					else:
-						pygame.mixer.music.stop()
+						if ismusic:
+							if ismusicfine:
+								pygame.mixer.music.rewind()
+								ismusicfine = False
+							else:
+								if pygame.mixer.music.get_pos() != 0 and not pygame.mixer.music.get_busy():
+									pygame.mixer.music.unpause()
+						else:
+							if pygame.mixer.music.get_busy():
+								pygame.mixer.music.pause()
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
