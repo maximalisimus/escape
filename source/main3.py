@@ -1306,8 +1306,6 @@ def enter_name_scene():
 	pygame.display.update()
 	
 	is_ok = False
-	ok_last_update = pygame.time.get_ticks()
-	ok_frame_rate = 60
 	
 	running = True
 	while running:
