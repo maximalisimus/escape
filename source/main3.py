@@ -1571,6 +1571,8 @@ def GameScene():
 	pygame.display.update()
 	# (166, 166, 166) Gray
 	# (48, 150, 250) Blue
+	# pygame.draw.rect(display1, (64, 64, 64), (0, 0, infoObject.current_w, infoObject.current_h))
+	
 	
 		
 	### Debug
