@@ -571,6 +571,7 @@ ok_up_surf.blit(ok_text, ok_pos)
 ok_down_surf.blit(ok_text, ok_pos)
 # score_ok_rect = ok_up_surf.get_rect(topleft=(W - btn_rect[2] - 15, H - btn_rect[3] - 15))
 score_ok_rect = ok_up_surf.get_rect(topleft=(15, H - btn_rect[3] - 15))
+ok_about_rect = ok_up_surf.get_rect(topleft=(W - btn_rect[2] - 15, H - btn_rect[3] - 15))
 del btn_rect, ok_font, ok_text, ok_pos
 
 logo = pathlib.Path('./images/esc_t.png').resolve()
@@ -1275,6 +1276,7 @@ def ScoreScene():
 						if ismusic:
 							if ismusicfine:
 								pygame.mixer.music.rewind()
+								pygame.mixer.music.play()
 								ismusicfine = False
 							else:
 								if pygame.mixer.music.get_pos() != 0 and not pygame.mixer.music.get_busy():
@@ -1326,6 +1328,9 @@ def enter_name_scene():
 	pygame.draw.rect(screen1, (255, 255, 255), text_area_rect)
 	pygame.display.update()
 	
+	ok_last_update = pygame.time.get_ticks()
+	ok_frame_rate = 60
+	
 	is_ok = False
 	
 	running = True
@@ -1370,6 +1375,7 @@ def enter_name_scene():
 						if ismusic:
 							if ismusicfine:
 								pygame.mixer.music.rewind()
+								pygame.mixer.music.play()
 								ismusicfine = False
 							else:
 								if pygame.mixer.music.get_pos() != 0 and not pygame.mixer.music.get_busy():
@@ -1406,14 +1412,12 @@ def enter_name_scene():
 		clock.tick(FPS)
 
 def about_scene():
-	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
+	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect, ok_about_rect
 	global ismusic, issound, live_bg, STOPPED_PLAYING, ismusicfine, ismusicstart
 	
 	pygame.display.set_caption("О программе")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))
-	btn_rect = ok_up_surf.get_rect(topleft=(0, 0))
-	ok_score_rect = ok_up_surf.get_rect(topleft=(W - btn_rect[2] - 15, H - btn_rect[3] - 15))
-	screen1.blit(ok_up_surf, ok_score_rect)
+	screen1.blit(ok_up_surf, ok_about_rect)
 	screen1.blit(live_bg, (27, 30))
 	pygame.display.update()
 	
@@ -1470,6 +1474,7 @@ def about_scene():
 						if ismusic:
 							if ismusicfine:
 								pygame.mixer.music.rewind()
+								pygame.mixer.music.play()
 								ismusicfine = False
 							else:
 								if pygame.mixer.music.get_pos() != 0 and not pygame.mixer.music.get_busy():
@@ -1485,16 +1490,16 @@ def about_scene():
 					SwitchScene(GameScene)
 					running = False
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				if score_ok_rect.collidepoint(event.pos):
-					screen1.blit(ok_down_surf, score_ok_rect)
+				if ok_about_rect.collidepoint(event.pos):
+					screen1.blit(ok_down_surf, ok_about_rect)
 					pygame.display.update()
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-				if score_ok_rect.collidepoint(event.pos):
-					screen1.blit(ok_up_surf, score_ok_rect)
+				if ok_about_rect.collidepoint(event.pos):
+					screen1.blit(ok_up_surf, ok_about_rect)
 					pygame.display.update()
 					is_ok = True
 				else:
-					screen1.blit(ok_up_surf, score_ok_rect)
+					screen1.blit(ok_up_surf, ok_about_rect)
 					pygame.display.update()
 		
 		clock.tick(FPS)
@@ -1548,6 +1553,7 @@ def GameScene():
 						if ismusic:
 							if ismusicfine:
 								pygame.mixer.music.rewind()
+								pygame.mixer.music.play()
 								ismusicfine = False
 							else:
 								if pygame.mixer.music.get_pos() != 0 and not pygame.mixer.music.get_busy():
