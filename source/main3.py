@@ -420,9 +420,18 @@ FPS = 60
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
-screen1 = pygame.display.set_mode((W, H))
+infoObject = pygame.display.Info()
+w = infoObject.current_w
+h = infoObject.current_h
+display1 = pygame.display.set_mode((w , h))
 pygame.display.set_caption("Escape")
 pygame.display.set_icon(pygame.image.load(str(pathlib.Path('./config/').joinpath('logo.png').resolve())))
+
+screen1 = pygame.Surface((W, H), pygame.SRCALPHA, 32).convert_alpha()
+infoObject = pygame.display.Info()
+pygame.draw.rect(display1, (64, 64, 64), (0, 0, infoObject.current_w, infoObject.current_h))
+spx = (infoObject.current_w - W)//2 # screen position x
+spy = (infoObject.current_h - H)//2 # screen position y
 
 current_scene = None
 
@@ -1170,9 +1179,10 @@ if isStart:
 	Restart()
 
 def StartScene():
-	global screen1, clock, logo, ismusic, issound
+	global display1, spx, spy, screen1, clock, logo, ismusic, issound
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
+	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	del surf_start_bg, logo
 	
@@ -1205,12 +1215,15 @@ def StartScene():
 		clock.tick(FPS)
 
 def ScoreScene():
-	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
+	global display1, spx, spy, screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
 	global dict_score, ismusic, issound, STOPPED_PLAYING, ismusicfine, ismusicstart
+	
+	ok_score_pos_rect = ok_up_surf.get_rect(topleft = (score_ok_rect.x + spx, score_ok_rect.y + spy))
 	
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
+	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	
 	text_font = pygame.font.SysFont('arial', 20)
@@ -1229,6 +1242,7 @@ def ScoreScene():
 		screen1.blit(text, text_rect)
 		y+=30
 		count+=1
+		display1.blit(screen1, (spx, spy))
 		pygame.display.update()
 	
 	is_ok = False
@@ -1290,28 +1304,34 @@ def ScoreScene():
 					SwitchScene(about_scene)
 					running = False
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				if score_ok_rect.collidepoint(event.pos):
+				if ok_score_pos_rect.collidepoint(event.pos):
 					screen1.blit(ok_down_surf, score_ok_rect)
+					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-				if score_ok_rect.collidepoint(event.pos):
+				if ok_score_pos_rect.collidepoint(event.pos):
 					screen1.blit(ok_up_surf, score_ok_rect)
+					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 					is_ok = True
 				else:
 					screen1.blit(ok_up_surf, score_ok_rect)
+					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 		
 		clock.tick(FPS)
 
 def enter_name_scene():
-	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
+	global display1, spx, spy, screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect
 	global Old_Score, user_name, dict_score, score_file
 	global ismusic, issound, STOPPED_PLAYING, ismusicfine, ismusicstart
+	
+	ok_enter_pos_rect = ok_up_surf.get_rect(topleft = (score_ok_rect.x + spx, score_ok_rect.y + spy))
 	
 	pygame.display.set_caption("")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
+	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	
 	header_font = pygame.font.SysFont('arial', 20)
@@ -1326,6 +1346,7 @@ def enter_name_scene():
 	screen1.blit(header_text, (35,30))
 	pygame.draw.rect(screen1, (158, 158, 158), (30, 65, W-60, 36), width=2)
 	pygame.draw.rect(screen1, (255, 255, 255), text_area_rect)
+	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	
 	ok_last_update = pygame.time.get_ticks()
@@ -1391,34 +1412,41 @@ def enter_name_scene():
 				elif event.key == pygame.K_RETURN:
 					is_ok = True
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				if score_ok_rect.collidepoint(event.pos):
+				if ok_enter_pos_rect.collidepoint(event.pos):
 					screen1.blit(ok_down_surf, score_ok_rect)
+					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-				if score_ok_rect.collidepoint(event.pos):
+				if ok_enter_pos_rect.collidepoint(event.pos):
 					screen1.blit(ok_up_surf, score_ok_rect)
+					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 					is_ok = True
 				else:
 					screen1.blit(ok_up_surf, score_ok_rect)
+					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 		
 		pygame.draw.rect(screen1, (255, 255, 255), text_area_rect)
 		screen1.blit(text_surf, text_rect)
 		if time.time() % 1 > 0.5:
 			pygame.draw.rect(screen1, (0, 0, 0), cursor)
+		display1.blit(screen1, (spx, spy))
 		pygame.display.update()
 		
 		clock.tick(FPS)
 
 def about_scene():
-	global screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, score_ok_rect, ok_about_rect
+	global display1, spx, spy, screen1, isGame, clock, W, H, ok_up_surf, ok_down_surf, ok_about_rect
 	global ismusic, issound, live_bg, STOPPED_PLAYING, ismusicfine, ismusicstart
+	
+	ok_about_pos_rect = ok_up_surf.get_rect(topleft=(ok_about_rect.x + spx, ok_about_rect.y + spy))
 	
 	pygame.display.set_caption("О программе")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))
 	screen1.blit(ok_up_surf, ok_about_rect)
 	screen1.blit(live_bg, (27, 30))
+	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	
 	text_font = pygame.font.SysFont('arial', 18)
@@ -1429,6 +1457,7 @@ def about_scene():
 	screen1.blit(text_font.render('Музыка и звуки: Александр Чистяков.', 1, (0, 0, 0)), (20, 150))
 	screen1.blit(text_font.render('Copyright (c) 1995 Nikita, Ltd.', 1, (0, 0, 0)), (20, 195))
 	screen1.blit(text_font.render('Все права защищены.', 1, (0, 0, 0)), (43, 220))
+	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	
 	is_ok = False
@@ -1490,28 +1519,32 @@ def about_scene():
 					SwitchScene(GameScene)
 					running = False
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				if ok_about_rect.collidepoint(event.pos):
+				if ok_about_pos_rect.collidepoint(event.pos):
 					screen1.blit(ok_down_surf, ok_about_rect)
+					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-				if ok_about_rect.collidepoint(event.pos):
+				if ok_about_pos_rect.collidepoint(event.pos):
 					screen1.blit(ok_up_surf, ok_about_rect)
+					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 					is_ok = True
 				else:
 					screen1.blit(ok_up_surf, ok_about_rect)
+					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 		
 		clock.tick(FPS)
 
 def GameScene():
-	global screen1, clock, surf_table, rect_table, score_bg, coord_score_bg, isGame, background
+	global display1, spx, spy, w, h, screen1, clock, surf_table, rect_table, score_bg, coord_score_bg, isGame, background
 	global ismusic, issound, dict_score, STOPPED_PLAYING, ismusicfine, ismusicstart
 	
 	pygame.display.set_caption("Escape")
 	
 	screen1.blit(background, (0, 0))
 	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	
 	### Debug
@@ -1519,7 +1552,19 @@ def GameScene():
 	score = 0
 	live = 4
 	level = 1
-		
+	
+	#menu_str1 = CreateEmtySurf(w, 25)
+	#pygame.draw.rect(menu_str1, (255, 255, 255), menu_str1.get_rect())
+	#menu_font = pygame.font.SysFont('arial', 14)
+	#menu1 = menu_font.render('Игра', 1, (0, 0, 0))
+	#menu_rect1 = menu1.get_rect(topleft = (10, 5))
+	#menu2 = menu_font.render('Помощь', 1, (0, 0, 0))
+	#menu_rect2 = menu1.get_rect(topleft = (60, 5))
+	#menu_str1.blit(menu1, menu_rect1)
+	#menu_str1.blit(menu2, menu_rect2)
+	#display1.blit(menu_str1, (0, 0))
+	#pygame.display.update()
+	
 	### Debug
 	
 	running = True
@@ -1585,6 +1630,7 @@ def GameScene():
 		#if isGame:
 		#	DrawTotal(score_bg, score, level, live, False)
 		#	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
+		#	display1.blit(screen1, (w, h))
 		#	pygame.display.update()
 		
 		#if Old_Score > dict_score[tuple(dict_score.keys())[-1]]:
