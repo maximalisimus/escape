@@ -1553,17 +1553,22 @@ def GameScene():
 	live = 4
 	level = 1
 	
-	#menu_str1 = CreateEmtySurf(w, 25)
-	#pygame.draw.rect(menu_str1, (255, 255, 255), menu_str1.get_rect())
-	#menu_font = pygame.font.SysFont('arial', 14)
-	#menu1 = menu_font.render('Игра', 1, (0, 0, 0))
-	#menu_rect1 = menu1.get_rect(topleft = (10, 5))
-	#menu2 = menu_font.render('Помощь', 1, (0, 0, 0))
-	#menu_rect2 = menu1.get_rect(topleft = (60, 5))
-	#menu_str1.blit(menu1, menu_rect1)
-	#menu_str1.blit(menu2, menu_rect2)
-	#display1.blit(menu_str1, (0, 0))
-	#pygame.display.update()
+	menu_str1 = CreateEmtySurf(w, 25)
+	pygame.draw.rect(menu_str1, (255, 255, 255), menu_str1.get_rect())
+	menu_font = pygame.font.SysFont('arial', 14)
+	menu1 = menu_font.render('Игра', 1, (0, 0, 0))
+	menu_rect1 = menu1.get_rect(topleft = (10, 5))
+	menu_area_rect1 = pygame.Rect(0, 0, menu1.get_rect()[2] + 20, menu1.get_rect()[3] + 20)
+	menu2 = menu_font.render('Помощь', 1, (0, 0, 0))
+	menu_rect2 = menu1.get_rect(topleft = (60, 5))
+	menu_area_rect2 = pygame.Rect(menu1.get_rect()[2] + 20, 0, menu2.get_rect()[2] + 20, menu2.get_rect()[3] + 20)
+	menu_str1.blit(menu1, menu_rect1)
+	menu_str1.blit(menu2, menu_rect2)
+	display1.blit(menu_str1, (0, 0))
+	pygame.display.update()
+	# (166, 166, 166) Gray
+	# (48, 150, 250) Blue
+	# ✓
 	
 	### Debug
 	
@@ -1626,6 +1631,10 @@ def GameScene():
 		#if pressed[0]:
 		#	pos = pygame.mouse.get_pos()
 		#	print(pos)
+		
+		#pressed = pygame.mouse.get_pressed()
+		#if pressed[0]:
+		#	pos = pygame.mouse.get_pos()
 		
 		#if isGame:
 		#	DrawTotal(score_bg, score, level, live, False)
