@@ -1540,12 +1540,72 @@ class TMenu:
 	
 	def __init__(self):
 		global w
-		self.image = CreateEmtySurf(w, 175)
+		self.w = w
+		self.h = 175
+		self.image = CreateEmtySurf(self.w, self.h)
 		self.rect = self.image.get_rect()
+		menu_font = pygame.font.SysFont('arial', 14)
+		
+		self.menu1 = menu_font.render('Игра', 1, (0, 0, 0))
+		self.menu2 = menu_font.render('Помощь', 1, (0, 0, 0))
+		self.menu111 = menu_font.render('Сначала', 1, (0, 0, 0))
+		self.menu112 = menu_font.render('F2', 1, (0, 0, 0))
+		self.menu121 = menu_font.render('Перерыв', 1, (0, 0, 0))
+		self.menu122 = menu_font.render('F3', 1, (0, 0, 0))
+		self.menu131 = menu_font.render('Лучшие игроки', 1, (0, 0, 0))
+		self.menu132 = menu_font.render('F5', 1, (0, 0, 0))
+		self.menu141 = menu_font.render('Музыка', 1, (0, 0, 0))
+		self.menu142 = menu_font.render('F6', 1, (0, 0, 0))
+		self.menu151 = menu_font.render('Звук', 1, (0, 0, 0))
+		self.menu152 = menu_font.render('F7', 1, (0, 0, 0))
+		self.menu161 = menu_font.render('Выход', 1, (0, 0, 0))
+		self.menu162 = menu_font.render('F4', 1, (0, 0, 0))
+		self.menu211 = menu_font.render('О программе', 1, (0, 0, 0))
+		self.menu212 = menu_font.render('F8', 1, (0, 0, 0))
+		
+		self.menu111_rect = self.menu111.get_rect(topleft = (30, 35))
+		self.menu111_sel_rect = pygame.Rect(5, 30, 165, 25)
+		self.menu112_rect = self.menu112.get_rect(topleft = (140, 35))
+		self.menu121_rect = self.menu121.get_rect(topleft = (30, 60))
+		self.menu121_sel_rect = pygame.Rect(5, 55, 165, 25)
+		self.menu122_rect = self.menu122.get_rect(topleft = (140, 60))
+		self.menu131_rect = self.menu131.get_rect(topleft = (30, 85))
+		self.menu131_sel_rect = pygame.Rect(5, 80, 165, 25)
+		self.menu132_rect = self.menu132.get_rect(topleft = (140, 85))
+		self.menu141_rect = self.menu141.get_rect(topleft = (30, 110))
+		self.menu141_sel_rect = pygame.Rect(5, 105, 165, 25)
+		self.menu142_rect = self.menu142.get_rect(topleft = (140, 110))
+		self.menu151_rect = self.menu151.get_rect(topleft = (30, 135))
+		self.menu151_sel_rect = pygame.Rect(5, 130, 165, 25)
+		self.menu152_rect = self.menu152.get_rect(topleft = (140, 135))
+		self.menu161_rect = self.menu161.get_rect(topleft = (30, 170))
+		self.menu161_sel_rect = pygame.Rect(5, 165, 165, 25)
+		self.menu162_rect = self.menu162.get_rect(topleft = (140, 170))
+		self.menu211_rect = self.menu211.get_rect(topleft = (80, 30))
+		self.menu211_sel_rect = pygame.Rect(64, 29, 161, 21)
+		self.menu212_rect = self.menu212.get_rect(topleft = (190, 30))
+		
+		self.submenu_frame_rect1 = pygame.Rect(0, 25, 175, 174)
+		self.submenu_rect1 = pygame.Rect(2, 27, 171, 170)
+		self.submenu_frame_rect2 = pygame.Rect(60, 25, 169, 29)
+		self.submenu_rect2 = pygame.Rect(62, 27, 165, 25)
+				
 		self.bg_color = (64, 64, 64)
 		self.menu_color = (240, 240, 240)
 		self.frame_color = (166, 166, 166)
 		self.select_color = (48, 150, 250)
+		
+		self.menu_rect1 = self.menu1.get_rect(topleft = (10, 5))
+		self.menu_rect2 = self.menu1.get_rect(topleft = (60, 5))
+		self.menu_sel_rect1 = pygame.Rect(0, 0, self.menu1.get_rect()[2] + 20, 25)
+		self.menu_sel_rect2 = pygame.Rect(self.menu1.get_rect()[2] + 20, 0, self.menu2.get_rect()[2] + 20, 25)
+		
+		self.checkmark_surf = LoadSurf(pathlib.Path('./images/checkmark-round.png').resolve())
+		self.checkmark_surf = pygame.transform.scale(self.checkmark_surf, (10, 10))
+		
+		self.menu121_checkmarg_rect = self.checkmark_surf.get_rect(topleft = (10, 63))
+		self.menu141_checkmarg_rect = self.checkmark_surf.get_rect(topleft = (10, 113))
+		self.menu151_checkmarg_rect = self.checkmark_surf.get_rect(topleft = (10, 138))
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
@@ -1593,7 +1653,6 @@ def GameScene():
 	#pygame.display.update()
 	# (166, 166, 166) Gray
 	# (48, 150, 250) Blue
-	# pygame.draw.rect(display1, (64, 64, 64), (0, 0, infoObject.current_w, infoObject.current_h))
 	#checkmark_surf = LoadSurf(pathlib.Path('./images/checkmark-round.png').resolve())
 	#checkmark_surf = pygame.transform.scale(checkmark_surf, (10, 10))
 	#menu111 = menu_font.render('Сначала', 1, (0, 0, 0))
@@ -1638,10 +1697,11 @@ def GameScene():
 	#display1.blit(menu161, (30, 170))
 	#display1.blit(menu162, (140, 170))
 	
-	#pygame.draw.rect(display1, (166, 166, 166), (60, 25, 129, 29), width = 2)
-	#pygame.draw.rect(display1, (240, 240, 240), (62, 27, 125, 25))
-	#pygame.draw.rect(display1, (48, 150, 250), (64, 29, 121, 21))
+	#pygame.draw.rect(display1, (166, 166, 166), (60, 25, 169, 29), width = 2)
+	#pygame.draw.rect(display1, (240, 240, 240), (62, 27, 165, 25))
+	#pygame.draw.rect(display1, (48, 150, 250), (64, 29, 161, 21))
 	#display1.blit(menu211, (80, 30))
+	#display1.blit(menu212, (190, 30))
 		
 	pygame.display.update()
 		
