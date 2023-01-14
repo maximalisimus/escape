@@ -1610,6 +1610,13 @@ class TMenu:
 		self.isactivate = False
 		self.ismenu1 = False
 		self.ismenu2 = False
+		self.issubmenu11 = False
+		self.issubmenu12 = False
+		self.issubmenu13 = False
+		self.issubmenu14 = False
+		self.issubmenu15 = False
+		self.issubmenu16 = False
+		self.issubmenu21 = False
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
@@ -1620,7 +1627,20 @@ class TMenu:
 		#	pos = pygame.mouse.get_pos()
 		pass
 
+	def __ResetCheckers(self):
+		self.isactivate = False
+		self.ismenu1 = False
+		self.ismenu2 = False
+		self.issubmenu11 = False
+		self.issubmenu12 = False
+		self.issubmenu13 = False
+		self.issubmenu14 = False
+		self.issubmenu15 = False
+		self.issubmenu16 = False
+		self.issubmenu21 = False
+
 	def MenuRestartClick(self):
+		self.__ResetCheckers()
 		global isGame, running
 		Restart()
 		isGame = True
@@ -1633,15 +1653,14 @@ class TMenu:
 	def MenuPauseClick(self):
 		global isGame
 		isGame = not isGame
+		self.__ResetCheckers()
 	
 	def MenuScoreClick(self):
+		self.__ResetCheckers()
 		global isGame, running
 		isGame = False
 		SwitchScene(ScoreScene)
 		running = False
-		self.isactivate = False
-		self.ismenu1 = False
-		self.ismenu2 = False
 
 	def MenuMusicClick(self):
 		global ismusic, ismusicstart, ismusicfine
@@ -1661,27 +1680,26 @@ class TMenu:
 			else:
 				if pygame.mixer.music.get_busy():
 					pygame.mixer.music.pause()
-		self.isactivate = False
-		self.ismenu1 = False
-		self.ismenu2 = False
+		self.__ResetCheckers()
 	
 	def MenuSoundClick(self):
 		global issound
 		issound = not issound
+		self.__ResetCheckers()
 	
 	def MenuExitClick(self):
+		self.__ResetCheckers()
 		global running
 		running = False
 		SwitchScene(None)
 	
 	def MenuAboutClick(self):
+		self.__ResetCheckers()
 		global isGame, running
 		isGame = False
 		SwitchScene(about_scene)
 		running = False
-		self.isactivate = False
-		self.ismenu1 = False
-		self.ismenu2 = False
+		
 
 def GameScene():
 	global display1, spx, spy, w, h, screen1, clock, surf_table, rect_table, score_bg, coord_score_bg, isGame, background
