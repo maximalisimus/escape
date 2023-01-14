@@ -1539,9 +1539,13 @@ def about_scene():
 class TMenu:
 	
 	def __init__(self):
-		global w, h
+		global w
 		self.image = CreateEmtySurf(w, 175)
 		self.rect = self.image.get_rect()
+		self.bg_color = (64, 64, 64)
+		self.menu_color = (240, 240, 240)
+		self.frame_color = (166, 166, 166)
+		self.select_color = (48, 150, 250)
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
