@@ -1473,7 +1473,7 @@ def StartScene():
 	global display1, spx, spy, screen1, clock, logo, ismusic, issound, running, menu
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
-	screen_rect = screen1.get_rect()
+	screen_rect = screen1.get_rect(topleft = (spx, spy))
 	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	del surf_start_bg, logo
