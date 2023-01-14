@@ -1536,6 +1536,22 @@ def about_scene():
 		
 		clock.tick(FPS)
 
+class TMenu:
+	
+	def __init__(self):
+		global w, h
+		self.image = CreateEmtySurf(w, 175)
+		self.rect = self.image.get_rect()
+	
+	def draw(self, surface):
+		surface.blit(self.image, self.rect)
+	
+	def update(self):
+		#pressed = pygame.mouse.get_pressed()
+		#if pressed[0]:
+		#	pos = pygame.mouse.get_pos()
+		pass
+
 def GameScene():
 	global display1, spx, spy, w, h, screen1, clock, surf_table, rect_table, score_bg, coord_score_bg, isGame, background
 	global ismusic, issound, dict_score, STOPPED_PLAYING, ismusicfine, ismusicstart
@@ -1553,6 +1569,8 @@ def GameScene():
 	score = 0
 	live = 4
 	level = 1
+	
+	menu = TMenu()
 	
 	#menu_str1 = CreateEmtySurf(w, 25)
 	#pygame.draw.rect(menu_str1, (240, 240, 240), menu_str1.get_rect())
@@ -1699,6 +1717,11 @@ def GameScene():
 		#if Old_Score > dict_score[tuple(dict_score.keys())[-1]]:
 		# Enter Name scene
 		# Else Score Scene
+		
+		menu.draw(display1)
+		pygame.display.update()
+		
+		menu.update()
 		
 		clock.tick(FPS)
 
