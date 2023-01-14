@@ -571,10 +571,11 @@ class TMenu:
 		pygame.draw.rect(surface, self.bg_color, self.sub_rect1)
 		pygame.draw.rect(surface, self.bg_color, self.sub_rect2)
 		surface.blit(self.image, self.rect)
-		if self.ismenu_active1:
-			surface.blit(self.sub_image1, self.sub_rect1)
-		if self.ismenu_active2:
-			surface.blit(self.sub_image2, self.sub_rect2)
+		if self.isactivate:
+			if self.ismenu_active1:
+				surface.blit(self.sub_image1, self.sub_rect1)
+			if self.ismenu_active2:
+				surface.blit(self.sub_image2, self.sub_rect2)
 	
 	def update(self):
 		new_tick = pygame.time.get_ticks()
@@ -604,8 +605,9 @@ class TMenu:
 				mouse_pos = pygame.mouse.get_pos()
 				if self.menu_sel_rect1.collidepoint(mouse_pos) or self.menu_sel_rect2.collidepoint(mouse_pos):
 					self.isactivate = not self.isactivate
-					self.ismenu_active1 = self.menu_sel_rect1.collidepoint(mouse_pos)
-					self.ismenu_active2 = self.menu_sel_rect2.collidepoint(mouse_pos)
+					if self.isactivate:
+						self.ismenu_active1 = self.menu_sel_rect1.collidepoint(mouse_pos)
+						self.ismenu_active2 = self.menu_sel_rect2.collidepoint(mouse_pos)
 				if not self.menu_sel_rect1.collidepoint(mouse_pos) and \
 					not self.menu_sel_rect2.collidepoint(mouse_pos) and \
 					not self.sub_rect1.collidepoint(mouse_pos) and \
@@ -1474,7 +1476,7 @@ def StartScene():
 	surf_start_bg = pygame.transform.scale(LoadSurf(logo), (W, H))
 	screen1.blit(surf_start_bg, (0, 0))
 	screen_rect = screen1.get_rect(topleft = (spx, spy))
-	display1.blit(screen1, (spx, spy))
+	display1.blit(screen1, screen_rect)
 	pygame.display.update()
 	del surf_start_bg, logo
 	
@@ -1504,6 +1506,8 @@ def StartScene():
 						effects['start'].play()
 					break
 					break
+			elif event.type ==  pygame.MOUSEBUTTONUP and event.button == 1:
+				pass
 		
 		menu.draw(display1)
 		pygame.display.update()
@@ -1868,15 +1872,10 @@ def GameScene():
 	score = 0
 	live = 4
 	level = 1
-	
-	menu = TMenu()
-			
-	pygame.display.update()
 		
 	### Debug
 	
 	running = True
-	#SwitchScene(None)
 	while running:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -1928,7 +1927,6 @@ def GameScene():
 			elif  event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
 			elif event.type == pygame.MOUSEMOTION:
-				#mouse_position = event.pos
 				pass
 		
 		#keys = pygame.key.get_pressed()
