@@ -582,39 +582,30 @@ class TMenu:
 			self.last_update = new_tick
 			mouse_pos = pygame.mouse.get_pos()
 			if self.isactivate:
-				if self.menu_sel_rect1.collidepoint(mouse_pos):
-					self.ismenu1 = True
+				self.ismenu1 = self.menu_sel_rect1.collidepoint(mouse_pos)
+				self.ismenu2 = self.menu_sel_rect2.collidepoint(mouse_pos)
+				if self.ismenu1:
 					self.ismenu_active1 = True
 					self.ismenu_active2 = False
-				else:
-					self.ismenu1 = False
-				if self.menu_sel_rect2.collidepoint(mouse_pos):
-					self.ismenu2 = True
-					self.ismenu_active1 = False
+				if self.ismenu2:
 					self.ismenu_active2 = True
-				else:
-					self.ismenu2 = False
+					self.ismenu_active1 = False
 				if self.ismenu_active1:
-					self.issubmenu11 = True if self.menu111_col_rect.collidepoint(mouse_pos) else False
-					self.issubmenu12 = True if self.menu121_col_rect.collidepoint(mouse_pos) else False
-					self.issubmenu13 = True if self.menu131_col_rect.collidepoint(mouse_pos) else False
-					self.issubmenu14 = True if self.menu141_col_rect.collidepoint(mouse_pos) else False
-					self.issubmenu15 = True if self.menu151_col_rect.collidepoint(mouse_pos) else False
-					self.issubmenu16 = True if self.menu161_col_rect.collidepoint(mouse_pos) else False
-					pass
+					self.issubmenu11 = self.menu111_col_rect.collidepoint(mouse_pos)
+					self.issubmenu12 = self.menu121_col_rect.collidepoint(mouse_pos)
+					self.issubmenu13 = self.menu131_col_rect.collidepoint(mouse_pos)
+					self.issubmenu14 = self.menu141_col_rect.collidepoint(mouse_pos)
+					self.issubmenu15 = self.menu151_col_rect.collidepoint(mouse_pos)
+					self.issubmenu16 = self.menu161_col_rect.collidepoint(mouse_pos)
 				elif self.ismenu_active2:
-					self.issubmenu21 = True if self.sub_rect2.collidepoint(mouse_pos) else False
+					self.issubmenu21 = self.sub_rect2.collidepoint(mouse_pos)
 			mouse_pressed = pygame.mouse.get_pressed()
 			if mouse_pressed[0]:
 				mouse_pos = pygame.mouse.get_pos()
 				if self.menu_sel_rect1.collidepoint(mouse_pos) or self.menu_sel_rect2.collidepoint(mouse_pos):
 					self.isactivate = not self.isactivate
-					if self.menu_sel_rect1.collidepoint(mouse_pos):
-						self.ismenu_active1 = True
-						self.ismenu_active2 = False
-					elif self.menu_sel_rect2.collidepoint(mouse_pos):
-						self.ismenu_active2 = True
-						self.ismenu_active1 = False
+					self.ismenu_active1 = self.menu_sel_rect1.collidepoint(mouse_pos)
+					self.ismenu_active2 = self.menu_sel_rect2.collidepoint(mouse_pos)
 				if not self.menu_sel_rect1.collidepoint(mouse_pos) and \
 					not self.menu_sel_rect2.collidepoint(mouse_pos) and \
 					not self.sub_rect1.collidepoint(mouse_pos) and \
