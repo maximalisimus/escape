@@ -1620,26 +1620,68 @@ class TMenu:
 		#	pos = pygame.mouse.get_pos()
 		pass
 
-	def MenuRestart(self):
-		pass
+	def MenuRestartClick(self):
+		global isGame, running
+		Restart()
+		isGame = True
+		self.isactivate = False
+		self.ismenu1 = False
+		self.ismenu2 = False
+		SwitchScene(GameScene)
+		running = False
 	
-	def MenuPause(self):
-		pass
+	def MenuPauseClick(self):
+		global isGame
+		isGame = not isGame
 	
-	def MenuScore(self):
-		pass
+	def MenuScoreClick(self):
+		global isGame, running
+		isGame = False
+		SwitchScene(ScoreScene)
+		running = False
+		self.isactivate = False
+		self.ismenu1 = False
+		self.ismenu2 = False
+
+	def MenuMusicClick(self):
+		global ismusic, ismusicstart, ismusicfine
+		ismusic = not ismusic
+		if not ismusicstart:
+			ismusicstart = True
+			pygame.mixer.music.play()
+		else:
+			if ismusic:
+				if ismusicfine:
+					pygame.mixer.music.rewind()
+					pygame.mixer.music.play()
+					ismusicfine = False
+				else:
+					if pygame.mixer.music.get_pos() != 0 and not pygame.mixer.music.get_busy():
+						pygame.mixer.music.unpause()
+			else:
+				if pygame.mixer.music.get_busy():
+					pygame.mixer.music.pause()
+		self.isactivate = False
+		self.ismenu1 = False
+		self.ismenu2 = False
 	
-	def MenuMusic(self):
-		pass
+	def MenuSoundClick(self):
+		global issound
+		issound = not issound
 	
-	def MenuSound(self):
-		pass
+	def MenuExitClick(self):
+		global running
+		running = False
+		SwitchScene(None)
 	
-	def MenuExit(self):
-		pass
-	
-	def MenuAbout(self):
-		pass
+	def MenuAboutClick(self):
+		global isGame, running
+		isGame = False
+		SwitchScene(about_scene)
+		running = False
+		self.isactivate = False
+		self.ismenu1 = False
+		self.ismenu2 = False
 
 def GameScene():
 	global display1, spx, spy, w, h, screen1, clock, surf_table, rect_table, score_bg, coord_score_bg, isGame, background
@@ -1754,7 +1796,6 @@ def GameScene():
 					isGame = False
 					SwitchScene(ScoreScene)
 					running = False
-					isGame = True
 				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
 					if not ismusicstart:
