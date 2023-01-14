@@ -1514,7 +1514,6 @@ def StartScene():
 		
 		menu.draw(display1)
 		pygame.display.update()
-		#menu.update()
 		menu.update(mousepos)
 		
 		clock.tick(FPS)
@@ -1632,7 +1631,6 @@ def ScoreScene():
 		
 		menu.draw(display1)
 		pygame.display.update()
-		#menu.update()
 		menu.update(mousepos)
 		
 		clock.tick(FPS)
@@ -1755,7 +1753,6 @@ def enter_name_scene():
 				
 		menu.draw(display1)
 		pygame.display.update()
-		#menu.update()
 		menu.update(mousepos)
 		
 		clock.tick(FPS)
@@ -1864,8 +1861,7 @@ def about_scene():
 		mousepos = pygame.mouse.get_pos()
 		
 		menu.draw(display1)
-		pygame.display.update()		
-		#menu.update()
+		pygame.display.update()
 		menu.update(mousepos)
 		
 		clock.tick(FPS)
@@ -1968,8 +1964,7 @@ def GameScene():
 		mousepos = pygame.mouse.get_pos()
 		
 		menu.draw(display1)
-		pygame.display.update()		
-		#menu.update()
+		pygame.display.update()	
 		menu.update(mousepos)
 		
 		clock.tick(FPS)
