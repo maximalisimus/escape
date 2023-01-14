@@ -585,7 +585,6 @@ del btn_rect, ok_font, ok_text, ok_pos
 
 logo = pathlib.Path('./images/esc_t.png').resolve()
 
-background = LoadSurf(pathlib.Path('./images/esc-bg.png').resolve())
 score_bg = LoadSurf(pathlib.Path('./images/score-bg.png').resolve())
 live_bg = LoadSurf(pathlib.Path('./images/live-bg.png').resolve())
 died_bg = LoadSurf(pathlib.Path('./images/died-bg.png').resolve())
@@ -1542,7 +1541,8 @@ def GameScene():
 	
 	pygame.display.set_caption("Escape")
 	
-	screen1.blit(background, (0, 0))
+	#screen1.blit(background, (0, 0))
+	screen1.fill((64, 64, 64))
 	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
@@ -1556,7 +1556,6 @@ def GameScene():
 	menu_str1 = CreateEmtySurf(w, 25)
 	pygame.draw.rect(menu_str1, (240, 240, 240), menu_str1.get_rect())
 	menu_font = pygame.font.SysFont('arial', 14)
-	bool_surf = menu_font.render('✓', 1, (0, 0, 0))
 	menu1 = menu_font.render('Игра', 1, (0, 0, 0))
 	menu_rect1 = menu1.get_rect(topleft = (10, 5))
 	menu_area_rect1 = pygame.Rect(0, 0, menu1.get_rect()[2] + 20, 25)
@@ -1572,8 +1571,56 @@ def GameScene():
 	# (166, 166, 166) Gray
 	# (48, 150, 250) Blue
 	# pygame.draw.rect(display1, (64, 64, 64), (0, 0, infoObject.current_w, infoObject.current_h))
+	checkmark_surf = LoadSurf(pathlib.Path('./images/checkmark-round.png').resolve())
+	checkmark_surf = pygame.transform.scale(checkmark_surf, (10, 10))
+	menu111 = menu_font.render('Сначала', 1, (0, 0, 0))
+	menu112 = menu_font.render('F2', 1, (0, 0, 0))
+	menu121 = menu_font.render('Перерыв', 1, (0, 0, 0))
+	menu122 = menu_font.render('F3', 1, (0, 0, 0))
+	menu131 = menu_font.render('Лучшие игроки', 1, (0, 0, 0))
+	menu132 = menu_font.render('F5', 1, (0, 0, 0))
+	menu141 = menu_font.render('Музыка', 1, (0, 0, 0))
+	menu142 = menu_font.render('F6', 1, (0, 0, 0))
+	menu151 = menu_font.render('Звук', 1, (0, 0, 0))
+	menu152 = menu_font.render('F7', 1, (0, 0, 0))
+	menu161 = menu_font.render('Выход', 1, (0, 0, 0))
+	menu162 = menu_font.render('F4', 1, (0, 0, 0))
+	menu211 = menu_font.render('О программе', 1, (0, 0, 0))
+	menu212 = menu_font.render('F8', 1, (0, 0, 0))
 	
+	#pygame.draw.rect(display1, (166, 166, 166), (0, 25, 175, 174), width = 2)
+	#pygame.draw.rect(display1, (240, 240, 240), (2, 27, 171, 170))
+	#pygame.draw.line(display1, (166, 166, 166), (10, 160), (160, 160)) 
 	
+	#pygame.draw.rect(display1, (48, 150, 250), (5, 30, 165, 25))
+	#pygame.draw.rect(display1, (48, 150, 250), (5, 55, 165, 25))
+	#pygame.draw.rect(display1, (48, 150, 250), (5, 80, 165, 25))
+	#pygame.draw.rect(display1, (48, 150, 250), (5, 105, 165, 25))
+	#pygame.draw.rect(display1, (48, 150, 250), (5, 130, 165, 25))
+	#pygame.draw.rect(display1, (48, 150, 250), (5, 165, 165, 25))
+	
+	#display1.blit(menu111, (30, 35))
+	#display1.blit(menu112, (140, 35))
+	#display1.blit(menu121, (30, 60))
+	#display1.blit(checkmark_surf, (10, 63))
+	#display1.blit(menu122, (140, 60))
+	#display1.blit(menu131, (30, 85))
+	#display1.blit(menu132, (140, 85))
+	#display1.blit(menu141, (30, 110))
+	#display1.blit(checkmark_surf, (10, 113))
+	#display1.blit(menu142, (140, 110))
+	#display1.blit(checkmark_surf, (10, 138))
+	#display1.blit(menu151, (30, 135))
+	#display1.blit(menu152, (140, 135))
+	#display1.blit(menu161, (30, 170))
+	#display1.blit(menu162, (140, 170))
+	
+	#pygame.draw.rect(display1, (166, 166, 166), (60, 25, 129, 29), width = 2)
+	#pygame.draw.rect(display1, (240, 240, 240), (62, 27, 125, 25))
+	#pygame.draw.rect(display1, (48, 150, 250), (64, 29, 121, 21))
+	#display1.blit(menu211, (80, 30))
+		
+	pygame.display.update()
 		
 	### Debug
 	
