@@ -577,11 +577,11 @@ class TMenu:
 			if self.ismenu_active2:
 				surface.blit(self.sub_image2, self.sub_rect2)
 	
-	def update(self):
+	def update(self, onposition):
 		new_tick = pygame.time.get_ticks()
+		mouse_pos = onposition
 		if new_tick - self.last_update > self.frame_rate:
 			self.last_update = new_tick
-			mouse_pos = pygame.mouse.get_pos()
 			if self.isactivate:
 				self.ismenu1 = self.menu_sel_rect1.collidepoint(mouse_pos)
 				self.ismenu2 = self.menu_sel_rect2.collidepoint(mouse_pos)
@@ -600,35 +600,35 @@ class TMenu:
 					self.issubmenu16 = self.menu161_col_rect.collidepoint(mouse_pos)
 				elif self.ismenu_active2:
 					self.issubmenu21 = self.sub_rect2.collidepoint(mouse_pos)
-			mouse_pressed = pygame.mouse.get_pressed()
-			if mouse_pressed[0]:
-				mouse_pos = pygame.mouse.get_pos()
-				if self.menu_sel_rect1.collidepoint(mouse_pos) or self.menu_sel_rect2.collidepoint(mouse_pos):
-					self.isactivate = not self.isactivate
-					if self.isactivate:
-						self.ismenu_active1 = self.menu_sel_rect1.collidepoint(mouse_pos)
-						self.ismenu_active2 = self.menu_sel_rect2.collidepoint(mouse_pos)
-				if not self.menu_sel_rect1.collidepoint(mouse_pos) and \
-					not self.menu_sel_rect2.collidepoint(mouse_pos) and \
-					not self.sub_rect1.collidepoint(mouse_pos) and \
-					not self.sub_rect2.collidepoint(mouse_pos):
-					self.__ResetCheckers()
-				if self.ismenu_active1:
-					if self.menu111_col_rect.collidepoint(mouse_pos):
-						self.MenuRestartClick()
-					if self.menu121_col_rect.collidepoint(mouse_pos):
-						self.MenuPauseClick()
-					if self.menu131_col_rect.collidepoint(mouse_pos):
-						self.MenuScoreClick()
-					if self.menu141_col_rect.collidepoint(mouse_pos):
-						self.MenuMusicClick()
-					if self.menu151_col_rect.collidepoint(mouse_pos):
-						self.MenuSoundClick()
-					if self.menu161_col_rect.collidepoint(mouse_pos):
-						self.MenuExitClick()
-				if self.ismenu_active2:
-					if self.sub_rect2.collidepoint(mouse_pos):
-						self.MenuAboutClick()
+	
+	def updateclick(self, onposition):
+		mouse_pos = onposition
+		if self.menu_sel_rect1.collidepoint(mouse_pos) or self.menu_sel_rect2.collidepoint(mouse_pos):
+			self.isactivate = not self.isactivate
+			if self.isactivate:
+				self.ismenu_active1 = self.menu_sel_rect1.collidepoint(mouse_pos)
+				self.ismenu_active2 = self.menu_sel_rect2.collidepoint(mouse_pos)
+		if not self.menu_sel_rect1.collidepoint(mouse_pos) and \
+			not self.menu_sel_rect2.collidepoint(mouse_pos) and \
+			not self.sub_rect1.collidepoint(mouse_pos) and \
+			not self.sub_rect2.collidepoint(mouse_pos):
+			self.__ResetCheckers()
+		if self.ismenu_active1:
+			if self.menu111_col_rect.collidepoint(mouse_pos):
+				self.MenuRestartClick()
+			if self.menu121_col_rect.collidepoint(mouse_pos):
+				self.MenuPauseClick()
+			if self.menu131_col_rect.collidepoint(mouse_pos):
+				self.MenuScoreClick()
+			if self.menu141_col_rect.collidepoint(mouse_pos):
+				self.MenuMusicClick()
+			if self.menu151_col_rect.collidepoint(mouse_pos):
+				self.MenuSoundClick()
+			if self.menu161_col_rect.collidepoint(mouse_pos):
+				self.MenuExitClick()
+		if self.ismenu_active2:
+			if self.sub_rect2.collidepoint(mouse_pos):
+				self.MenuAboutClick()
 
 	def __ResetCheckers(self):
 		self.isactivate = False
@@ -1499,6 +1499,7 @@ def StartScene():
 				elif event.key == pygame.K_F7:
 					issound = not issound
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				menu.updateclick(event.pos)
 				if screen_rect.collidepoint(event.pos):
 					SwitchScene(GameScene)
 					running = False
@@ -1509,9 +1510,12 @@ def StartScene():
 			elif event.type ==  pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
 		
+		mousepos = pygame.mouse.get_pos()
+		
 		menu.draw(display1)
 		pygame.display.update()
-		menu.update()
+		#menu.update()
+		menu.update(mousepos)
 		
 		clock.tick(FPS)
 
@@ -1608,6 +1612,7 @@ def ScoreScene():
 					SwitchScene(about_scene)
 					running = False
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				menu.updateclick(event.pos)
 				if ok_score_pos_rect.collidepoint(event.pos):
 					screen1.blit(ok_down_surf, score_ok_rect)
 					display1.blit(screen1, (spx, spy))
@@ -1623,9 +1628,12 @@ def ScoreScene():
 					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 		
+		mousepos = pygame.mouse.get_pos()
+		
 		menu.draw(display1)
 		pygame.display.update()
-		menu.update()
+		#menu.update()
+		menu.update(mousepos)
 		
 		clock.tick(FPS)
 
@@ -1720,6 +1728,7 @@ def enter_name_scene():
 				elif event.key == pygame.K_RETURN:
 					is_ok = True
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				menu.updateclick(event.pos)
 				if ok_enter_pos_rect.collidepoint(event.pos):
 					screen1.blit(ok_down_surf, score_ok_rect)
 					display1.blit(screen1, (spx, spy))
@@ -1735,16 +1744,19 @@ def enter_name_scene():
 					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 		
+		mousepos = pygame.mouse.get_pos()
+		
 		pygame.draw.rect(screen1, (255, 255, 255), text_area_rect)
 		screen1.blit(text_surf, text_rect)
 		if time.time() % 1 > 0.5:
 			pygame.draw.rect(screen1, (0, 0, 0), cursor)
 		display1.blit(screen1, (spx, spy))
 		pygame.display.update()
-		
+				
 		menu.draw(display1)
 		pygame.display.update()
-		menu.update()
+		#menu.update()
+		menu.update(mousepos)
 		
 		clock.tick(FPS)
 
@@ -1833,6 +1845,7 @@ def about_scene():
 					SwitchScene(GameScene)
 					running = False
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+				menu.updateclick(event.pos)
 				if ok_about_pos_rect.collidepoint(event.pos):
 					screen1.blit(ok_down_surf, ok_about_rect)
 					display1.blit(screen1, (spx, spy))
@@ -1848,9 +1861,12 @@ def about_scene():
 					display1.blit(screen1, (spx, spy))
 					pygame.display.update()
 		
+		mousepos = pygame.mouse.get_pos()
+		
 		menu.draw(display1)
 		pygame.display.update()		
-		menu.update()
+		#menu.update()
+		menu.update(mousepos)
 		
 		clock.tick(FPS)
 
@@ -1923,7 +1939,7 @@ def GameScene():
 				# if event.key in []:
 				pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				pass
+				menu.updateclick(event.pos)
 			elif  event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
 			elif event.type == pygame.MOUSEMOTION:
@@ -1949,9 +1965,12 @@ def GameScene():
 		# Enter Name scene
 		# Else Score Scene
 		
+		mousepos = pygame.mouse.get_pos()
+		
 		menu.draw(display1)
 		pygame.display.update()		
-		menu.update()
+		#menu.update()
+		menu.update(mousepos)
 		
 		clock.tick(FPS)
 
