@@ -1606,6 +1606,10 @@ class TMenu:
 		self.menu121_checkmarg_rect = self.checkmark_surf.get_rect(topleft = (10, 63))
 		self.menu141_checkmarg_rect = self.checkmark_surf.get_rect(topleft = (10, 113))
 		self.menu151_checkmarg_rect = self.checkmark_surf.get_rect(topleft = (10, 138))
+		
+		self.isactivate = False
+		self.ismenu1 = False
+		self.ismenu2 = False
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
@@ -1614,6 +1618,27 @@ class TMenu:
 		#pressed = pygame.mouse.get_pressed()
 		#if pressed[0]:
 		#	pos = pygame.mouse.get_pos()
+		pass
+
+	def MenuRestart(self):
+		pass
+	
+	def MenuPause(self):
+		pass
+	
+	def MenuScore(self):
+		pass
+	
+	def MenuMusic(self):
+		pass
+	
+	def MenuSound(self):
+		pass
+	
+	def MenuExit(self):
+		pass
+	
+	def MenuAbout(self):
 		pass
 
 def GameScene():
