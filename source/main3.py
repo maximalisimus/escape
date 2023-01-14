@@ -1541,7 +1541,9 @@ class TMenu:
 	def __init__(self):
 		global w
 		self.w = w
-		self.h = 175
+		self.h = 200
+		self.menu_w = w
+		self.menu_h = 25
 		self.image = CreateEmtySurf(self.w, self.h)
 		self.rect = self.image.get_rect()
 		menu_font = pygame.font.SysFont('arial', 14)
@@ -1595,21 +1597,27 @@ class TMenu:
 		self.frame_color = (166, 166, 166)
 		self.select_color = (48, 150, 250)
 		
+		self.menu_rect = pygame.Rect(0, 0, self.menu_w, self.menu_h)
 		self.menu_rect1 = self.menu1.get_rect(topleft = (10, 5))
 		self.menu_rect2 = self.menu1.get_rect(topleft = (60, 5))
 		self.menu_sel_rect1 = pygame.Rect(0, 0, self.menu1.get_rect()[2] + 20, 25)
 		self.menu_sel_rect2 = pygame.Rect(self.menu1.get_rect()[2] + 20, 0, self.menu2.get_rect()[2] + 20, 25)
 		
+		self.submenu_line_x1y1 = (10, 160)
+		self.submenu_line_x2y2 = (160, 160)
+		
 		self.checkmark_surf = LoadSurf(pathlib.Path('./images/checkmark-round.png').resolve())
 		self.checkmark_surf = pygame.transform.scale(self.checkmark_surf, (10, 10))
 		
-		self.menu121_checkmarg_rect = self.checkmark_surf.get_rect(topleft = (10, 63))
-		self.menu141_checkmarg_rect = self.checkmark_surf.get_rect(topleft = (10, 113))
-		self.menu151_checkmarg_rect = self.checkmark_surf.get_rect(topleft = (10, 138))
+		self.menu121_checkmark_rect = self.checkmark_surf.get_rect(topleft = (10, 63))
+		self.menu141_checkmark_rect = self.checkmark_surf.get_rect(topleft = (10, 113))
+		self.menu151_checkmark_rect = self.checkmark_surf.get_rect(topleft = (10, 138))
 		
 		self.isactivate = False
 		self.ismenu1 = False
+		self.ismenu_active1 = False
 		self.ismenu2 = False
+		self.ismenu_active2 = False
 		self.issubmenu11 = False
 		self.issubmenu12 = False
 		self.issubmenu13 = False
@@ -1617,20 +1625,117 @@ class TMenu:
 		self.issubmenu15 = False
 		self.issubmenu16 = False
 		self.issubmenu21 = False
+		self.last_update = pygame.time.get_ticks()
+		self.frame_rate = 100
 	
 	def draw(self, surface):
+		global isGame, ismusic, issound
+		pygame.draw.rect(self.image, self.menu_color, self.menu_rect)
+		if self.isactivate:
+			if self.ismenu1:
+				pygame.draw.rect(self.image, self.select_color, self.menu_sel_rect1)
+			if self.ismenu2:
+				pygame.draw.rect(self.image, self.select_color, self.menu_sel_rect2)
+		self.image.blit(self.menu1, self.menu_rect1)
+		self.image.blit(self.menu2, self.menu_rect2)
+		if self.isactivate:
+			if self.ismenu_active1:
+				pygame.draw.rect(self.image, self.bg_color, self.submenu_frame_rect2)
+				pygame.draw.rect(self.image, self.frame_color, self.submenu_frame_rect1, width = 2)
+				pygame.draw.rect(self.image, self.menu_color, self.submenu_rect1)
+				pygame.draw.line(self.image, self.frame_color, self.submenu_line_x1y1, self.submenu_line_x2y2) 
+				if self.issubmenu11:
+					pygame.draw.rect(self.image, self.select_color, self.menu111_sel_rect)
+				if self.issubmenu12:
+					pygame.draw.rect(self.image, self.select_color, self.menu121_sel_rect)
+				if self.issubmenu13:
+					pygame.draw.rect(self.image, self.select_color, self.menu131_sel_rect)
+				if self.issubmenu14:
+					pygame.draw.rect(self.image, self.select_color, self.menu141_sel_rect)
+				if self.issubmenu15:
+					pygame.draw.rect(self.image, self.select_color, self.menu151_sel_rect)
+				if self.issubmenu16:
+					pygame.draw.rect(self.image, self.select_color, self.menu161_sel_rect)
+				if not isGame:
+					self.image.blit(self.checkmark_surf, self.menu121_checkmark_rect)
+				if ismusic:
+					self.image.blit(self.checkmark_surf, self.menu141_checkmark_rect)
+				if issound:
+					self.image.blit(self.checkmark_surf, self.menu151_checkmark_rect)
+				self.image.blit(self.menu111, self.menu111_rect)
+				self.image.blit(self.menu112, self.menu112_rect)
+				self.image.blit(self.menu121, self.menu121_rect)
+				self.image.blit(self.menu122, self.menu122_rect)
+				self.image.blit(self.menu131, self.menu131_rect)
+				self.image.blit(self.menu132, self.menu132_rect)
+				self.image.blit(self.menu141, self.menu141_rect)
+				self.image.blit(self.menu142, self.menu142_rect)
+				self.image.blit(self.menu151, self.menu151_rect)
+				self.image.blit(self.menu152, self.menu152_rect)
+				self.image.blit(self.menu161, self.menu161_rect)
+				self.image.blit(self.menu162, self.menu162_rect)
+			if self.ismenu_active2:
+				pygame.draw.rect(self.image, self.bg_color, self.submenu_frame_rect1)
+				pygame.draw.rect(self.image, self.frame_color, self.submenu_frame_rect2, width = 2)
+				pygame.draw.rect(self.image, self.menu_color, self.submenu_rect2)
+				if self.issubmenu21:
+					pygame.draw.rect(self.image, self.select_color, self.menu211_sel_rect)
+				self.image.blit(self.menu211, self.menu211_rect)
+				self.image.blit(self.menu212, self.menu212_rect)
+		else:
+			pygame.draw.rect(self.image, self.bg_color, (0, 25, self.w, self.h - 25))
 		surface.blit(self.image, self.rect)
 	
 	def update(self):
-		#pressed = pygame.mouse.get_pressed()
-		#if pressed[0]:
-		#	pos = pygame.mouse.get_pos()
-		pass
+		new_tick = pygame.time.get_ticks()
+		if new_tick - self.last_update > self.frame_rate:
+			self.last_update = new_tick
+			mouse_pos = pygame.mouse.get_pos()
+			if self.isactivate:
+				if self.menu_sel_rect1.collidepoint(mouse_pos):
+					self.ismenu1 = True
+					self.ismenu_active1 = True
+					self.ismenu_active2 = False
+				else:
+					self.ismenu1 = False
+				if self.menu_sel_rect2.collidepoint(mouse_pos):
+					self.ismenu2 = True
+					self.ismenu_active1 = False
+					self.ismenu_active2 = True
+				else:
+					self.ismenu2 = False
+				if self.ismenu_active1:
+					self.issubmenu11 = True if self.menu111_sel_rect.collidepoint(mouse_pos) else False
+					self.issubmenu12 = True if self.menu121_sel_rect.collidepoint(mouse_pos) else False
+					self.issubmenu13 = True if self.menu131_sel_rect.collidepoint(mouse_pos) else False
+					self.issubmenu14 = True if self.menu141_sel_rect.collidepoint(mouse_pos) else False
+					self.issubmenu15 = True if self.menu151_sel_rect.collidepoint(mouse_pos) else False
+					self.issubmenu16 = True if self.menu161_sel_rect.collidepoint(mouse_pos) else False
+				elif self.ismenu_active2:
+					self.issubmenu21 = True if self.menu211_sel_rect.collidepoint(mouse_pos) else False
+			mouse_pressed = pygame.mouse.get_pressed()
+			if mouse_pressed[0]:
+				mouse_pos = pygame.mouse.get_pos()
+				if self.menu_sel_rect1.collidepoint(mouse_pos) or self.menu_sel_rect2.collidepoint(mouse_pos):
+					self.isactivate = not self.isactivate
+					if self.menu_sel_rect1.collidepoint(mouse_pos):
+						self.ismenu_active1 = True
+						self.ismenu_active2 = False
+					elif self.menu_sel_rect2.collidepoint(mouse_pos):
+						self.ismenu_active2 = True
+						self.ismenu_active1 = False
+				if not self.menu_sel_rect1.collidepoint(mouse_pos) and \
+					not self.menu_sel_rect2.collidepoint(mouse_pos) and \
+					not self.submenu_frame_rect1.collidepoint(mouse_pos) and \
+					not self.submenu_frame_rect2.collidepoint(mouse_pos):
+					self.__ResetCheckers()
 
 	def __ResetCheckers(self):
 		self.isactivate = False
 		self.ismenu1 = False
+		self.ismenu_active1 = False
 		self.ismenu2 = False
+		self.ismenu_active2 = False
 		self.issubmenu11 = False
 		self.issubmenu12 = False
 		self.issubmenu13 = False
@@ -1841,9 +1946,11 @@ def GameScene():
 				# if event.key in []:
 				pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				if isGame:
-					pass
-			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+				pass
+			elif  event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+				pass
+			elif event.type == pygame.MOUSEMOTION:
+				#mouse_position = event.pos
 				pass
 		
 		#keys = pygame.key.get_pressed()
