@@ -1222,6 +1222,7 @@ def ScoreScene():
 	pygame.display.set_caption("Лучшие игроки")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
+	pygame.draw.rect(display1, (166, 166, 166), (spx - 4, spy - 4, W + 8, H + 8), width = 4)
 	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	
@@ -1300,6 +1301,7 @@ def ScoreScene():
 				elif event.key == pygame.K_F7:
 					issound = not issound
 				elif event.key == pygame.K_F8:
+					isGame = False
 					SwitchScene(about_scene)
 					running = False
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -1330,6 +1332,7 @@ def enter_name_scene():
 	pygame.display.set_caption("")
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))	
 	screen1.blit(ok_up_surf, score_ok_rect)
+	pygame.draw.rect(display1, (166, 166, 166), (spx - 4, spy - 4, W + 8, H + 8), width = 4)
 	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	
@@ -1405,9 +1408,6 @@ def enter_name_scene():
 								pygame.mixer.music.pause()
 				elif event.key == pygame.K_F7:
 					issound = not issound
-				elif event.key == pygame.K_F8:
-					SwitchScene(about_scene)
-					running = False
 				elif event.key == pygame.K_RETURN:
 					is_ok = True
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -1445,6 +1445,7 @@ def about_scene():
 	pygame.draw.rect(screen1, (240, 240, 240), (0, 0, W, H))
 	screen1.blit(ok_up_surf, ok_about_rect)
 	screen1.blit(live_bg, (27, 30))
+	pygame.draw.rect(display1, (166, 166, 166), (spx - 4, spy - 4, W + 8, H + 8), width = 4)
 	display1.blit(screen1, (spx, spy))
 	pygame.display.update()
 	
@@ -1490,9 +1491,9 @@ def about_scene():
 					running = False
 					SwitchScene(None)
 				elif event.key == pygame.K_F5:
+					isGame = False
 					SwitchScene(ScoreScene)
 					running = False
-					isGame = True
 				elif event.key == pygame.K_F6:
 					ismusic = not ismusic
 					if not ismusicstart:
@@ -1541,7 +1542,7 @@ def GameScene():
 	
 	pygame.display.set_caption("Escape")
 	
-	#screen1.blit(background, (0, 0))
+	pygame.draw.rect(display1, (64, 64, 64), (spx - 4, spy - 4, W + 8, H + 8), width = 4)
 	screen1.fill((64, 64, 64))
 	screen1.blit(score_bg, (coord_score_bg[0], coord_score_bg[1]))
 	display1.blit(screen1, (spx, spy))
@@ -1643,6 +1644,7 @@ def GameScene():
 					running = False
 					SwitchScene(None)
 				elif event.key == pygame.K_F5:
+					isGame = False
 					SwitchScene(ScoreScene)
 					running = False
 					isGame = True
