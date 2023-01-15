@@ -554,7 +554,7 @@ class TMenu:
 				self.sub_image1.blit(self.menu152, self.menu152_rect)
 				self.sub_image1.blit(self.menu161, self.menu161_rect)
 				self.sub_image1.blit(self.menu162, self.menu162_rect)
-				if not isGame:
+				if isGame:
 					self.sub_image1.blit(self.checkmark_surf, self.menu121_checkmark_rect)
 				if ismusic:
 					self.sub_image1.blit(self.checkmark_surf, self.menu141_checkmark_rect)
