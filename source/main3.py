@@ -176,6 +176,27 @@ class TDict(object):
 	def has_value(self, v):
 		return v in self.__g.values()
 
+	def __enter__(self):
+		self.__tmp = self.__g.copy()
+		return self.__tmp
+	
+	def __exit__(self, exc_type, exc_val, exc_tb):
+		if exc_type is None:
+			self.__g = self.__tmp.copy()
+		return False
+
+#a = TDict({1: 'Text1', 2: 'Text2', 3: 'Text3'})
+#print(a)
+#b = True
+#try:
+#	with a as td:
+#		for key, value in td.items():
+#			td[key] = b
+#			b = not b
+#except:
+#	pass
+#print(a, a.size)
+
 class NoValue(Enum):
 	''' Base Enum class elements '''
 
