@@ -11,7 +11,8 @@ import time
 
 class TDict(object):
 	
-	__slots__ = '__dict__'
+	#__slots__ = '__dict__'
+	__slots__ = ['__g', '__tmp']
 	
 	def __init__(self, *args):
 		super(TDict, self).__init__()
@@ -193,6 +194,10 @@ class TDict(object):
 #		for key, value in td.items():
 #			td[key] = b
 #			b = not b
+#		# Или так
+#		for key in td:
+#				td[key] = b
+#				b = not b
 #except:
 #	pass
 #print(a, a.size)
