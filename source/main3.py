@@ -200,7 +200,7 @@ class TDict(object):
 #				b = not b
 #except:
 #	pass
-#print(a, a.size)
+#print(a)
 
 class NoValue(Enum):
 	''' Base Enum class elements '''
