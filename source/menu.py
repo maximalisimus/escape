@@ -102,7 +102,7 @@ class TCheckMark:
 				f"{self.__markbold}, {self.__markitalic}, {self.__markunderline}]"
 	
 	def __call__(self):
-		return self.font
+		return self.__mark
 	
 	def update(self):
 		FontMenu = pygame.font.Font
