@@ -346,6 +346,9 @@ class TFont:
 
 class TMenu:
 	
+	screen_w = pygame.display.Info().current_w
+	screen_h = pygame.display.Info().current_h
+	
 	def __init__(self, upmenu: list = []):
 		self.text = upmenu[:]
 		self.font = TFont(ismark = True)
