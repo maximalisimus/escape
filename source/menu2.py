@@ -346,8 +346,14 @@ class TFont:
 
 class TMenu:
 	
-	def __init__(self):
-		pass
+	def __init__(self, upmenu: list = []):
+		self.text_up_menu = upmenu
+		self.font = TFont(ismark = True)
+		self.bg_color = (64, 64, 64)
+		self.menu_color = (240, 240, 240)
+		self.frame_color = (166, 166, 166)
+		self.select_color = (48, 150, 250)
+		self.text_color = (0, 0, 0)
 	
 	def update(self):
 		pass
@@ -360,17 +366,11 @@ class TMenu:
 
 def work():
 	global display1, clock, running, w, h
-	
-	bg_color = (64, 64, 64)
-	menu_color = (240, 240, 240)
-	frame_color = (166, 166, 166)
-	select_color = (48, 150, 250)
-	text_color = (0, 0, 0)
-	
-	display1.fill(bg_color)
+		
+	display1.fill((64, 64, 64))
 	pygame.display.update()
 	
-	
+	main_menu = TMenu(['Игра', 'Помощь'])
 		
 	running = True
 	while running:
