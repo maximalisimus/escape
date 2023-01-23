@@ -344,11 +344,10 @@ class TFont:
 	def ismark(self):
 		del self.__ismark
 
-class MainMenu:
+class TMenu:
 	
-	def __init__(self, surf, CoordXY: Tuple[int, int]):
-		self.image = surf
-		self.rect = self.image.get_rect(topleft = CoordXY)
+	def __init__(self):
+		pass
 	
 	def update(self):
 		pass
