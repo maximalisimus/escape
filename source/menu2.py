@@ -347,7 +347,7 @@ class TFont:
 class TMenu:
 	
 	def __init__(self, upmenu: list = []):
-		self.text_up_menu = upmenu
+		self.text = upmenu[:]
 		self.font = TFont(ismark = True)
 		self.bg_color = (64, 64, 64)
 		self.menu_color = (240, 240, 240)
