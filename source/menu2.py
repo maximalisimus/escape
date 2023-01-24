@@ -346,10 +346,16 @@ class TFont:
 
 class SubMenu(pygame.sprite.Sprite):
 	
-	def __init__(self, surf):
+	def __init__(self, *on_menu):
 		super(SubMenu, self).__init__()
-		self.image = surf
-		self.rect = self.image.get_rect()
+		self.ismark = on_menu[0]
+		self.text = on_menu[1]
+		self.hotkey = on_menu[2]
+		self.callback = on_menu[3]
+		self.sup_rect = on_menu[4]
+
+	def build(self):
+		pass
 
 	def update(self, pos):
 		pass
@@ -373,6 +379,11 @@ class MainMenu(pygame.sprite.Sprite):
 		self.callback = callback
 		if group != None:
 			self.add(group)
+		if callback == None:
+			self.submenu = pygame.sprite.Group()
+	
+	def addsub(self, *onmenu):
+		self.submenu.add(SubMenu(*onmenu, self.rect))
 	
 	def update(self, pos):
 		self.ismenu = self.rect.collidepoint(pos)
@@ -467,6 +478,8 @@ def work():
 	
 	up_menu_text = ('Игра', 'Помощь')
 	main_menu = TMenu(up_menu_text)
+	sub1 = (False, 'Сначала', 'F2', None)
+	main_menu.menu.sprites()[0].addsub(*sub1)
 	
 	running = True
 	while running:
