@@ -367,15 +367,17 @@ class TMenu:
 	
 	screen_w = pygame.display.Info().current_w
 	screen_h = pygame.display.Info().current_h
+	bg_color = (64, 64, 64)
+	menu_color = (240, 240, 240)
+	frame_color = (166, 166, 166)
+	select_color = (48, 150, 250)
+	text_color = (0, 0, 0)
 	
 	def __init__(self, menu = [], *oncallback):
 		self.text = list(menu)[:]
 		self.font = TFont(ismark = True)
-		self.bg_color = (64, 64, 64)
-		self.menu_color = (240, 240, 240)
-		self.frame_color = (166, 166, 166)
-		self.select_color = (48, 150, 250)
-		self.text_color = (0, 0, 0)
+		self.font.color = TMenu.text_color
+		self.font.update()
 		self.step = (10, 5)
 		self.frame_width = 2
 		self.menu = pygame.sprite.Group()
@@ -401,7 +403,7 @@ class TMenu:
 		mh = self.menu.sprites()[0].rect.height
 		self.image = CreateEmtySurf(mw, mh)
 		self.rect = self.image.get_rect(topleft = (0, 0))
-		self.image.fill(self.menu_color)
+		self.image.fill(TMenu.menu_color)
 	
 	def update(self, pos):
 		if MainMenu.isactive:
@@ -420,6 +422,11 @@ class TMenu:
 							MainMenu.isactive = False
 							hits.clear()
 							item.callback()
+					#if hasattr(item, 'submenu'):
+					#	item.ismenu = False
+					#	MainMenu.isactive = False
+					#	hits.clear()
+					#	item.submenu.updateclick(pos)
 				else:
 					item.ismenu = False
 		else:
@@ -432,7 +439,7 @@ class TMenu:
 		if MainMenu.isactive:
 			for item in self.menu.sprites():
 				if item.ismenu:
-					pygame.draw.rect(surface, self.select_color, item.rect)
+					pygame.draw.rect(surface, TMenu.select_color, item.rect)
 		self.menu.draw(surface)
 
 def work():
