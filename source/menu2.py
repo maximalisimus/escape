@@ -344,6 +344,22 @@ class TFont:
 	def ismark(self):
 		del self.__ismark
 
+class TextMenu(pygame.sprite.Sprite):
+	
+	def __init__(self, surf, group = None):
+		super(TextMenu, self).__init__()
+		self.image = surf
+		self.rect = self.image.get_rect()
+		self.ismenu = False
+		if group != None:
+			self.add(group)
+	
+	def update(self, pos):
+		if self.rect.collidepoint(pos):
+			self.ismenu = True
+		else:
+			self.ismenu = False
+
 class TMenu:
 	
 	screen_w = pygame.display.Info().current_w
@@ -357,15 +373,55 @@ class TMenu:
 		self.frame_color = (166, 166, 166)
 		self.select_color = (48, 150, 250)
 		self.text_color = (0, 0, 0)
+		self.step = (10, 5)
+		self.frame_width = 2
+		self.isactive = False
+		self.upmenu = pygame.sprite.Group()
+		for count in range(len(self.text)):
+			text_surf = self.font().render(self.text[count], 1, self.font.color)
+			x = self.step[0]
+			y = self.step[1]
+			text_rect = text_surf.get_rect(topleft = (x, y))
+			w1 = text_rect.width + x*2
+			h1 = text_rect.height + y*2
+			menu = TextMenu(CreateEmtySurf(w1, h1), self.upmenu)
+			menu.image.blit(text_surf, text_rect)
+			if count == 0:
+				posx = 0
+			else:
+				posx = self.upmenu.sprites()[count-1].rect.x + self.upmenu.sprites()[count-1].rect.width
+			posy = 0
+			menu.rect.topleft = (posx, posy)
+		mw = TMenu.screen_w
+		mh = self.upmenu.sprites()[0].rect.height
+		self.image = CreateEmtySurf(mw, mh)
+		self.rect = self.image.get_rect(topleft = (0, 0))
+		self.image.fill(self.menu_color)
 	
-	def update(self):
-		pass
-		
-	def updateclick(self):
-		pass
+	def update(self, pos):
+		if self.isactive:
+			self.upmenu.update(pos)
+	
+	def updateclick(self, pos):
+		hits = []
+		for item in self.upmenu.sprites():
+			if item.rect.collidepoint(pos):
+				hits.append(item)
+		if len(hits) >= 1:
+			self.isactive = True
+		else:
+			self.isactive = False
+		if not self.isactive:
+			for item in self.upmenu.sprites():
+				item.ismenu = False
 	
 	def draw(self, surface):
-		pass
+		surface.blit(self.image, self.rect)
+		if self.isactive:
+			for item in self.upmenu.sprites():
+				if item.ismenu:
+					pygame.draw.rect(surface, self.select_color, item.rect)
+		self.upmenu.draw(surface)
 
 def work():
 	global display1, clock, running, w, h
@@ -374,7 +430,7 @@ def work():
 	pygame.display.update()
 	
 	main_menu = TMenu(['Игра', 'Помощь'])
-		
+	
 	running = True
 	while running:
 		for event in pygame.event.get():
@@ -391,11 +447,11 @@ def work():
 				# if event.key in []:
 				pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				pass
+				main_menu.updateclick(event.pos)
 			elif  event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
 			elif event.type == pygame.MOUSEMOTION:
-				pass
+				main_menu.update(event.pos)
 		
 		#keys = pygame.key.get_pressed()
 		# if keys[pygame.K_SPACE]:
@@ -404,6 +460,9 @@ def work():
 		#if pressed[0]:
 		#	pos = pygame.mouse.get_pos()
 		#	print(pos)
+		
+		main_menu.draw(display1)
+		pygame.display.update()
 		
 		clock.tick(FPS)
 
