@@ -344,13 +344,16 @@ class TFont:
 	def ismark(self):
 		del self.__ismark
 
-class TextMenu(pygame.sprite.Sprite):
+class MainMenu(pygame.sprite.Sprite):
 	
-	def __init__(self, surf, group = None):
-		super(TextMenu, self).__init__()
+	isactive = False
+	
+	def __init__(self, surf, group = None, callback = None):
+		super(MainMenu, self).__init__()
 		self.image = surf
 		self.rect = self.image.get_rect()
 		self.ismenu = False
+		self.callback = callback
 		if group != None:
 			self.add(group)
 	
@@ -365,8 +368,8 @@ class TMenu:
 	screen_w = pygame.display.Info().current_w
 	screen_h = pygame.display.Info().current_h
 	
-	def __init__(self, upmenu = []):
-		self.text = list(upmenu)[:]
+	def __init__(self, menu = [], *oncallback):
+		self.text = list(menu)[:]
 		self.font = TFont(ismark = True)
 		self.bg_color = (64, 64, 64)
 		self.menu_color = (240, 240, 240)
@@ -375,8 +378,7 @@ class TMenu:
 		self.text_color = (0, 0, 0)
 		self.step = (10, 5)
 		self.frame_width = 2
-		self.isactive = False
-		self.upmenu = pygame.sprite.Group()
+		self.menu = pygame.sprite.Group()
 		for count in range(len(self.text)):
 			text_surf = self.font().render(self.text[count], 1, self.font.color)
 			x = self.step[0]
@@ -384,44 +386,54 @@ class TMenu:
 			text_rect = text_surf.get_rect(topleft = (x, y))
 			w1 = text_rect.width + x*2
 			h1 = text_rect.height + y*2
-			menu = TextMenu(CreateEmtySurf(w1, h1), self.upmenu)
+			if len(oncallback) > count:
+				menu = MainMenu(CreateEmtySurf(w1, h1), self.menu, oncallback[count])
+			else:
+				menu = MainMenu(CreateEmtySurf(w1, h1), self.menu)
 			menu.image.blit(text_surf, text_rect)
 			if count == 0:
 				posx = 0
 			else:
-				posx = self.upmenu.sprites()[count-1].rect.x + self.upmenu.sprites()[count-1].rect.width
+				posx = self.menu.sprites()[count-1].rect.x + self.menu.sprites()[count-1].rect.width
 			posy = 0
 			menu.rect.topleft = (posx, posy)
 		mw = TMenu.screen_w
-		mh = self.upmenu.sprites()[0].rect.height
+		mh = self.menu.sprites()[0].rect.height
 		self.image = CreateEmtySurf(mw, mh)
 		self.rect = self.image.get_rect(topleft = (0, 0))
 		self.image.fill(self.menu_color)
 	
 	def update(self, pos):
-		if self.isactive:
-			self.upmenu.update(pos)
+		if MainMenu.isactive:
+			self.menu.update(pos)
 	
 	def updateclick(self, pos):
 		hits = []
-		for item in self.upmenu.sprites():
-			if item.rect.collidepoint(pos):
-				hits.append(item)
-		if len(hits) >= 1:
-			self.isactive = True
+		if not MainMenu.isactive:
+			for item in self.menu.sprites():
+				if item.rect.collidepoint(pos):
+					hits.append(item)
+					item.ismenu = True
+					if hasattr(item, 'callback'):
+						if item.callback != None:
+							item.ismenu = False
+							MainMenu.isactive = False
+							hits.clear()
+							item.callback()
+				else:
+					item.ismenu = False
 		else:
-			self.isactive = False
-		if not self.isactive:
-			for item in self.upmenu.sprites():
-				item.ismenu = False
+			MainMenu.isactive = False
+		if len(hits) >= 1:
+			MainMenu.isactive = True
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
-		if self.isactive:
-			for item in self.upmenu.sprites():
+		if MainMenu.isactive:
+			for item in self.menu.sprites():
 				if item.ismenu:
 					pygame.draw.rect(surface, self.select_color, item.rect)
-		self.upmenu.draw(surface)
+		self.menu.draw(surface)
 
 def work():
 	global display1, clock, running, w, h
