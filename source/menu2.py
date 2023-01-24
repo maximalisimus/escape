@@ -365,8 +365,8 @@ class TMenu:
 	screen_w = pygame.display.Info().current_w
 	screen_h = pygame.display.Info().current_h
 	
-	def __init__(self, upmenu: list = []):
-		self.text = upmenu[:]
+	def __init__(self, upmenu = []):
+		self.text = list(upmenu)[:]
 		self.font = TFont(ismark = True)
 		self.bg_color = (64, 64, 64)
 		self.menu_color = (240, 240, 240)
@@ -429,7 +429,8 @@ def work():
 	display1.fill((64, 64, 64))
 	pygame.display.update()
 	
-	main_menu = TMenu(['Игра', 'Помощь'])
+	up_menu_text = ('Игра', 'Помощь')
+	main_menu = TMenu(up_menu_text)
 	
 	running = True
 	while running:
