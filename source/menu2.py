@@ -428,24 +428,14 @@ class TMenu:
 		for item in self.menu.sprites():
 			if item.rect.collidepoint(pos):
 				MainMenu.isactive = not MainMenu.isactive
-				if MainMenu.isactive:
-					item.ismenu = item.rect.collidepoint(pos)
 			else:
-				if MainMenu.isactive:
-					item.ismenu = item.rect.collidepoint(pos)
 				hits.append(item)
+			if MainMenu.isactive:
+				item.ismenu = item.rect.collidepoint(pos)
 		if len(hits) == len(self.menu.sprites()):
 			MainMenu.isactive = False
 			for item in hits:
-				if not item.rect.collidepoint(pos):
-					if hasattr(item, 'callback'):
-						item.ismenu = False
-						if item.callback != None:
-							item.ismenu = False
-							MainMenu.isactive = False
-							hits.clear()
-							item.callback()
-		
+				pass
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
