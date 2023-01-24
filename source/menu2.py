@@ -360,7 +360,24 @@ class SubMenu(pygame.sprite.Sprite):
 		pass
 	
 	def draw(self, surface):
-		#surface.blit(self.image, self.rect)
+		pass
+
+class TSubMenu(pygame.sprite.Sprite):
+	
+	def __init__(self):
+		super(SubMenu, self).__init__()
+		pass
+
+	def build(self):
+		pass
+
+	def update(self, pos):
+		pass
+		
+	def updateclick(self, pos):
+		pass
+	
+	def draw(self, surface):
 		pass
 
 class MainMenu(pygame.sprite.Sprite):
