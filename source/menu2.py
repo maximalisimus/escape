@@ -344,6 +344,23 @@ class TFont:
 	def ismark(self):
 		del self.__ismark
 
+class SubMenu(pygame.sprite.Sprite):
+	
+	def __init__(self, surf):
+		super(SubMenu, self).__init__()
+		self.image = surf
+		self.rect = self.image.get_rect()
+
+	def update(self, pos):
+		pass
+		
+	def updateclick(self, pos):
+		pass
+	
+	def draw(self, surface):
+		#surface.blit(self.image, self.rect)
+		pass
+
 class MainMenu(pygame.sprite.Sprite):
 	
 	isactive = False
