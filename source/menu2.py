@@ -380,6 +380,8 @@ class MainMenu(pygame.sprite.Sprite):
 	def updateclick(self, pos):
 		if self.rect.collidepoint(pos):
 			if self.callback != None:
+				self.ismenu = False
+				MainMenu.isactive = False
 				self.callback()
 
 class TMenu:
@@ -400,6 +402,10 @@ class TMenu:
 		self.step = (10, 5)
 		self.frame_width = 2
 		self.menu = pygame.sprite.Group()
+		self.oncallback = list(oncallback)
+		self.build()
+	
+	def build(self):
 		for count in range(len(self.text)):
 			text_surf = TMenu.font().render(self.text[count], 1, TMenu.font.color)
 			x = self.step[0]
@@ -407,8 +413,8 @@ class TMenu:
 			text_rect = text_surf.get_rect(topleft = (x, y))
 			w1 = text_rect.width + x*2
 			h1 = text_rect.height + y*2
-			if len(oncallback) > count:
-				menu = MainMenu(CreateEmtySurf(w1, h1), self.menu, oncallback[count])
+			if len(self.oncallback) > count:
+				menu = MainMenu(CreateEmtySurf(w1, h1), self.menu, self.oncallback[count])
 			else:
 				menu = MainMenu(CreateEmtySurf(w1, h1), self.menu)
 			menu.image.blit(text_surf, text_rect)
@@ -429,20 +435,18 @@ class TMenu:
 			self.menu.update(pos)
 	
 	def updateclick(self, pos):
-		hits = []
 		for item in self.menu.sprites():
 			if item.rect.collidepoint(pos):
 				MainMenu.isactive = not MainMenu.isactive
-			else:
-				hits.append(item)
-			if MainMenu.isactive:
-				item.ismenu = item.rect.collidepoint(pos)
-		if len(hits) == len(self.menu.sprites()):
-			MainMenu.isactive = False
-			for item in hits:
-				pass
 				if hasattr(item, 'updateclick'):
 					item.updateclick(pos)
+			if MainMenu.isactive:
+				item.ismenu = item.rect.collidepoint(pos)
+	
+	def __reset(self):
+		MainMenu.isactive = False
+		for item in self.menu.sprites():
+			item.ismenu = False
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
@@ -451,6 +455,9 @@ class TMenu:
 				if item.ismenu:
 					pygame.draw.rect(surface, TMenu.select_color, item.rect)
 		self.menu.draw(surface)
+
+def info():
+	print('Info')
 
 def work():
 	global display1, clock, running, w, h
