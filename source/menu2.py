@@ -377,6 +377,11 @@ class MainMenu(pygame.sprite.Sprite):
 	def update(self, pos):
 		self.ismenu = self.rect.collidepoint(pos)
 
+	def updateclick(self, pos):
+		if self.rect.collidepoint(pos):
+			if self.callback != None:
+				self.callback()
+
 class TMenu:
 	
 	screen_w = pygame.display.Info().current_w
@@ -436,6 +441,8 @@ class TMenu:
 			MainMenu.isactive = False
 			for item in hits:
 				pass
+				if hasattr(item, 'updateclick'):
+					item.updateclick(pos)
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
