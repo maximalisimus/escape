@@ -367,6 +367,7 @@ class TMenu:
 	
 	screen_w = pygame.display.Info().current_w
 	screen_h = pygame.display.Info().current_h
+	font = TFont(ismark = True)
 	bg_color = (64, 64, 64)
 	menu_color = (240, 240, 240)
 	frame_color = (166, 166, 166)
@@ -375,14 +376,13 @@ class TMenu:
 	
 	def __init__(self, menu = [], *oncallback):
 		self.text = list(menu)[:]
-		self.font = TFont(ismark = True)
-		self.font.color = TMenu.text_color
-		self.font.update()
+		TMenu.font.color = TMenu.text_color
+		TMenu.font.update()
 		self.step = (10, 5)
 		self.frame_width = 2
 		self.menu = pygame.sprite.Group()
 		for count in range(len(self.text)):
-			text_surf = self.font().render(self.text[count], 1, self.font.color)
+			text_surf = TMenu.font().render(self.text[count], 1, TMenu.font.color)
 			x = self.step[0]
 			y = self.step[1]
 			text_rect = text_surf.get_rect(topleft = (x, y))
