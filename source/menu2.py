@@ -375,10 +375,7 @@ class MainMenu(pygame.sprite.Sprite):
 			self.add(group)
 	
 	def update(self, pos):
-		if self.rect.collidepoint(pos):
-			self.ismenu = True
-		else:
-			self.ismenu = False
+		self.ismenu = self.rect.collidepoint(pos)
 
 class TMenu:
 	
@@ -428,28 +425,27 @@ class TMenu:
 	
 	def updateclick(self, pos):
 		hits = []
-		if not MainMenu.isactive:
-			for item in self.menu.sprites():
-				if item.rect.collidepoint(pos):
-					hits.append(item)
-					item.ismenu = True
+		for item in self.menu.sprites():
+			if item.rect.collidepoint(pos):
+				MainMenu.isactive = not MainMenu.isactive
+				if MainMenu.isactive:
+					item.ismenu = item.rect.collidepoint(pos)
+			else:
+				if MainMenu.isactive:
+					item.ismenu = item.rect.collidepoint(pos)
+				hits.append(item)
+		if len(hits) == len(self.menu.sprites()):
+			MainMenu.isactive = False
+			for item in hits:
+				if not item.rect.collidepoint(pos):
 					if hasattr(item, 'callback'):
+						item.ismenu = False
 						if item.callback != None:
 							item.ismenu = False
 							MainMenu.isactive = False
 							hits.clear()
 							item.callback()
-					#if hasattr(item, 'submenu'):
-					#	item.ismenu = False
-					#	MainMenu.isactive = False
-					#	hits.clear()
-					#	item.submenu.updateclick(pos)
-				else:
-					item.ismenu = False
-		else:
-			MainMenu.isactive = False
-		if len(hits) >= 1:
-			MainMenu.isactive = True
+		
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
