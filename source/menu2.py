@@ -344,6 +344,29 @@ class TFont:
 	def ismark(self):
 		del self.__ismark
 
+class GetScreenW:
+	
+	def __get__(self, obj, objtype = None):
+		return pygame.display.Info().current_w
+
+class GetScreenH:
+	
+	def __get__(self, obj, objtype = None):
+		return pygame.display.Info().current_h
+		
+class TConfig:
+	
+	screen_w = GetScreenW()
+	screen_h = GetScreenH()
+	font = TFont(ismark = True)
+	bg_color = (64, 64, 64)
+	menu_color = (240, 240, 240)
+	frame_color = (166, 166, 166)
+	select_color = (48, 150, 250)
+	text_color = (0, 0, 0)
+	step = (10, 5)
+	frame_width = 2
+
 class SubMenu(pygame.sprite.Sprite):
 	
 	def __init__(self):
@@ -362,10 +385,13 @@ class SubMenu(pygame.sprite.Sprite):
 	def draw(self, surface):
 		pass
 
-class TSubMenu(pygame.sprite.Sprite):
+class TSub:
 	
 	def __init__(self):
 		super(SubMenu, self).__init__()
+		pass
+
+	def addmenu(self):
 		pass
 
 	def build(self):
@@ -407,30 +433,19 @@ class MainMenu(pygame.sprite.Sprite):
 
 class TMenu:
 	
-	screen_w = pygame.display.Info().current_w
-	screen_h = pygame.display.Info().current_h
-	font = TFont(ismark = True)
-	bg_color = (64, 64, 64)
-	menu_color = (240, 240, 240)
-	frame_color = (166, 166, 166)
-	select_color = (48, 150, 250)
-	text_color = (0, 0, 0)
-	
 	def __init__(self, menu = [], *oncallback):
 		self.text = list(menu)[:]
-		TMenu.font.color = TMenu.text_color
-		TMenu.font.update()
-		self.step = (10, 5)
-		self.frame_width = 2
+		TConfig.font.color = TConfig.text_color
+		TConfig.font.update()
 		self.menu = pygame.sprite.Group()
 		self.oncallback = list(oncallback)
 		self.build()
 	
 	def build(self):
 		for count in range(len(self.text)):
-			text_surf = TMenu.font().render(self.text[count], 1, TMenu.font.color)
-			x = self.step[0]
-			y = self.step[1]
+			text_surf = TConfig.font().render(self.text[count], 1, TConfig.font.color)
+			x = TConfig.step[0]
+			y = TConfig.step[1]
 			text_rect = text_surf.get_rect(topleft = (x, y))
 			w1 = text_rect.width + x*2
 			h1 = text_rect.height + y*2
@@ -445,11 +460,11 @@ class TMenu:
 				posx = self.menu.sprites()[count-1].rect.x + self.menu.sprites()[count-1].rect.width
 			posy = 0
 			menu.rect.topleft = (posx, posy)
-		mw = TMenu.screen_w
+		mw = TConfig.screen_w
 		mh = self.menu.sprites()[0].rect.height
 		self.image = CreateEmtySurf(mw, mh)
 		self.rect = self.image.get_rect(topleft = (0, 0))
-		self.image.fill(TMenu.menu_color)
+		self.image.fill(TConfig.menu_color)
 	
 	def update(self, pos):
 		if MainMenu.isactive:
@@ -474,7 +489,7 @@ class TMenu:
 		if MainMenu.isactive:
 			for item in self.menu.sprites():
 				if item.ismenu:
-					pygame.draw.rect(surface, TMenu.select_color, item.rect)
+					pygame.draw.rect(surface, TConfig.select_color, item.rect)
 		self.menu.draw(surface)
 
 def info():
@@ -488,6 +503,7 @@ def work():
 	
 	up_menu_text = ('Игра', 'Помощь')
 	main_menu = TMenu(up_menu_text)
+	# main_menu.menu.sprites()[0].rect
 	
 	running = True
 	while running:
