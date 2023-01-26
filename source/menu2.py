@@ -438,6 +438,7 @@ class TSub:
 			SubMenu(menutype, self.ismark, ismark, text, hotkey, None, self.menu, callback)
 		else:
 			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.menu.sprites()[-1].rect, self.menu, callback)
+		self.build()
 
 	def build(self):
 		pass
