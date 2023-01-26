@@ -433,9 +433,6 @@ class SubMenu(pygame.sprite.Sprite):
 		if group != None:
 			self.add(group)
 		self.ismenu = False
-		self.prebuild()
-
-	def prebuild(self):
 		self.text_surf = TConfig.font().render(self.text, 1, TConfig.font.color)
 		self.hotkey_surf = TConfig.font().render(self.hotkey, 1, TConfig.font.color)
 		self.text_rect = self.text_surf.get_rect()
@@ -461,17 +458,10 @@ class TSub:
 		SubMenu.up_rect = up_rect
 		self.menu = pygame.sprite.Group()
 		self.ismark = ismark
+		self.on_menu = []
 
 	def add(self, menutype: TypeMenu = TypeMenu.Menu, ismark = False, text: str = '', hotkey: str = '', callback = None):
-		if len(self.menu.sprites()) == 0:
-			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.up_rect, self.menu, callback)
-		else:
-			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.menu.sprites()[-1].rect, self.menu, callback)
-		self.prebuild()
-		self.build()
-
-	def prebuild(self):
-		pass
+		self.on_menu.append((menutype, self.ismark, ismark, text, hotkey, None, self.menu, callback))
 
 	def build(self):
 		pass
@@ -594,14 +584,14 @@ def work():
 	
 	sub_menu = TSub(main_menu.menu.sprites()[0].rect)
 	sub_menu.add(*sub_menu_param_1)
-	#sub_menu.add(*sub_menu_param_2)
-	#sub_menu.add(*sub_menu_param_3)
-	#sub_menu.add(*sub_menu_param_4)
-	#sub_menu.add(*sub_menu_param_5)
-	#sub_menu.add(*sub_menu_param_6)
-	#sub_menu.add(*sub_menu_param_7)
-	sub_menu.draw(display1)
-	pygame.display.update()
+	sub_menu.add(*sub_menu_param_2)
+	sub_menu.add(*sub_menu_param_3)
+	sub_menu.add(*sub_menu_param_4)
+	sub_menu.add(*sub_menu_param_5)
+	sub_menu.add(*sub_menu_param_6)
+	sub_menu.add(*sub_menu_param_7)
+	#sub_menu.draw(display1)
+	#pygame.display.update()
 	
 	running = True
 	while running:
