@@ -460,12 +460,18 @@ class TSub:
 		SubMenu.up_rect = up_rect
 		self.menu = pygame.sprite.Group()
 		self.ismark = ismark
+		self.image = None
+		self.rect = None
 
 	def add(self, menutype: TypeMenu = TypeMenu.Menu, ismark = False, text: str = '', hotkey: str = '', callback = None):
 		if len(self.menu.sprites()) == 0:
 			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.up_rect, self.menu, callback)
 		else:
 			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.menu.sprites()[-1].rect, self.menu, callback)
+		dmw = []
+		for item in self.menu.sprites():
+			dmw.append(item.text_rect.width)
+		TConfig.dmw_max = max(dmw)
 
 	def build(self):
 		pass
