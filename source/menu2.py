@@ -384,7 +384,12 @@ class GetScreenH:
 	
 	def __get__(self, obj, objtype = None):
 		return pygame.display.Info().current_h
-		
+
+class GetMarkRect:
+	
+	def __get__(self, obj, objtype = None):
+		return TConfig.font.mark.get_rect()
+
 class TConfig:
 	
 	screen_w = GetScreenW()
@@ -397,6 +402,15 @@ class TConfig:
 	text_color = (0, 0, 0)
 	step = (10, 5)
 	frame_width = 2
+	dmw_max = 0
+	mark_rect = GetMarkRect()
+
+	@classmethod
+	def GetTextRectWH(cls, text):
+		surf = cls.font().render(text, 1, cls.font.color)
+		width = surf.get_rect().width
+		height = surf.get_rect().height
+		return (width, height)
 
 class SubMenu(pygame.sprite.Sprite):
 	
@@ -418,10 +432,15 @@ class SubMenu(pygame.sprite.Sprite):
 		self.build()
 
 	def build(self):
+		text_surf = TConfig.font().render(self.text, 1, TConfig.font.color)
+		hotkey_surf = TConfig.font().render(self.hotkey, 1, TConfig.font.color)
 		if len(self.groups()[0].sprites()) == 1:
 			pass
 		else:
-			pass
+			if self.typemenu == TypeMenu.Menu:
+				pass
+			else:
+				pass
 
 	def update(self, pos):
 		pass
@@ -449,12 +468,22 @@ class TSub:
 
 	def build(self):
 		if len(self.menu.sprites()) > 0:
-			#dmw = []
-			#for item in self.menu.sprites():
-			#	dmw.append(item.rect.width)
-			#self.dmw_max = max(dwm)
-			#self.mark_rect = TConfig.mark.get_rect()
-			pass
+			dmw = []
+			for item in self.menu.sprites():
+				dmw.append(item.rect.width)
+			TConfig.dmw_max = max(dwm)
+			dmenu_w = 0
+			if self.ismark:
+				dmenu_w = TConfig.dmw_max + TConfig.GetTextRectWH(self.menu.sprites()[0].hotkey)[0] + TConfig.mark_rect.width + TConfig.step[0]*6 + 8
+			else:
+				dmenu_w = TConfig.dmw_max + TConfig.GetTextRectWH(self.menu.sprites()[0].hotkey)[0] + TConfig.mark_rect.width + TConfig.step[0]*4 + 8
+			dmenu_h = (self.menu.sprites()[0].rect.height + TConfig.step[1])*len(self.menu.sprites()) + 8
+			self.image = CreateEmtySurf(dmenu_w, dmenu_h)
+			dm_x = self.up_menu_rect1.bottomleft[0]
+			dm_y = self.up_menu_rect1.bottomleft[1]
+			self.rect = self.image.get_rect(topleft = (dm_x, dm_y))
+			pygame.draw.rect(self.image, TConfig.frame_color, (0, 0, dmenu_w, dmenu_h), width = TConfig.frame_width)
+			pygame.draw.rect(self.image, TConfig.menu_color, (2, 2, dmenu_w - 4, dmenu_h - 4))
 
 	def update(self, pos):
 		pass
@@ -574,6 +603,8 @@ def work():
 	
 	sub_menu = TSub(main_menu.menu.sprites()[0].rect)
 	sub_menu.add(*sub_menu_param_1)
+	#display1.blit(sub_menu.menu.sprites()[0].image, sub_menu.menu.sprites()[0].rect)
+	#sub_menu.menu.sprites()[0].draw(display1)
 	#sub_menu.add(*sub_menu_param_2)
 	#sub_menu.add(*sub_menu_param_3)
 	#sub_menu.add(*sub_menu_param_4)
