@@ -388,7 +388,7 @@ class GetScreenH:
 class GetMarkRect:
 	
 	def __get__(self, obj, objtype = None):
-		return TConfig.font.mark.get_rect()
+		return TConfig.font.mark().get_rect()
 
 class TConfig:
 	
@@ -414,11 +414,15 @@ class TConfig:
 
 class SubMenu(pygame.sprite.Sprite):
 	
+	ID = 0
+	up_rect = None
+	
 	def __init__(self, MenuType: TypeMenu = TypeMenu.Menu, \
 				fmark: bool = True, ismark = False, text: str = '', \
 				hotkey: str = '', old_rect = None, group = None, \
 				callback = None):
 		super(SubMenu, self).__init__()
+		SubMenu.ID += 1
 		self.typemenu = MenuType
 		self.fmark = fmark
 		self.ismark = ismark
@@ -429,18 +433,16 @@ class SubMenu(pygame.sprite.Sprite):
 		if group != None:
 			self.add(group)
 		self.ismenu = False
-		self.build()
+		self.prebuild()
+
+	def prebuild(self):
+		self.text_surf = TConfig.font().render(self.text, 1, TConfig.font.color)
+		self.hotkey_surf = TConfig.font().render(self.hotkey, 1, TConfig.font.color)
+		self.text_rect = self.text_surf.get_rect()
+		self.hotkey_rect = self.hotkey_surf.get_rect()
 
 	def build(self):
-		text_surf = TConfig.font().render(self.text, 1, TConfig.font.color)
-		hotkey_surf = TConfig.font().render(self.hotkey, 1, TConfig.font.color)
-		if len(self.groups()[0].sprites()) == 1:
-			pass
-		else:
-			if self.typemenu == TypeMenu.Menu:
-				pass
-			else:
-				pass
+		pass
 
 	def update(self, pos):
 		pass
@@ -448,14 +450,15 @@ class SubMenu(pygame.sprite.Sprite):
 	def updateclick(self, pos):
 		pass
 	
-	def draw(self, surface):
+	def draw(self, surf):
 		pass
-
+	
 class TSub:
 	
 	def __init__(self, up_rect, ismark: bool = True):
 		super(TSub, self).__init__()
 		self.up_rect = up_rect
+		SubMenu.up_rect = up_rect
 		self.menu = pygame.sprite.Group()
 		self.ismark = ismark
 
@@ -464,26 +467,14 @@ class TSub:
 			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.up_rect, self.menu, callback)
 		else:
 			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.menu.sprites()[-1].rect, self.menu, callback)
+		self.prebuild()
 		self.build()
 
+	def prebuild(self):
+		pass
+
 	def build(self):
-		if len(self.menu.sprites()) > 0:
-			dmw = []
-			for item in self.menu.sprites():
-				dmw.append(item.rect.width)
-			TConfig.dmw_max = max(dwm)
-			dmenu_w = 0
-			if self.ismark:
-				dmenu_w = TConfig.dmw_max + TConfig.GetTextRectWH(self.menu.sprites()[0].hotkey)[0] + TConfig.mark_rect.width + TConfig.step[0]*6 + 8
-			else:
-				dmenu_w = TConfig.dmw_max + TConfig.GetTextRectWH(self.menu.sprites()[0].hotkey)[0] + TConfig.mark_rect.width + TConfig.step[0]*4 + 8
-			dmenu_h = (self.menu.sprites()[0].rect.height + TConfig.step[1])*len(self.menu.sprites()) + 8
-			self.image = CreateEmtySurf(dmenu_w, dmenu_h)
-			dm_x = self.up_menu_rect1.bottomleft[0]
-			dm_y = self.up_menu_rect1.bottomleft[1]
-			self.rect = self.image.get_rect(topleft = (dm_x, dm_y))
-			pygame.draw.rect(self.image, TConfig.frame_color, (0, 0, dmenu_w, dmenu_h), width = TConfig.frame_width)
-			pygame.draw.rect(self.image, TConfig.menu_color, (2, 2, dmenu_w - 4, dmenu_h - 4))
+		pass
 
 	def update(self, pos):
 		pass
@@ -603,8 +594,6 @@ def work():
 	
 	sub_menu = TSub(main_menu.menu.sprites()[0].rect)
 	sub_menu.add(*sub_menu_param_1)
-	#display1.blit(sub_menu.menu.sprites()[0].image, sub_menu.menu.sprites()[0].rect)
-	#sub_menu.menu.sprites()[0].draw(display1)
 	#sub_menu.add(*sub_menu_param_2)
 	#sub_menu.add(*sub_menu_param_3)
 	#sub_menu.add(*sub_menu_param_4)
