@@ -4,6 +4,7 @@
 import pygame
 import pathlib
 from typing import Tuple
+from enum import Enum
 import time
 
 FPS = 60
@@ -31,6 +32,36 @@ def SwitchScene(scene):
 	current_scene = scene
 
 checkmark_font_file = pathlib.Path('./config/SegoeUISymbol.ttf').resolve()
+
+class NoValue(Enum):
+	''' Base Enum class elements '''
+
+	def __repr__(self):
+		return f"{self.__class__}: {self.name}"
+	
+	def __str__(self):
+		return f"{self.name}"
+	
+	def __call__(self):
+		return f"{self.value}"
+
+class TypeMenu(NoValue):
+	Menu = 0
+	Sep = 1
+	
+	@classmethod
+	def GetTypeMenuValue(cls, value):
+		for x in cls:
+			if value == x.value:
+				return x
+		return None
+	
+	@classmethod
+	def GetTypeMenuName(cls, OnName):
+		for x in cls:
+			if OnName == x:
+				return x
+		return None
 
 class TCheckMark:
 	
@@ -369,9 +400,18 @@ class TConfig:
 
 class SubMenu(pygame.sprite.Sprite):
 	
-	def __init__(self):
+	def __init__(self, MenuType: TypeMenu = TypeMenu.Menu, fmark: bool = True, ismark = False, text: str = '', hotkey: str = '', old_rect = None, group = None, callback = None):
 		super(SubMenu, self).__init__()
-		pass
+		self.typemenu = MenuType
+		self.fmark = fmark
+		self.ismark = ismark
+		self.text = text
+		self.hotkey = hotkey
+		self.old_rect = old_rect
+		self.callback = callback
+		if group != None:
+			self.add(group)
+		self.ismenu = False
 
 	def build(self):
 		pass
@@ -387,12 +427,17 @@ class SubMenu(pygame.sprite.Sprite):
 
 class TSub:
 	
-	def __init__(self):
-		super(SubMenu, self).__init__()
-		pass
+	def __init__(self, up_rect, ismark: bool = True):
+		super(TSub, self).__init__()
+		self.up_rect = up_rect
+		self.menu = pygame.sprite.Group()
+		self.ismark = ismark
 
-	def addmenu(self):
-		pass
+	def add(self, menutype: TypeMenu = TypeMenu.Menu, ismark = False, text: str = '', hotkey: str = '', callback = None):
+		if len(self.menu.sprites()) == 0:
+			SubMenu(menutype, self.ismark, ismark, text, hotkey, None, self.menu, callback)
+		else:
+			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.menu.sprites()[-1].rect, self.menu, callback)
 
 	def build(self):
 		pass
@@ -503,7 +548,26 @@ def work():
 	
 	up_menu_text = ('Игра', 'Помощь')
 	main_menu = TMenu(up_menu_text)
-	# main_menu.menu.sprites()[0].rect
+	
+	sub_menu_param_1 = (TypeMenu.Menu, False, 'Сначала', 'F2', info)
+	sub_menu_param_2 = (TypeMenu.Menu, True, 'Перерыв', 'F3', info)
+	sub_menu_param_3 = (TypeMenu.Menu, False, 'Лучшие игроки', 'F5', info)
+	sub_menu_param_4 = (TypeMenu.Menu, True, 'Музыка', 'F6', info)
+	sub_menu_param_5 = (TypeMenu.Menu, True, 'Звук', 'F7', info)
+	sub_menu_param_6 = (TypeMenu.Sep, False, '', '', info)
+	sub_menu_param_7 = (TypeMenu.Menu, False, 'Выход', 'F4', info)
+	sub_menu_param_8 = (TypeMenu.Menu, False, 'О программе', 'F8', info)
+	
+	sub_menu = TSub(main_menu.menu.sprites()[0].rect)
+	sub_menu.add(*sub_menu_param_1)
+	#sub_menu.add(*sub_menu_param_2)
+	#sub_menu.add(*sub_menu_param_3)
+	#sub_menu.add(*sub_menu_param_4)
+	#sub_menu.add(*sub_menu_param_5)
+	#sub_menu.add(*sub_menu_param_6)
+	#sub_menu.add(*sub_menu_param_7)
+	sub_menu.draw(display1)
+	pygame.display.update()
 	
 	running = True
 	while running:
