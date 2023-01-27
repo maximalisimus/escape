@@ -48,20 +48,27 @@ def work():
 	sub_menu_param_7 = (TypeMenu.Menu, False, 'Выход', 'F4', info)
 	sub_menu_param_8 = (TypeMenu.Menu, False, 'О программе', 'F8', info)
 	
-	sub_menu = TSub(main_menu.menu.sprites()[0].rect)
-	sub_menu.add(*sub_menu_param_1)
-	sub_menu.add(*sub_menu_param_2)
-	sub_menu.add(*sub_menu_param_3)
-	sub_menu.add(*sub_menu_param_4)
-	sub_menu.add(*sub_menu_param_5)
-	sub_menu.add(*sub_menu_param_6)
-	sub_menu.add(*sub_menu_param_7)
-	sub_menu.build()	
-	#sub_menu.menu.sprites()[0].ismenu = True
-	#sub_menu.menu.sprites()[2].ismenu = True
-	#sub_menu.menu.sprites()[4].ismenu = True
-	#sub_menu.menu.sprites()[-1].ismenu = True
-	sub_menu.draw(display1)
+	sub_menu1 = TSub(main_menu.menu.sprites()[0].rect, True)
+	sub_menu1.add(*sub_menu_param_1)
+	sub_menu1.add(*sub_menu_param_2)
+	sub_menu1.add(*sub_menu_param_3)
+	sub_menu1.add(*sub_menu_param_4)
+	sub_menu1.add(*sub_menu_param_5)
+	sub_menu1.add(*sub_menu_param_6)
+	sub_menu1.add(*sub_menu_param_7)
+	sub_menu1.build()
+	#sub_menu1.menu.sprites()[0].ismenu = True
+	#sub_menu1.menu.sprites()[2].ismenu = True
+	#sub_menu1.menu.sprites()[4].ismenu = True
+	#sub_menu1.menu.sprites()[-1].ismenu = True
+	sub_menu1.draw(display1)
+	pygame.display.update()
+	
+	sub_menu2 = TSub(main_menu.menu.sprites()[1].rect, False)
+	sub_menu2.add(*sub_menu_param_8)
+	sub_menu2.build()
+	#sub_menu2.menu.sprites()[0].ismenu = True
+	sub_menu2.draw(display1)
 	pygame.display.update()
 	
 	running = True
