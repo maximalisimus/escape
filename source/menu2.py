@@ -466,25 +466,24 @@ class SubMenu(pygame.sprite.Sprite):
 				x111 = TConfig.step[0]*2
 				w111 = TConfig.dmw_max + TConfig.GetTextRectWH(hotkey_text)[0] + TConfig.step[0]*4
 				x112 = SubMenu.up_rect.bottomleft[0] + 4 + TConfig.dmw_max + TConfig.step[0]*4
-			y111 = TConfig.step[1]*2
+			y111 = TConfig.step[1]
 			self.text_rect.topleft = (x111, y111)
 			h111 = self.text_rect.height + TConfig.step[1]*2
-			y112 = TConfig.step[1]*2
+			y112 = TConfig.step[1]
 			self.hotkey_rect.topleft = (x112, y112)
 			self.image = CreateEmtySurf(w111, h111)
-			x113 = self.old_rect.bottomleft[0]
-			y113 = self.old_rect.bottomleft[1]
+			if SubMenu.ID == 1:
+				x113 = self.old_rect.bottomleft[0] + 4
+				y113 = self.old_rect.bottomleft[1] + 4
+			else:
+				x113 = self.old_rect.bottomleft[0]
+				y113 = self.old_rect.bottomleft[1]
 			self.rect = self.image.get_rect(topleft = (x113, y113))
-			x121 = self.rect.x + 4
-			x122 = self.rect.width
-			y121 = self.rect.y + 4
-			y122 = self.rect.height
-			self.sel_rect = pygame.Rect(x121, y121, x122, y122)
 			self.image.blit(self.text_surf, self.text_rect)
 			self.image.blit(self.hotkey_surf, self.hotkey_rect)
 			if self.fmark:
 				mark_x = TConfig.step[0] + self.rect.x
-				mark_y = TConfig.step[1]*1.5 + self.rect.y
+				mark_y = self.rect.y + 2
 				self.mark_rect = TConfig.font.mark().get_rect(topleft = (mark_x, mark_y))
 		else:
 			pass
@@ -556,7 +555,8 @@ class TSub:
 		surface.blit(self.image, self.rect)
 		for sprite in self.menu.sprites():
 			if sprite.ismenu:
-				pygame.draw.rect(surface, TConfig.select_color, sprite.sel_rect)
+				pygame.draw.rect(surface, TConfig.select_color, sprite.rect)
+				pass
 			if sprite.fmark and sprite.ismark:
 				surface.blit(TConfig.font.mark.mark, sprite.mark_rect)
 			sprite.draw(surface)
@@ -677,9 +677,9 @@ def work():
 	#sub_menu.add(*sub_menu_param_6)
 	#sub_menu.add(*sub_menu_param_7)
 	sub_menu.build()
-	#sub_menu.menu.sprites()[0].ismenu = True
-	#sub_menu.menu.sprites()[2].ismenu = True
-	#sub_menu.menu.sprites()[4].ismenu = True
+	sub_menu.menu.sprites()[0].ismenu = True
+	sub_menu.menu.sprites()[2].ismenu = True
+	sub_menu.menu.sprites()[4].ismenu = True
 	sub_menu.draw(display1)
 	pygame.display.update()
 	
