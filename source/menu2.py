@@ -544,6 +544,7 @@ class TSub:
 		pygame.draw.rect(self.image, TConfig.menu_color, (2, 2, dmenu_w - 4, dmenu_h - 4))
 		for sprite in self.menu.sprites():
 			sprite.build()
+		self.menu.sprites()[0].rect.topleft = (self.up_rect.bottomleft[0] + 4, self.up_rect.bottomleft[1] + 4)
 
 	def update(self, pos):
 		pass
@@ -676,7 +677,7 @@ def work():
 	sub_menu.add(*sub_menu_param_5)
 	#sub_menu.add(*sub_menu_param_6)
 	#sub_menu.add(*sub_menu_param_7)
-	sub_menu.build()
+	sub_menu.build()	
 	sub_menu.menu.sprites()[0].ismenu = True
 	sub_menu.menu.sprites()[2].ismenu = True
 	sub_menu.menu.sprites()[4].ismenu = True
