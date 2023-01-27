@@ -678,9 +678,9 @@ def work():
 	#sub_menu.add(*sub_menu_param_6)
 	#sub_menu.add(*sub_menu_param_7)
 	sub_menu.build()	
-	sub_menu.menu.sprites()[0].ismenu = True
-	sub_menu.menu.sprites()[2].ismenu = True
-	sub_menu.menu.sprites()[4].ismenu = True
+	#sub_menu.menu.sprites()[0].ismenu = True
+	#sub_menu.menu.sprites()[2].ismenu = True
+	#sub_menu.menu.sprites()[4].ismenu = True
 	sub_menu.draw(display1)
 	pygame.display.update()
 	
