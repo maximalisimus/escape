@@ -64,12 +64,12 @@ def work():
 	sub_menu1.draw(display1)
 	pygame.display.update()
 	
-	sub_menu2 = TSub(main_menu.menu.sprites()[1].rect, False)
-	sub_menu2.add(*sub_menu_param_8)
-	sub_menu2.build()
+	#sub_menu2 = TSub(main_menu.menu.sprites()[1].rect, False)
+	#sub_menu2.add(*sub_menu_param_8)
+	#sub_menu2.build()
 	#sub_menu2.menu.sprites()[0].ismenu = True
-	sub_menu2.draw(display1)
-	pygame.display.update()
+	#sub_menu2.draw(display1)
+	#pygame.display.update()
 	
 	running = True
 	while running:

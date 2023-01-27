@@ -528,11 +528,6 @@ class TSub:
 	def build(self, hotkey: str = 'F2'):
 		dmenu_w = 0
 		dmenu_h = 0
-		#if self.ismark:
-		#	dmenu_w = TConfig.dmw_max + TConfig.GetTextRectWH(hotkey)[0] + TConfig.mark_rect.width + TConfig.step[0]*6 + 8
-		#else:
-		#	dmenu_w = TConfig.dmw_max + TConfig.GetTextRectWH(hotkey)[0] + TConfig.step[0]*4 + 8
-		#dmenu_h = (TConfig.GetTextRectWH(hotkey)[1] + TConfig.step[1]*2)*len(self.menu.sprites())
 		dmenu_w = self.dmw + TConfig.GetTextRectWH(hotkey)[0] - 8
 		dmenu_h = self.dmh + 8
 		self.image = CreateEmtySurf(dmenu_w, dmenu_h)
