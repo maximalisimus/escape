@@ -508,13 +508,18 @@ class SubMenu(pygame.sprite.Sprite):
 	
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
-	
+
+def updatesubclick(group, pos, ismark = None, obj = None):
+	for item in group.sprites():
+		item.updateclick(pos, ismark, obj)
+
 class TSub:
 	
 	def __init__(self, up_rect, ismark: bool = True):
 		super(TSub, self).__init__()
 		self.up_rect = up_rect
 		self.menu = pygame.sprite.Group()
+		self.menu.updateclick = updatesubclick
 		self.ismark = ismark
 		self.image = None
 		self.rect = None
@@ -594,6 +599,10 @@ class MainMenu(pygame.sprite.Sprite):
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
 
+def updateclick(group, pos, ismark = None):
+	for item in group.sprites():
+		item.updateclick(pos, ismark)
+
 class TMenu:
 	
 	def __init__(self, menu = [], *oncallback):
@@ -601,6 +610,7 @@ class TMenu:
 		TConfig.font.color = TConfig.text_color
 		TConfig.font.update()
 		self.menu = pygame.sprite.Group()
+		self.menu.updateclick = updateclick
 		self.oncallback = list(oncallback)
 		self.build()
 	
