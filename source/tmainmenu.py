@@ -393,14 +393,14 @@ class TConfig:
 class SubMenu(pygame.sprite.Sprite):
 	
 	ID = 0
-	up_rect = None
 	
 	def __init__(self, MenuType: TypeMenu = TypeMenu.Menu, \
 				fmark: bool = True, ismark = False, text: str = '', \
-				hotkey: str = '', old_rect = None, group = None, \
+				hotkey: str = '', old_rect = None, up_rect = None, group = None, \
 				callback = None):
 		pygame.sprite.Sprite.__init__(self)
 		SubMenu.ID += 1
+		self.up_rect = up_rect
 		self.typemenu = MenuType
 		self.fmark = fmark
 		self.ismark = ismark
@@ -439,7 +439,7 @@ class SubMenu(pygame.sprite.Sprite):
 			if self.fmark:
 				x111 = TConfig.step[0]*2 + TConfig.mark_rect.width
 				w111 = TConfig.dmw_max + TConfig.GetTextRectWH(hotkey_text)[0] + TConfig.mark_rect.width + TConfig.step[0]*6
-				x112 = SubMenu.up_rect.bottomleft[0] + 4 + TConfig.dmw_max + TConfig.step[0]*6
+				x112 = self.up_rect.bottomleft[0] + 4 + TConfig.dmw_max + TConfig.step[0]*6
 				y111 = TConfig.step[1]
 				y112 = TConfig.step[1]
 				h111 = self.text_rect.height + TConfig.step[1]*2
@@ -472,7 +472,7 @@ class SubMenu(pygame.sprite.Sprite):
 			self.image.blit(self.hotkey_surf, self.hotkey_rect)
 			if self.fmark:
 				mark_x = TConfig.step[0] + self.rect.x
-				mark_y = self.rect.y + 2
+				mark_y = 2 + self.rect.y
 				self.mark_rect = TConfig.font.mark().get_rect(topleft = (mark_x, mark_y))
 		else:
 			if self.fmark:
@@ -491,10 +491,20 @@ class SubMenu(pygame.sprite.Sprite):
 			pygame.draw.line(self.image, TConfig.frame_color, (lr_x1, lr_y1), (lr_x2, lr_y1), width = TConfig.frame_width)
 
 	def update(self, pos):
-		pass
-		
-	def updateclick(self, pos):
-		pass
+		self.ismenu = self.rect.collidepoint(pos)
+	
+	def updateclick(self, pos, ismark = None, obj = None):
+		if self.rect.collidepoint(pos):
+			for item in self.groups()[0].sprites():
+				item.ismenu = False
+			if ismark is not None:
+				self.ismark = ismark
+			if obj is not None:
+				if hasattr(obj, 'ismenu'):
+					obj.ismenu = False
+					MainMenu.isactive = False
+			if self.callback is not None:
+				self.callback()
 	
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
@@ -504,7 +514,6 @@ class TSub:
 	def __init__(self, up_rect, ismark: bool = True):
 		super(TSub, self).__init__()
 		self.up_rect = up_rect
-		SubMenu.up_rect = up_rect
 		self.menu = pygame.sprite.Group()
 		self.ismark = ismark
 		self.image = None
@@ -514,9 +523,9 @@ class TSub:
 
 	def add(self, menutype: TypeMenu = TypeMenu.Menu, ismark = False, text: str = '', hotkey: str = '', callback = None):
 		if len(self.menu.sprites()) == 0:
-			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.up_rect, self.menu, callback)
+			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.up_rect, self.up_rect, self.menu, callback)
 		else:
-			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.menu.sprites()[-1].rect, self.menu, callback)
+			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.menu.sprites()[-1].rect, self.up_rect, self.menu, callback)
 		self.dmh = 0
 		self.dmw = 0
 		on_dmw = []
@@ -539,12 +548,13 @@ class TSub:
 		for sprite in self.menu.sprites():
 			sprite.build(hotkey)
 		self.menu.sprites()[0].rect.topleft = (self.up_rect.bottomleft[0] + 4, self.up_rect.bottomleft[1] + 4)
+		self.menu.sprites()[0].mark_rect.topleft = (TConfig.step[0] + self.menu.sprites()[0].rect.x, 2 + self.menu.sprites()[0].rect.y)
 
 	def update(self, pos):
-		pass
+		self.menu.update(pos)
 	
-	def updateclick(self, pos):
-		pass
+	def updateclick(self, pos, ismark = None, obj = None):
+		self.menu.updateclick(pos, ismark, obj)
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
@@ -573,7 +583,7 @@ class MainMenu(pygame.sprite.Sprite):
 	def update(self, pos):
 		self.ismenu = self.rect.collidepoint(pos)
 
-	def updateclick(self, pos):
+	def updateclick(self, pos, ismark = None):
 		if self.rect.collidepoint(pos):
 			if self.callback != None:
 				self.ismenu = False
@@ -619,12 +629,12 @@ class TMenu:
 		if MainMenu.isactive:
 			self.menu.update(pos)
 	
-	def updateclick(self, pos):
+	def updateclick(self, pos, ismark = None):
 		for item in self.menu.sprites():
 			if item.rect.collidepoint(pos):
 				MainMenu.isactive = not MainMenu.isactive
 				if hasattr(item, 'updateclick'):
-					item.updateclick(pos)
+					item.updateclick(pos, ismark)
 			if MainMenu.isactive:
 				item.ismenu = item.rect.collidepoint(pos)
 	
