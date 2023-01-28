@@ -392,14 +392,11 @@ class TConfig:
 
 class SubMenu(pygame.sprite.Sprite):
 	
-	ID = 0
-	
 	def __init__(self, MenuType: TypeMenu = TypeMenu.Menu, \
 				fmark: bool = True, ismark = False, text: str = '', \
 				hotkey: str = '', old_rect = None, up_rect = None, group = None, \
 				callback = None):
 		pygame.sprite.Sprite.__init__(self)
-		SubMenu.ID += 1
 		self.up_rect = up_rect
 		self.typemenu = MenuType
 		self.fmark = fmark
@@ -453,7 +450,7 @@ class SubMenu(pygame.sprite.Sprite):
 			self.text_rect.topleft = (x111, y111)
 			self.hotkey_rect.topleft = (x112, y112)
 			self.image = CreateEmtySurf(w111, h111)
-			if str(SubMenu.ID) == '1':
+			if len(self.groups()[0].sprites()) == 1:
 				x113 = self.old_rect.bottomleft[0] + 4
 				y113 = self.old_rect.bottomleft[1] + 4
 			else:
@@ -461,7 +458,7 @@ class SubMenu(pygame.sprite.Sprite):
 					x113 = self.old_rect.bottomleft[0]
 					y113 = self.old_rect.bottomleft[1]
 				else:
-					if str(SubMenu.ID) != '1':
+					if len(self.groups()[0].sprites()) > 1:
 						x113 = self.old_rect.bottomleft[0] + 2
 						y113 = self.old_rect.bottomleft[1] + 2
 					else:

@@ -38,6 +38,8 @@ def work():
 	
 	up_menu_text = ('Игра', 'Помощь')
 	main_menu = TMenu(up_menu_text)
+	main_menu.draw(display1)
+	pygame.display.update()
 	
 	sub_menu_param_1 = (TypeMenu.Menu, False, 'Сначала', 'F2', info)
 	sub_menu_param_2 = (TypeMenu.Menu, True, 'Перерыв', 'F3', info)
@@ -87,11 +89,13 @@ def work():
 				# if event.key in []:
 				pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				main_menu.updateclick(event.pos)
+				#main_menu.updateclick(event.pos)
+				pass
 			elif  event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
 			elif event.type == pygame.MOUSEMOTION:
-				main_menu.update(event.pos)
+				#main_menu.update(event.pos)
+				pass
 		
 		#keys = pygame.key.get_pressed()
 		# if keys[pygame.K_SPACE]:
@@ -101,9 +105,9 @@ def work():
 		#	pos = pygame.mouse.get_pos()
 		#	print(pos)
 		
-		display1.fill((64, 64, 64))
-		main_menu.draw(display1)
-		pygame.display.update()
+		#display1.fill((64, 64, 64))
+		#main_menu.draw(display1)
+		#pygame.display.update()
 		
 		clock.tick(FPS)
 
