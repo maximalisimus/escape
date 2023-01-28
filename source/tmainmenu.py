@@ -520,6 +520,7 @@ class TSub:
 		self.rect = None
 		self.dmh = 0
 		self.dmw = 0
+		self.ismenu = False
 
 	def add(self, menutype: TypeMenu = TypeMenu.Menu, ismark = False, text: str = '', hotkey: str = '', callback = None):
 		if len(self.menu.sprites()) == 0:
@@ -589,6 +590,9 @@ class MainMenu(pygame.sprite.Sprite):
 				self.ismenu = False
 				MainMenu.isactive = False
 				self.callback()
+	
+	def draw(self, surf):
+		surf.blit(self.image, self.rect)
 
 class TMenu:
 	
