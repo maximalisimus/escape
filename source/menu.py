@@ -40,7 +40,7 @@ def work():
 	main_menu = TMenu(up_menu_text)
 	main_menu.draw(display1)
 	pygame.display.update()
-	
+		
 	sub_menu_param_1 = (TypeMenu.Menu, False, 'Сначала', 'F2', info)
 	sub_menu_param_2 = (TypeMenu.Menu, True, 'Перерыв', 'F3', info)
 	sub_menu_param_3 = (TypeMenu.Menu, False, 'Лучшие игроки', 'F5', info)

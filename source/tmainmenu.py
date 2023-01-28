@@ -3,6 +3,314 @@ import pathlib
 from typing import Tuple
 from enum import Enum
 
+class TDict(object):
+	
+	__slots__ = ['__g', '__tmp']
+	
+	def __init__(self, *args):
+		super(TDict, self).__init__()
+		self.__g = dict(*args)
+	
+	def __setitem__(self, key, item):
+		if not type(key) in (float, int, str, tuple, frozenset, bool, None):
+			raise TypeError('Please, enter the \'key\' in (float, int, str, tuple, bool or frozenset)!')
+		self.__g[key] = item
+
+	def __getitem__(self, key):
+		return self.__g[key] if self.has_key(key) else None
+	
+	def __call__(self):
+		return self.__g
+	
+	def get(self, k, v = None):
+		return self.__g.get(k, v)
+	
+	def __repr__(self):
+		return f"TDict:{self.__g.__str__()}"
+
+	def __len__(self):
+		return len(self.__g)
+
+	def __delitem__(self, key):
+		del self.__g[key]
+
+	def clear(self):
+		return self.__g.clear()
+
+	def copy(self):
+		return self.__g.copy()
+
+	def update(self, *args, **kwargs):
+		return self.__g.update(*args, **kwargs)
+
+	def keys(self):
+		return self.__g.keys()
+
+	def values(self):
+		return self.__g.values()
+
+	def items(self):
+		return self.__g.items()
+
+	def pop(self, *args):
+		return self.__g.pop(*args)
+
+	def setdefault(self, k, d = None):
+		return self.__g.setdefault(k, d)
+
+	def fromkeys(self, iterable, value = None):
+		if hasattr(iterable, '__iter__'):
+			if not hasattr(value, '__iter__') and type(value) != str:
+				for item in iterable:
+					self.__g[item] = value
+			elif type(value) == str:
+				for item in iterable:
+					self.__g[item] = value
+			else:
+				if len(value) >= len(iterable):
+					for count in range(len(iterable)):
+						self.__g[iterable[count]] = value[count]
+				elif len(value) < len(iterable):
+					for count in range(len(value)):
+						self.__g[iterable[count]] = value[count]			
+		return self
+	
+	def __sortOD(self, od, iskey: bool = True, revers: bool = False):
+		def CheckToSTR(on_dict, on_key, on_value, reverse_value):
+			if hasattr(on_value,'__iter__') and type(on_value) != str:
+				tp = type(on_value)
+				on_dict[on_key] = tp(sorted(on_value, reverse = reverse_value))
+			else:
+				on_dict[on_key] = on_value	
+		res = TDict()
+		if not TDict in set(map(type, od.values())):
+			if iskey:
+				if len(set(map(type,od.keys()))) == 1:
+					for k, v in sorted(od.items(), key=lambda i: i[0], reverse = revers):
+						CheckToSTR(res, k, v, revers)
+				else:
+					for k, v in sorted(od.items(), key=lambda i: str(i[0]), reverse = revers):
+						CheckToSTR(res, k, v, revers)
+			else:
+				if len(set(map(type,od.values()))) == 1:
+					for k, v in sorted(od.items(), key=lambda i: i[1], reverse = revers):
+						CheckToSTR(res, k, v, revers)
+				else:
+					for k, v in sorted(od.items(), key=lambda i: str(i[1]), reverse = revers):
+						CheckToSTR(res, k, v, revers)
+		else:
+			if len(set(map(type,od.keys()))) == 1:
+				for k, v in sorted(od.items(), reverse = revers):
+					if isinstance(v, TDict):
+						res[k] = self.__sortOD(v)
+					else:
+						CheckToSTR(res, k, v, revers)
+			else:
+				for k, v in sorted(od.items(), key=lambda i: str(i[0]), reverse = revers):
+					if isinstance(v, TDict):
+						res[k] = self.__sortOD(v)
+					else:
+						CheckToSTR(res, k, v, revers)
+		return res
+	
+	def sort(self, iskey: bool = True, revers: bool = False):
+		tmp = self.__sortOD(self.__g.copy(), iskey, revers)
+		self.__g = tmp.copy()
+		return self
+	
+	def popitem(self):
+		return self.__g.popitem()
+
+	def __or__(self, other):
+		if not isinstance(other, TDict):
+			return NotImplemented
+		new = TDict(self)
+		new.update(other)
+		return new
+
+	def __ror__(self, other):
+		if not isinstance(other, TDict):
+			return NotImplemented
+		new = TDict(other)
+		new.update(self)
+		return new
+
+	def __ior__(self, other):
+		TDict.update(self, other)
+		return self
+	
+	def __reversed__(self):
+		if len(set(map(type, self.keys()))) == 1:
+			self.__g = dict(sorted(self.__g.items(), key=lambda i: i[0], reverse=True))
+		else:
+			self.__g = dict(sorted(self.__g.items(), key=lambda i: str(i[0]), reverse=True))
+		return self
+
+	def __str__(self):
+		return self.__g.__str__()
+
+	def __cmp__(self, dict_):
+		return self.__cmp__(self.__g, dict_)
+
+	def __iter__(self):
+		return iter(self.__g)
+
+	def __unicode__(self):
+		return unicode(repr(self.__g))
+	
+	def is_emty(self):
+		return len(self.__g) == 0
+	
+	def __contains__(self, item):
+		return item in self.__g
+	
+	def has_key(self, k):
+		return k in self.__g
+
+	def has_value(self, v):
+		return v in self.__g.values()
+
+	def __enter__(self):
+		self.__tmp = self.__g.copy()
+		return self.__tmp
+	
+	def __exit__(self, exc_type, exc_val, exc_tb):
+		if exc_type is None:
+			self.__g = self.__tmp.copy()
+		return False
+
+class TGroup(TDict):
+	
+	def __init__(self, *args):
+		super(TGroup, self).__init__(*args)
+	
+	def add(self, *args):
+		if len(args) > 0:
+			if len(args) == 1:
+				if not hasattr(args[0], '__iter__'):
+					if not self.has_internal(args[0]):
+						if hasattr(args[0], 'i') and hasattr(args[0], 'j'):
+							if args[0].i != None and args[0].j != None:
+								self.add(args[0], args[0].i, args[0].j)
+							else:
+								self[len(self)+1] = args[0]
+						else:
+							self[len(self)+1] = args[0]
+				else:
+					for sprite in args[0]:
+						if not self.has_internal(sprite):
+							self.add(sprite)
+			elif len(args) == 2:
+				self[args[0]] = args[1]
+			elif len(args) == 3:
+				if not self.has_key(args[0]):
+					self[args[0]] = TDict()
+				if type(self[args[0]]) == TDict:
+					self[args[0]][args[1]] = args[2]
+	
+	def searchvalue(self, value):
+		for row in self.items():
+			if type(row[1]) == TDict:
+				for col in row[1].items():
+					if value == col[1]:
+						return (row[0], col[0])
+			else:
+				if value == row[1]:
+					return row[0]
+		return False
+	
+	def searchkey(self, *onkeys) -> bool:
+		if not onkeys:
+			return False
+		if len(onkeys) == 1:
+			if self.get(onkeys[0], False):
+				return True
+			else:
+				return False
+		elif len(onkeys) == 2:
+			if self.get(onkeys[0], TDict()).get(onkeys[1], False):
+				return True
+			else:
+				return False
+	
+	def remove(self, *args):
+		if len(args) > 0 and len(args) < 3:
+			if len(args) == 1:
+				if not hasattr(args[0], '__iter__'):
+					if self.has_internal(args[0]):
+						onkeys = self.searchvalue(args[0])
+						if onkeys != False:
+							if type(onkeys) == tuple:
+								self.remove(onkeys[0], onkeys[1])
+							else:
+								del self[onkeys]
+				else:
+					for sprite in args[0]:
+						if self.has_internal(sprite):
+							self.remove(sprite)
+			elif len(args) == 2:
+				if self.get(args[0], TDict()).get(args[1], False):
+					del self[args[0]][args[1]]
+	
+	def has_internal(self, sprite):
+		return sprite in self.sprites(True)
+	
+	def has(self, *sprites) -> bool:
+		if not sprites:
+			return False
+		if len(sprites) == 1:
+			return self.has_internal(sprites[0])
+		else:
+			tmp = []
+			for sprite in sprites:
+				tmp.append(self.has_internal(sprite))
+			return tuple(tmp)
+	
+	def haspos(self, *keys):
+		if not keys:
+			return False
+		if len(keys) == 1:
+			return self.searchkey(keys[0])
+		else:
+			return self.searchkey(*keys)
+
+	def sprites(self, isTuple: bool = False):
+		res = []
+		for row in self.values():
+			if type(row) == TDict:
+				for col in row.values():
+					res.append(col)
+			else:
+				res.append(row)
+		if isTuple:
+			return tuple(res)
+		else:
+			return res
+	
+	def updates(self, *args, **kwargs):
+		for row in self.values():
+			if type(row) == TDict:
+				for col in row.values():
+					if hasattr(col, 'update'):
+						col.update(*args, **kwargs)
+			else:
+				if hasattr(row, 'update'):
+					row.update(*args)
+	
+	def draw(self, surf, isDisplayUpdate: bool = False):
+		for row in self.values():
+			if type(row) == TDict:
+				for col in row.values():
+					if hasattr(col, 'image') and hasattr(col, 'rect'):
+						surf.blit(col.image, col.rect)
+						if isDisplayUpdate:
+							pygame.display.update()
+			else:
+				if hasattr(row, 'image') and hasattr(row, 'rect'):
+					surf.blit(row.image, row.rect)
+					if isDisplayUpdate:
+						pygame.display.update()
+
 def CreateEmtySurf(SizeWidth: int = 24, SizeHeight: int = 24):
 	return pygame.Surface((SizeWidth, SizeHeight), pygame.SRCALPHA, 32).convert_alpha()
 
@@ -409,6 +717,7 @@ class SubMenu(pygame.sprite.Sprite):
 		self.hotkey = hotkey
 		self.old_rect = old_rect
 		self.callback = callback
+		self.tgroup = TDict()
 		if group != None:
 			self.add(group)
 		self.ismenu = False
@@ -418,14 +727,10 @@ class SubMenu(pygame.sprite.Sprite):
 		self.hotkey_rect = self.hotkey_surf.get_rect()
 		self.image = None
 		self.rect = None
-		self.rebuildsize()
 		self.build()
 
-	def rebuildsize(self):
-		dmw = []
-		for item in self.groups()[0].sprites():
-			dmw.append(item.text_rect.width)
-		TConfig.dmw_max = max(dmw)
+	def add(self, group):
+		self.tgroup[len(self.tgroup)] = group
 
 	def build(self, hotkey_text: str = 'F2'):
 		if self.typemenu == TypeMenu.Menu:
@@ -454,7 +759,7 @@ class SubMenu(pygame.sprite.Sprite):
 			self.text_rect.topleft = (x111, y111)
 			self.hotkey_rect.topleft = (x112, y112)
 			self.image = CreateEmtySurf(w111, h111)
-			if len(self.groups()[0].sprites()) == 1:
+			if len(self.tgroup[0].sprites()) == 1:
 				x113 = self.old_rect.bottomleft[0] + 4
 				y113 = self.old_rect.bottomleft[1] + 4
 			else:
@@ -462,7 +767,7 @@ class SubMenu(pygame.sprite.Sprite):
 					x113 = self.old_rect.bottomleft[0]
 					y113 = self.old_rect.bottomleft[1]
 				else:
-					if len(self.groups()[0].sprites()) > 1:
+					if len(self.tgroup[0].sprites()) > 1:
 						x113 = self.old_rect.bottomleft[0] + 2
 						y113 = self.old_rect.bottomleft[1] + 2
 					else:
@@ -496,7 +801,7 @@ class SubMenu(pygame.sprite.Sprite):
 	
 	def updateclick(self, pos, ismark = None, obj = None):
 		if self.rect.collidepoint(pos):
-			for item in self.groups()[0].sprites():
+			for item in self.tgroup[0].sprites():
 				item.ismenu = False
 			if ismark is not None:
 				self.ismark = ismark
@@ -515,7 +820,7 @@ class TSub:
 	def __init__(self, up_rect, ismark: bool = True):
 		super(TSub, self).__init__()
 		self.up_rect = up_rect
-		self.menu = pygame.sprite.Group()
+		self.menu = TGroup()
 		self.menu.updateclick = self.updatesubclick
 		self.menu.edit = self.edit
 		self.ismark = ismark
@@ -537,9 +842,13 @@ class TSub:
 	
 	def add(self, menutype: TypeMenu = TypeMenu.Menu, ismark = False, text: str = '', hotkey: str = '', callback = None):
 		if len(self.menu.sprites()) == 0:
-			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.up_rect, self.up_rect, self.menu, callback)
+			self.menu.add(SubMenu(menutype, self.ismark, ismark, text, hotkey, self.up_rect, self.up_rect, self.menu, callback))
 		else:
-			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.menu.sprites()[-1].rect, self.up_rect, self.menu, callback)
+			self.menu.add(SubMenu(menutype, self.ismark, ismark, text, hotkey, self.menu.sprites()[-1].rect, self.up_rect, self.menu, callback))
+		dmw = []
+		for item in self.menu.sprites():
+			dmw.append(item.text_rect.width)
+		TConfig.dmw_max = max(dmw)
 		self.dmh = 0
 		self.dmw = 0
 		on_dmw = []
@@ -565,7 +874,7 @@ class TSub:
 		self.menu.sprites()[0].mark_rect.topleft = (TConfig.step[0] + self.menu.sprites()[0].rect.x, 2 + self.menu.sprites()[0].rect.y)
 
 	def update(self, pos):
-		self.menu.update(pos)
+		self.menu.updates(pos)
 	
 	def updateclick(self, pos, ismark = None, obj = None):
 		self.menu.updateclick(self.menu, pos, ismark, obj)
@@ -592,10 +901,14 @@ class MainMenu(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.ismenu = False
 		self.callback = callback
+		self.tgroup = TDict()
 		if group != None:
 			self.add(group)
 		if callback == None:
 			pass
+	
+	def add(self, group):
+		self.tgroup[len(self.tgroup)] = group
 	
 	def update(self, pos):
 		self.ismenu = self.rect.collidepoint(pos)
@@ -616,7 +929,7 @@ class TMenu:
 		self.text = list(menu)[:]
 		TConfig.font.color = TConfig.text_color
 		TConfig.font.update()
-		self.menu = pygame.sprite.Group()
+		self.menu = TGroup()
 		self.menu.updateclick = self.updateclick
 		self.menu.edit = self.edit
 		self.oncallback = list(oncallback)
@@ -641,16 +954,17 @@ class TMenu:
 			w1 = text_rect.width + x*2
 			h1 = text_rect.height + y*2
 			if len(self.oncallback) > count:
-				menu = MainMenu(CreateEmtySurf(w1, h1), self.menu, self.oncallback[count])
+				onmenu = MainMenu(CreateEmtySurf(w1, h1), self.menu, self.oncallback[count])
 			else:
-				menu = MainMenu(CreateEmtySurf(w1, h1), self.menu)
-			menu.image.blit(text_surf, text_rect)
+				onmenu = MainMenu(CreateEmtySurf(w1, h1), self.menu)
+			onmenu.image.blit(text_surf, text_rect)
 			if count == 0:
 				posx = 0
 			else:
 				posx = self.menu.sprites()[count-1].rect.x + self.menu.sprites()[count-1].rect.width
 			posy = 0
-			menu.rect.topleft = (posx, posy)
+			onmenu.rect.topleft = (posx, posy)
+			self.menu.add(onmenu)
 		mw = TConfig.screen_w
 		mh = self.menu.sprites()[0].rect.height
 		self.image = CreateEmtySurf(mw, mh)
@@ -659,7 +973,7 @@ class TMenu:
 	
 	def update(self, pos):
 		if MainMenu.isactive:
-			self.menu.update(pos)
+			self.menu.updates(pos)
 	
 	def updateclick(self, pos, ismark = None):
 		for item in self.menu.sprites():
