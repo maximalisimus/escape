@@ -35,44 +35,7 @@ def work():
 		
 	display1.fill((64, 64, 64))
 	pygame.display.update()
-	
-	up_menu_text = ('Игра', 'Помощь')
-	main_menu = TMenu(up_menu_text)
-	main_menu.draw(display1)
-	pygame.display.update()
 		
-	sub_menu_param_1 = (TypeMenu.Menu, False, 'Сначала', 'F2', info)
-	sub_menu_param_2 = (TypeMenu.Menu, True, 'Перерыв', 'F3', info)
-	sub_menu_param_3 = (TypeMenu.Menu, False, 'Лучшие игроки', 'F5', info)
-	sub_menu_param_4 = (TypeMenu.Menu, True, 'Музыка', 'F6', info)
-	sub_menu_param_5 = (TypeMenu.Menu, True, 'Звук', 'F7', info)
-	sub_menu_param_6 = (TypeMenu.Sep, False, '', '', info)
-	sub_menu_param_7 = (TypeMenu.Menu, False, 'Выход', 'F4', info)
-	sub_menu_param_8 = (TypeMenu.Menu, False, 'О программе', 'F8', info)
-	
-	#sub_menu1 = TSub(main_menu.menu.sprites()[0].rect, True)
-	#sub_menu1.add(*sub_menu_param_1)
-	#sub_menu1.add(*sub_menu_param_2)
-	#sub_menu1.add(*sub_menu_param_3)
-	#sub_menu1.add(*sub_menu_param_4)
-	#sub_menu1.add(*sub_menu_param_5)
-	#sub_menu1.add(*sub_menu_param_6)
-	#sub_menu1.add(*sub_menu_param_7)
-	#sub_menu1.build()
-	#sub_menu1.menu.edit(1).ismenu = True
-	#sub_menu1.menu.edit(3).ismenu = True
-	#sub_menu1.menu.edit(5).ismenu = True
-	#sub_menu1.menu.edit(7).ismenu = True
-	#sub_menu1.draw(display1)
-	#pygame.display.update()
-	
-	#sub_menu2 = TSub(main_menu.menu.sprites()[1].rect, False)
-	#sub_menu2.add(*sub_menu_param_8)
-	#sub_menu2.build()
-	#sub_menu2.menu.edit(1).ismenu = True
-	#sub_menu2.draw(display1)
-	#pygame.display.update()
-	
 	running = True
 	while running:
 		for event in pygame.event.get():
