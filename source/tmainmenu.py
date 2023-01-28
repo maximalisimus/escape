@@ -642,11 +642,6 @@ class TMenu:
 			if MainMenu.isactive:
 				item.ismenu = item.rect.collidepoint(pos)
 	
-	def __reset(self):
-		MainMenu.isactive = False
-		for item in self.menu.sprites():
-			item.ismenu = False
-	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
 		if MainMenu.isactive:
