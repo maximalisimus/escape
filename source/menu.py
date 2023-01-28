@@ -101,6 +101,7 @@ def work():
 		#	pos = pygame.mouse.get_pos()
 		#	print(pos)
 		
+		display1.fill((64, 64, 64))
 		main_menu.draw(display1)
 		pygame.display.update()
 		
