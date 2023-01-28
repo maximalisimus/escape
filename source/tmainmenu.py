@@ -399,7 +399,7 @@ class SubMenu(pygame.sprite.Sprite):
 				fmark: bool = True, ismark = False, text: str = '', \
 				hotkey: str = '', old_rect = None, group = None, \
 				callback = None):
-		super(SubMenu, self).__init__()
+		pygame.sprite.Sprite.__init__(self)
 		SubMenu.ID += 1
 		self.typemenu = MenuType
 		self.fmark = fmark
@@ -560,7 +560,7 @@ class MainMenu(pygame.sprite.Sprite):
 	isactive = False
 	
 	def __init__(self, surf, group = None, callback = None):
-		super(MainMenu, self).__init__()
+		pygame.sprite.Sprite.__init__(self)
 		self.image = surf
 		self.rect = self.image.get_rect()
 		self.ismenu = False
