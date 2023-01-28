@@ -560,7 +560,7 @@ class TSub:
 		self.menu.update(pos)
 	
 	def updateclick(self, pos, ismark = None, obj = None):
-		self.menu.updateclick(pos, ismark, obj)
+		self.menu.updateclick(self.menu, pos, ismark, obj)
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
