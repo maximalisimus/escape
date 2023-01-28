@@ -392,11 +392,15 @@ class TConfig:
 
 class SubMenu(pygame.sprite.Sprite):
 	
+	ID = 0
+	
 	def __init__(self, MenuType: TypeMenu = TypeMenu.Menu, \
 				fmark: bool = True, ismark = False, text: str = '', \
 				hotkey: str = '', old_rect = None, up_rect = None, group = None, \
 				callback = None):
 		pygame.sprite.Sprite.__init__(self)
+		SubMenu.ID += 1
+		self.uid = SubMenu.ID
 		self.up_rect = up_rect
 		self.typemenu = MenuType
 		self.fmark = fmark
@@ -506,24 +510,31 @@ class SubMenu(pygame.sprite.Sprite):
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
 
-def updatesubclick(group, pos, ismark = None, obj = None):
-	for item in group.sprites():
-		item.updateclick(pos, ismark, obj)
-
 class TSub:
 	
 	def __init__(self, up_rect, ismark: bool = True):
 		super(TSub, self).__init__()
 		self.up_rect = up_rect
 		self.menu = pygame.sprite.Group()
-		self.menu.updateclick = updatesubclick
+		self.menu.updateclick = self.updatesubclick
+		self.menu.edit = self.edit
 		self.ismark = ismark
 		self.image = None
 		self.rect = None
 		self.dmh = 0
 		self.dmw = 0
 		self.ismenu = False
-
+	
+	def edit(self, uid: int):
+		for item in self.menu.sprites():
+			if item.uid == uid:
+				return item
+		return self.menu.sprites()[0]
+	
+	def updatesubclick(self, pos, ismark = None, obj = None):
+		for item in self.menu.sprites():
+			item.updateclick(pos, ismark, obj)
+	
 	def add(self, menutype: TypeMenu = TypeMenu.Menu, ismark = False, text: str = '', hotkey: str = '', callback = None):
 		if len(self.menu.sprites()) == 0:
 			SubMenu(menutype, self.ismark, ismark, text, hotkey, self.up_rect, self.up_rect, self.menu, callback)
@@ -571,9 +582,12 @@ class TSub:
 class MainMenu(pygame.sprite.Sprite):
 	
 	isactive = False
+	ID = 0
 	
 	def __init__(self, surf, group = None, callback = None):
 		pygame.sprite.Sprite.__init__(self)
+		MainMenu.ID += 1
+		self.uid = MainMenu.ID
 		self.image = surf
 		self.rect = self.image.get_rect()
 		self.ismenu = False
@@ -596,10 +610,6 @@ class MainMenu(pygame.sprite.Sprite):
 	def draw(self, surf):
 		surf.blit(self.image, self.rect)
 
-def updateclick(group, pos, ismark = None):
-	for item in group.sprites():
-		item.updateclick(pos, ismark)
-
 class TMenu:
 	
 	def __init__(self, menu = [], *oncallback):
@@ -607,9 +617,20 @@ class TMenu:
 		TConfig.font.color = TConfig.text_color
 		TConfig.font.update()
 		self.menu = pygame.sprite.Group()
-		self.menu.updateclick = updateclick
+		self.menu.updateclick = self.updateclick
+		self.menu.edit = self.edit
 		self.oncallback = list(oncallback)
 		self.build()
+	
+	def edit(self, uid: int):
+		for item in self.menu.sprites():
+			if item.uid == uid:
+				return item
+		return self.menu.sprites()[0]
+	
+	def updateclick(self, pos, ismark = None):
+		for item in self.menu.sprites():
+			item.updateclick(pos, ismark)
 	
 	def build(self):
 		for count in range(len(self.text)):
