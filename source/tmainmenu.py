@@ -267,10 +267,10 @@ class TGroup(TDict):
 		ipos = sprite.rect.y // sprite.rect.height
 		jpos = sprite.rect.x // sprite.rect.width
 		out_blocks = []
-		in_blocks = set(self.get(ipos, dict()).get(jpos, False), \
-						self.get(ipos, dict()).get(jpos+1, False), \
-						self.get(ipos+1, dict()).get(jpos, False), \
-						self.get(ipos+1, dict()).get(jpos+1, False))
+		in_blocks = set(self.get(ipos, TDict()).get(jpos, False), \
+						self.get(ipos, TDict()).get(jpos+1, False), \
+						self.get(ipos+1, TDict()).get(jpos, False), \
+						self.get(ipos+1, TDict()).get(jpos+1, False))
 		in_blocks.discard(False)
 		for group_sprite in in_blocks:
 			if collided is not None:
