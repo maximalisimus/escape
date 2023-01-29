@@ -35,7 +35,7 @@ def work():
 		
 	display1.fill((64, 64, 64))
 	pygame.display.update()
-			
+	
 	running = True
 	while running:
 		for event in pygame.event.get():
@@ -52,12 +52,10 @@ def work():
 				# if event.key in []:
 				pass
 			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				#main_menu.updateclick(event.pos)
 				pass
 			elif  event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				pass
 			elif event.type == pygame.MOUSEMOTION:
-				#main_menu.update(event.pos)
 				pass
 		
 		#keys = pygame.key.get_pressed()
@@ -67,11 +65,7 @@ def work():
 		#if pressed[0]:
 		#	pos = pygame.mouse.get_pos()
 		#	print(pos)
-		
-		#display1.fill((64, 64, 64))
-		#main_menu.draw(display1)
-		#pygame.display.update()
-		
+				
 		clock.tick(FPS)
 
 def main():
