@@ -184,6 +184,9 @@ class TGroup(TDict):
 	def __init__(self, *args):
 		super(TGroup, self).__init__(*args)
 	
+	def __repr__(self):
+		return f"TGroup:{self}"
+	
 	def add(self, *args):
 		if len(args) == 1:
 			if not self.has_value(args[0]):
