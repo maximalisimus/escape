@@ -204,14 +204,24 @@ class TGroup(TDict):
 	def has(self, v):
 		return self.has_value(v)
 	
+	def removekeys(self, *keys):
+		if len(keys) > 0 and len(keys) < 3:
+			if len(keys) == 1:
+				if self.get(keys[0], False):
+					del self[keys[0]]
+			elif len(keys) == 2:
+				if self.get(keys[0], TDict()).get(keys[1], False):
+					del self[keys[0]][keys[1]]
+	
 	def remove(self, *args):
-		if len(args) > 0 and len(args) < 3:
-			if len(args) == 1:
-				if self.get(args[0], False):
-					del self[args[0]]
-			elif len(args) == 2:
-				if self.get(args[0], TDict()).get(args[1], False):
-					del self[args[0]][args[1]]
+		for item in args:
+			for k1, v1 in self.copy().items():
+				if type(v1) == TDict:
+					for k2, v2 in v1.copy().items():
+						if v2 == item:
+							self[k1].pop(k2, False)
+				else:
+					self.pop(k1, False)
 	
 	def sprites(self, isTuple: bool = False):
 		res = []
@@ -252,6 +262,28 @@ class TGroup(TDict):
 					surf.blit(row.image, row.rect)
 					if isDisplayUpdate:
 						pygame.display.update()
+
+	def CollidePosXY(self, sprite, dokill: bool = False, collided = None):
+		ipos = sprite.rect.y // sprite.rect.height
+		jpos = sprite.rect.x // sprite.rect.width
+		out_blocks = []
+		in_blocks = set(self.get(ipos, dict()).get(jpos, False), \
+						self.get(ipos, dict()).get(jpos+1, False), \
+						self.get(ipos+1, dict()).get(jpos, False), \
+						self.get(ipos+1, dict()).get(jpos+1, False))
+		in_blocks.discard(False)
+		for group_sprite in in_blocks:
+			if collided is not None:
+				if collided(sprite, group_sprite):
+					out_blocks.append(group_sprite)
+					if dokill:
+						self.remove(group_sprite)
+			else:
+				if pygame.sprite.collide_rect(sprite, group_sprite):
+					out_blocks.append(group_sprite)
+					if dokill:
+						self.remove(group_sprite)
+		return tuple(out_blocks)
 
 def CreateEmtySurf(SizeWidth: int = 24, SizeHeight: int = 24):
 	return pygame.Surface((SizeWidth, SizeHeight), pygame.SRCALPHA, 32).convert_alpha()
