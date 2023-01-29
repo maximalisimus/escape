@@ -263,9 +263,9 @@ class TGroup(TDict):
 					if isDisplayUpdate:
 						pygame.display.update()
 
-	def CollidePosXY(self, sprite, dokill: bool = False, collided = None):
-		ipos = sprite.rect.y // sprite.rect.height
-		jpos = sprite.rect.x // sprite.rect.width
+	def CollidePosXY(self, sprite, SizeWH: Tuple[int, int], dokill: bool = False, collided = None):
+		ipos = sprite.rect.y // SizeWH[1]
+		jpos = sprite.rect.x // SizeWH[0]
 		out_blocks = []
 		in_blocks = set(self.get(ipos, TDict()).get(jpos, False), \
 						self.get(ipos, TDict()).get(jpos+1, False), \
