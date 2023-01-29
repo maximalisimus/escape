@@ -263,7 +263,57 @@ class TGroup(TDict):
 					if isDisplayUpdate:
 						pygame.display.update()
 
+	def collidepoint(self, pos, dokill: bool = False):
+		out_blocks = []
+		for k1, v1 in self.copy().items():
+			if type(v1) == TDict:
+				for k2, v2 in v1.copy().items():
+					if hasattr(v2, 'rect'):
+						if v2.collidepoint(pos):
+							out_blocks.append(v2)
+							if dokill:
+								self.removekeys(k1, k2)
+			else:
+				if hasattr(v1, 'rect'):
+					if v1.collidepoint(pos):
+						out_blocks.append(v1)
+						if dokill:
+							self.removekeys(k1)
+		return tuple(out_blocks)
+
+	def collide(self, sprite, dokill: bool = False, collided = None):
+		if not hasattr(sprite, 'rect'):
+			return None
+		out_blocks = []
+		for k1, v1 in self.copy().items():
+			if type(v1) == TDict:
+				for k2, v2 in v1.copy().items():
+					if collided is not None and hasattr(v2, 'rect'):
+						if collided(sprite, v2):
+							out_blocks.append(v2)
+							if dokill:
+								self.removekeys(k1, k2)
+					else:
+						if pygame.sprite.collide_rect(sprite, v2):
+							out_blocks.append(v2)
+							if dokill:
+								self.removekeys(k1, k2)
+			else:
+				if collided is not None and hasattr(v1, 'rect'):
+					if collided(sprite, v1):
+						out_blocks.append(v1)
+						if dokill:
+							self.removekeys(k1)
+				else:
+					if pygame.sprite.collide_rect(sprite, v1):
+						out_blocks.append(v1)
+						if dokill:
+							self.removekeys(k1)
+		return tuple(out_blocks)
+
 	def CollidePosXY(self, sprite, SizeWH: Tuple[int, int], dokill: bool = False, collided = None):
+		if not hasattr(sprite, 'rect'):
+			return None
 		ipos = sprite.rect.y // SizeWH[1]
 		jpos = sprite.rect.x // SizeWH[0]
 		out_blocks = []
