@@ -250,8 +250,6 @@ class TGroup(TDict):
 					if isDisplayUpdate:
 						pygame.display.update()
 
-
-
 def CreateEmtySurf(SizeWidth: int = 24, SizeHeight: int = 24):
 	return pygame.Surface((SizeWidth, SizeHeight), pygame.SRCALPHA, 32).convert_alpha()
 
