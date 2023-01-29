@@ -35,7 +35,7 @@ def work():
 		
 	display1.fill((64, 64, 64))
 	pygame.display.update()
-	
+		
 	running = True
 	while running:
 		for event in pygame.event.get():
