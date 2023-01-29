@@ -186,22 +186,6 @@ class TDict(object):
 			self.__g = self.__tmp.copy()
 		return False
 
-#a = TDict({1: 'Text1', 2: 'Text2', 3: 'Text3'})
-#print(a)
-#b = True
-#try:
-#	with a as td:
-#		for key, value in td.items():
-#			td[key] = b
-#			b = not b
-#		# Или так
-#		for key in td:
-#				td[key] = b
-#				b = not b
-#except:
-#	pass
-#print(a)
-
 class NoValue(Enum):
 	''' Base Enum class elements '''
 
@@ -309,12 +293,12 @@ class TGroup(TDict):
 						if not self.has_internal(sprite):
 							self.add(sprite)
 			elif len(args) == 2:
-				self[args[1]] = args[0]
+				self[args[0]] = args[1]
 			elif len(args) == 3:
-				if not self.has_key(args[1]):
-					self[args[1]] = TDict()
-				if type(self[args[1]]) == TDict:
-					self[args[1]][args[2]] = args[0]
+				if not self.has_key(args[0]):
+					self[args[0]] = TDict()
+				if type(self[args[0]]) == TDict:
+					self[args[0]][args[1]] = args[2]
 	
 	def searchvalue(self, value):
 		for row in self.items():
