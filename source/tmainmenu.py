@@ -179,6 +179,79 @@ class TDict(object):
 			self.__g = self.__tmp.copy()
 		return False
 
+class TGroup(TDict):
+	
+	def __init__(self, *args):
+		super(TGroup, self).__init__(*args)
+	
+	def add(self, *args):
+		if len(args) == 1:
+			if not self.has_value(args[0]):
+				self[len(self)+1] = args[0]
+		elif len(args) > 1:
+			if len(args) == 2:
+				if not self.has_value(args[1]):
+					self[args[0]] = args[1]
+			elif len(args) == 3:
+				if not self.has_key(args[0]):
+					self[args[0]] = TDict()	
+				if type(self[args[0]]) == TDict:
+					self[args[0]][args[1]] = args[2]
+	
+	def has(self, v):
+		return self.has_value(v)
+	
+	def remove(self, *args):
+		if len(args) > 0 and len(args) < 3:
+			if len(args) == 1:
+				if self.get(args[0], False):
+					del self[args[0]]
+			elif len(args) == 2:
+				if self.get(args[0], TDict()).get(args[1], False):
+					del self[args[0]][args[1]]
+	
+	def sprites(self, isTuple: bool = False):
+		res = []
+		for row in self.values():
+			if type(row) == TDict:
+				for col in row.values():
+					res.append(col)
+			else:
+				res.append(row)
+		if isTuple:
+			return tuple(res)
+		else:
+			return res
+	
+	def empty(self):
+		self.clear()
+	
+	def updates(self, *args, **kwargs):
+		for row in self.values():
+			if type(row) == TDict:
+				for col in row.values():
+					if hasattr(col, 'update'):
+						col.update(*args, **kwargs)
+			else:
+				if hasattr(row, 'update'):
+					row.update(*args, **kwargs)
+	
+	def draw(self, surf, isDisplayUpdate: bool = False):
+		for row in self.values():
+			if type(row) == TDict:
+				for col in row.values():
+					if hasattr(col, 'image') and hasattr(col, 'rect'):
+						surf.blit(col.image, col.rect)
+						if isDisplayUpdate:
+							pygame.display.update()
+			else:
+				if hasattr(row, 'image') and hasattr(row, 'rect'):
+					surf.blit(row.image, row.rect)
+					if isDisplayUpdate:
+						pygame.display.update()
+
+
+
 def CreateEmtySurf(SizeWidth: int = 24, SizeHeight: int = 24):
 	return pygame.Surface((SizeWidth, SizeHeight), pygame.SRCALPHA, 32).convert_alpha()
 
