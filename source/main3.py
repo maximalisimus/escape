@@ -279,19 +279,14 @@ class TGroup(TDict):
 	def add(self, *args):
 		if len(args) > 0:
 			if len(args) == 1:
-				if not hasattr(args[0], '__iter__'):
-					if not self.has_internal(args[0]):
-						if hasattr(args[0], 'i') and hasattr(args[0], 'j'):
-							if args[0].i != None and args[0].j != None:
-								self.add(args[0], args[0].i, args[0].j)
-							else:
-								self[len(self)+1] = args[0]
+				if not self.has_value(args[0]):
+					if hasattr(args[0], 'i') and hasattr(args[0], 'j'):
+						if args[0].i != None and args[0].j != None:
+							self.add(args[0].i, args[0].j, args[0])
 						else:
 							self[len(self)+1] = args[0]
-				else:
-					for sprite in args[0]:
-						if not self.has_internal(sprite):
-							self.add(sprite)
+					else:
+						self[len(self)+1] = args[0]
 			elif len(args) == 2:
 				self[args[0]] = args[1]
 			elif len(args) == 3:
@@ -300,52 +295,22 @@ class TGroup(TDict):
 				if type(self[args[0]]) == TDict:
 					self[args[0]][args[1]] = args[2]
 	
-	def searchvalue(self, value):
-		for row in self.items():
-			if type(row[1]) == TDict:
-				for col in row[1].items():
-					if value == col[1]:
-						return (row[0], col[0])
-			else:
-				if value == row[1]:
-					return row[0]
-		return False
-	
-	def searchkey(self, *onkeys) -> bool:
-		if not onkeys:
-			return False
-		if len(onkeys) == 1:
-			if self.get(onkeys[0], False):
-				return True
-			else:
-				return False
-		elif len(onkeys) == 2:
-			if self.get(onkeys[0], TDict()).get(onkeys[1], False):
-				return True
-			else:
-				return False
+	def removekeys(self, *keys):
+		if len(keys) > 0 and len(keys) < 3:
+			if len(keys) == 1:
+				self.pop(keys[0], False)
+			elif len(keys) == 2:
+				self[keys[0]].pop(keys[1], False)
 	
 	def remove(self, *args):
-		if len(args) > 0 and len(args) < 3:
-			if len(args) == 1:
-				if not hasattr(args[0], '__iter__'):
-					if self.has_internal(args[0]):
-						onkeys = self.searchvalue(args[0])
-						if onkeys != False:
-							if type(onkeys) == tuple:
-								self.remove(onkeys[0], onkeys[1])
-							else:
-								del self[onkeys]
+		for item in args:
+			for k1, v1 in self.copy().items():
+				if type(v1) == TDict:
+					for k2, v2 in v1.copy().items():
+						if v2 == item:
+							self[k1].pop(k2, False)
 				else:
-					for sprite in args[0]:
-						if self.has_internal(sprite):
-							self.remove(sprite)
-			elif len(args) == 2:
-				if self.get(args[0], TDict()).get(args[1], False):
-					del self[args[0]][args[1]]
-	
-	def has_internal(self, sprite):
-		return sprite in self.sprites(True)
+					self.pop(k1, False)
 	
 	def has(self, *sprites) -> bool:
 		if not sprites:
@@ -403,27 +368,77 @@ class TGroup(TDict):
 					if isDisplayUpdate:
 						pygame.display.update()
 
-def CollideGroupPos(sprite, group: TGroup, dokill: bool = False, collided = None):
-	ipos = sprite.rect.y // sprite.SizeWH[1]
-	jpos = sprite.rect.x // sprite.SizeWH[0]
-	out_blocks = []
-	in_blocks = set(group.get(ipos, dict()).get(jpos, False), \
-					group.get(ipos, dict()).get(jpos+1, False), \
-					group.get(ipos+1, dict()).get(jpos, False), \
-					group.get(ipos+1, dict()).get(jpos+1, False))
-	in_blocks.discard(False)
-	for group_sprite in in_blocks:
-		if collided is not None:
-			if collided(sprite, group_sprite):
-				out_blocks.append(group_sprite)
-				if dokill:
-					group.remove(group_block)
-		else:
-			if pygame.sprite.collide_rect(sprite, group_sprite):
-				out_blocks.append(group_sprite)
-				if dokill:
-					group.remove(group_block)
-	return tuple(out_blocks)
+	def CollidePos(self, sprite, SizeWH: Tuple[int, int], dokill: bool = False, collided = None):
+		if not hasattr(sprite, 'rect'):
+			return None
+		ipos = sprite.rect.y // SizeWH[1]
+		jpos = sprite.rect.x // SizeWH[0]
+		out_blocks = []
+		in_blocks = set(self.get(ipos, TDict()).get(jpos, False), \
+						self.get(ipos, TDict()).get(jpos+1, False), \
+						self.get(ipos+1, TDict()).get(jpos, False), \
+						self.get(ipos+1, TDict()).get(jpos+1, False))
+		in_blocks.discard(False)
+		for group_sprite in in_blocks:
+			if collided is not None:
+				if collided(sprite, group_sprite):
+					out_blocks.append(group_sprite)
+					if dokill:
+						group.remove(group_sprite)
+			else:
+				if pygame.sprite.collide_rect(sprite, group_sprite):
+					out_blocks.append(group_sprite)
+					if dokill:
+						group.remove(group_sprite)
+		return tuple(out_blocks)
+	
+	def collidepoint(self, pos, dokill: bool = False):
+		out_blocks = []
+		for k1, v1 in self.copy().items():
+			if type(v1) == TDict:
+				for k2, v2 in v1.copy().items():
+					if hasattr(v2, 'rect'):
+						if v2.rect.collidepoint(pos):
+							out_blocks.append(v2)
+							if dokill:
+								self.removekeys(k1, k2)
+			else:
+				if hasattr(v1, 'rect'):
+					if v1.rect.collidepoint(pos):
+						out_blocks.append(v1)
+						if dokill:
+							self.removekeys(k1)
+		return tuple(out_blocks)
+	
+	def collide(self, sprite, dokill: bool = False, collided = None):
+		if not hasattr(sprite, 'rect'):
+			return None
+		out_blocks = []
+		for k1, v1 in self.copy().items():
+			if type(v1) == TDict:
+				for k2, v2 in v1.copy().items():
+					if collided is not None and hasattr(v2, 'rect'):
+						if collided(sprite, v2):
+							out_blocks.append(v2)
+							if dokill:
+								self.removekeys(k1, k2)
+					elif hasattr(v2, 'rect'):
+						if pygame.sprite.collide_rect(sprite, v2):
+							out_blocks.append(v2)
+							if dokill:
+								self.removekeys(k1, k2)
+			else:
+				if collided is not None and hasattr(v1, 'rect'):
+					if collided(sprite, v1):
+						out_blocks.append(v1)
+						if dokill:
+							self.removekeys(k1)
+				elif hasattr(v1, 'rect'):
+					if pygame.sprite.collide_rect(sprite, v1):
+						out_blocks.append(v1)
+						if dokill:
+							self.removekeys(k1)
+		return tuple(out_blocks)
 
 class TMenu:
 	
