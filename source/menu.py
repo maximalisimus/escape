@@ -237,7 +237,19 @@ class TGroup(TDict):
 						if v2 == item:
 							self[k1].pop(k2, False)
 				else:
-					self.pop(k1, False)
+					if v1 == item:
+						self.pop(k1, False)
+	
+	def removehash(self, *args):
+		for item in args:
+			for k1, v1 in self.copy().items():
+				if type(v1) == TDict:
+					for k2, v2 in v1.copy().items():
+						if hash(v2) == hash(item):
+							self[k1].pop(k2, False)
+				else:
+					if hash(v1) == hash(item):
+						self.pop(k1, False)
 	
 	def has(self, *sprites) -> bool:
 		if not sprites:
@@ -272,28 +284,16 @@ class TGroup(TDict):
 			return res
 	
 	def updates(self, *args, **kwargs):
-		for row in self.values():
-			if type(row) == TDict:
-				for col in row.values():
-					if hasattr(col, 'update'):
-						col.update(*args, **kwargs)
-			else:
-				if hasattr(row, 'update'):
-					row.update(*args)
+		for item in self.sprites():
+			if hasattr(item, 'update'):
+				item.update(*args, **kwargs)
 	
 	def draw(self, surf, isDisplayUpdate: bool = False):
-		for row in self.values():
-			if type(row) == TDict:
-				for col in row.values():
-					if hasattr(col, 'image') and hasattr(col, 'rect'):
-						surf.blit(col.image, col.rect)
-						if isDisplayUpdate:
-							pygame.display.update()
-			else:
-				if hasattr(row, 'image') and hasattr(row, 'rect'):
-					surf.blit(row.image, row.rect)
-					if isDisplayUpdate:
-						pygame.display.update()
+		for item in self.sprites():
+			if hasattr(item, 'image') and hasattr(item, 'rect'):
+				surf.blit(item.image, item.rect)
+				if isDisplayUpdate:
+					pygame.display.update()
 
 	def CollidePos(self, sprite, SizeWH: Tuple[int, int], dokill: bool = False, collided = None):
 		if not hasattr(sprite, 'rect'):
@@ -311,12 +311,12 @@ class TGroup(TDict):
 				if collided(sprite, group_sprite):
 					out_blocks.append(group_sprite)
 					if dokill:
-						group.remove(group_sprite)
+						self.removehash(group_sprite)
 			else:
 				if pygame.sprite.collide_rect(sprite, group_sprite):
 					out_blocks.append(group_sprite)
 					if dokill:
-						group.remove(group_sprite)
+						self.removehash(group_sprite)
 		return tuple(out_blocks)
 	
 	def collidepoint(self, pos, dokill: bool = False):
@@ -328,13 +328,13 @@ class TGroup(TDict):
 						if v2.rect.collidepoint(pos):
 							out_blocks.append(v2)
 							if dokill:
-								self.removekeys(k1, k2)
+								self.removehash(v2)
 			else:
 				if hasattr(v1, 'rect'):
 					if v1.rect.collidepoint(pos):
 						out_blocks.append(v1)
 						if dokill:
-							self.removekeys(k1)
+							self.removehash(v1)
 		return tuple(out_blocks)
 	
 	def collide(self, sprite, dokill: bool = False, collided = None):
@@ -396,7 +396,7 @@ def SwitchScene(scene):
 	current_scene = scene
 
 def Work():
-	global display1, clock
+	global display1, clock, w, h
 	
 	pygame.display.set_caption("Menu")
 	
